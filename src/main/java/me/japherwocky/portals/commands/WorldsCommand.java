@@ -12,9 +12,9 @@ public class WorldsCommand extends DimensionsCommand {
 	
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		sender.sendMessage("ง7Available worlds: ");
+		sender.sendMessage("ยง7Available worlds: ");
 		for (World world : Bukkit.getWorlds()) {
-			sender.sendMessage("ง7- งc"+world.getName());
+			sender.sendMessage("ยง7- ยงc"+world.getName());
 		}
 	}
 	

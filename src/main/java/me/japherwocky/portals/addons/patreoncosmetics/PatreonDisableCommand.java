@@ -21,6 +21,6 @@ public class PatreonDisableCommand extends DimensionsCommand {
 		if (!(sender instanceof Player)) return;
 
 		main.getUsers().remove(((Player) sender).getUniqueId());
-		sender.sendMessage("§7[§cDimensions§7] §aSuccesfully disabled portal effects for the current session.");
+		sender.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§aSuccesfully disabled portal effects for the current session.");
 	}
 }

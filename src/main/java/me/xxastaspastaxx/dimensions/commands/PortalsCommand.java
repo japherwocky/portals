@@ -61,9 +61,9 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 		if (sender instanceof Player) {
 			((Player) sender).openInventory(mainInventory);
 		} else {
-			String msg = "§7[§cDimensions§7] Portals list:";
+			String msg = "Â§7[Â§cDimensionsÂ§7] Portals list:";
 			for (CustomPortal portal : Dimensions.getCustomPortalManager().getCustomPortals()) {
-				msg +="\n["+(portal.isEnabled()?"§aEnabled":"§cDisabled")+"§7] "+ portal.getPortalId();
+				msg +="\n["+(portal.isEnabled()?"Â§aEnabled":"Â§cDisabled")+"Â§7] "+ portal.getPortalId();
 			}
 			
 			sender.sendMessage(msg);
@@ -72,27 +72,27 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 	
 	private void setupMenu() {
 
-		mainInventory = Bukkit.createInventory(null, 9, "§cDimensions");
+		mainInventory = Bukkit.createInventory(null, 9, "Â§cDimensions");
 		
 		ItemStack decor = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 		ItemMeta decorMeta = decor.getItemMeta();
-		decorMeta.setDisplayName("§6");
+		decorMeta.setDisplayName("Â§6");
 		decor.setItemMeta(decorMeta);
 		
 		for (int i=0;i<9;i++) mainInventory.setItem(i, decor);
 		
 		ItemStack myPortals = new ItemStack(Material.PAPER);
 		ItemMeta myPortalsMeta = myPortals.getItemMeta();
-		myPortalsMeta.setDisplayName("§6My Portals");
-		myPortalsMeta.setLore(Arrays.asList(new String[] {"§7Click to view your portals"}));
+		myPortalsMeta.setDisplayName("Â§6My Portals");
+		myPortalsMeta.setLore(Arrays.asList(new String[] {"Â§7Click to view your portals"}));
 		myPortals.setItemMeta(myPortalsMeta);
 		
 		mainInventory.setItem(3, myPortals);
 		
 		ItemStack browsePortals = new ItemStack(Material.CHEST);
 		ItemMeta browsePortalsMeta = browsePortals.getItemMeta();
-		browsePortalsMeta.setDisplayName("§bBrowse portals online");
-		browsePortalsMeta.setLore(Arrays.asList(new String[] {"§7Click to browse portals online", "§7Use §nShift+Click§7 to forcfully load portals"}));
+		browsePortalsMeta.setDisplayName("Â§bBrowse portals online");
+		browsePortalsMeta.setLore(Arrays.asList(new String[] {"Â§7Click to browse portals online", "Â§7Use Â§nShift+ClickÂ§7 to forcfully load portals"}));
 		browsePortals.setItemMeta(browsePortalsMeta);
 		
 		mainInventory.setItem(5, browsePortals);
@@ -102,37 +102,37 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 	private void updatePortalsMenu(Player p, int page) {
 		ArrayList<CustomPortal> portals = Dimensions.getCustomPortalManager().getCustomPortals();
 		
-		Inventory inv = Bukkit.createInventory(null, 54, "My portals | Page §4"+(page+1)+"§c/"+((int)Math.ceil(portals.size()/45f)));
+		Inventory inv = Bukkit.createInventory(null, 54, "My portals | Page Â§4"+(page+1)+"Â§c/"+((int)Math.ceil(portals.size()/45f)));
 		
 		for (int i = page*45;i<(page+1)*45;i++) {
 			if (i>=portals.size()) break;
 			CustomPortal portal = portals.get(i);
 			ItemStack portalItem = new ItemStack(portal.getOutsideMaterial());
 			ItemMeta itemMeta = portalItem.getItemMeta();
-			itemMeta.setDisplayName("§6"+portal.getPortalId());
-			itemMeta.setLore(Arrays.asList(new String[] {"§6§l"+portal.getDisplayName(), "§7Click for more details"}));
+			itemMeta.setDisplayName("Â§6"+portal.getPortalId());
+			itemMeta.setLore(Arrays.asList(new String[] {"Â§6Â§l"+portal.getDisplayName(), "Â§7Click for more details"}));
 			portalItem.setItemMeta(itemMeta);
 			inv.addItem(portalItem);
 		}
 		
 		ItemStack decor = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 		ItemMeta decorMeta = decor.getItemMeta();
-		decorMeta.setDisplayName("§6");
+		decorMeta.setDisplayName("Â§6");
 		decor.setItemMeta(decorMeta);
 
 		for (int i=46;i<=52;i++) inv.setItem(i, decor);
 		
 		ItemStack goBack = new ItemStack(page==0?Material.BARRIER:Material.ARROW);
 		ItemMeta goBackMeta = goBack.getItemMeta();
-		goBackMeta.setDisplayName("§6Previous page");
-		goBackMeta.setLore(Arrays.asList(new String[] {"§7Go to page "+((int)Math.max(1, page))}));
+		goBackMeta.setDisplayName("Â§6Previous page");
+		goBackMeta.setLore(Arrays.asList(new String[] {"Â§7Go to page "+((int)Math.max(1, page))}));
 		goBack.setItemMeta(goBackMeta);
 		inv.setItem(45, goBack);
 		
 		ItemStack goMprosta = new ItemStack((page+1)*45>=portals.size()?Material.BARRIER:Material.ARROW);
 		ItemMeta goMprostaMeta = goBack.getItemMeta();
-		goMprostaMeta.setDisplayName("§6Next page");
-		goMprostaMeta.setLore(Arrays.asList(new String[] {"§7Go to page "+((int)Math.min(Math.ceil(portals.size()/45f), page+2))}));
+		goMprostaMeta.setDisplayName("Â§6Next page");
+		goMprostaMeta.setLore(Arrays.asList(new String[] {"Â§7Go to page "+((int)Math.min(Math.ceil(portals.size()/45f), page+2))}));
 		goMprosta.setItemMeta(goMprostaMeta);
 		inv.setItem(53, goMprosta);
 		
@@ -142,7 +142,7 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 	
 	private void updateBrowseInventory(Player p, int page, boolean forceUpdate) {
 
-		Inventory inv = Bukkit.createInventory(null, 54, "Browse portals | Page §4"+(page+1)+"§c/"+((int)Math.ceil(cachedPortals.size()/45f)));
+		Inventory inv = Bukkit.createInventory(null, 54, "Browse portals | Page Â§4"+(page+1)+"Â§c/"+((int)Math.ceil(cachedPortals.size()/45f)));
 		
 		if (forceUpdate || System.currentTimeMillis()-lastUpdate>=108000000) {
 			p.closeInventory();
@@ -173,22 +173,22 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 		
 		ItemStack decor = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 		ItemMeta decorMeta = decor.getItemMeta();
-		decorMeta.setDisplayName("§6");
+		decorMeta.setDisplayName("Â§6");
 		decor.setItemMeta(decorMeta);
 
 		for (int i=46;i<=52;i++) inv.setItem(i, decor);
 		
 		ItemStack goBack = new ItemStack(page==0?Material.BARRIER:Material.ARROW);
 		ItemMeta goBackMeta = goBack.getItemMeta();
-		goBackMeta.setDisplayName("§6Previous page");
-		goBackMeta.setLore(Arrays.asList(new String[] {"§7Go to page "+((int)Math.max(1, page))}));
+		goBackMeta.setDisplayName("Â§6Previous page");
+		goBackMeta.setLore(Arrays.asList(new String[] {"Â§7Go to page "+((int)Math.max(1, page))}));
 		goBack.setItemMeta(goBackMeta);
 		inv.setItem(45, goBack);
 		
 		ItemStack goMprosta = new ItemStack((page+1)*45>=cachedPortals.size()?Material.BARRIER:Material.ARROW);
 		ItemMeta goMprostaMeta = goBack.getItemMeta();
-		goMprostaMeta.setDisplayName("§6Next page");
-		goMprostaMeta.setLore(Arrays.asList(new String[] {"§7Go to page "+((int)Math.min(Math.ceil(cachedPortals.size()/45f), page+2))}));
+		goMprostaMeta.setDisplayName("Â§6Next page");
+		goMprostaMeta.setLore(Arrays.asList(new String[] {"Â§7Go to page "+((int)Math.min(Math.ceil(cachedPortals.size()/45f), page+2))}));
 		goMprosta.setItemMeta(goMprostaMeta);
 		inv.setItem(53, goMprosta);
 
@@ -215,47 +215,47 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 			e.setCancelled(true);
 			if (e.getClickedInventory()!=e.getInventory()) return;
 			if (item.getType()==Material.PAPER) updatePortalsMenu(p,0);
-			if (item.getType()==Material.CHEST) if (p.hasPermission("dimensions.forceupdatebrowser")) {updateBrowseInventory(p, 0, e.isShiftClick());} else { p.sendMessage("§7[§cDimensions§7] §cYou do not have the §ndimensions.forceupdatebrowser§c permission to do perform that action");};
+			if (item.getType()==Material.CHEST) if (p.hasPermission("dimensions.forceupdatebrowser")) {updateBrowseInventory(p, 0, e.isShiftClick());} else { p.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§cYou do not have the Â§ndimensions.forceupdatebrowserÂ§c permission to do perform that action");};
 		} else if (portalsInventory.containsKey(p) && e.getInventory().equals(portalsInventory.get(p))) {
 			e.setCancelled(true);
 			if (e.getClickedInventory()!=e.getInventory()) return;
 			String name = item.getItemMeta().getDisplayName();
-			if (name.equalsIgnoreCase("§6")) {
+			if (name.equalsIgnoreCase("Â§6")) {
 				return;
-			} else if (name.contentEquals("§6Previous page") || name.contentEquals("§6Next page")) {
+			} else if (name.contentEquals("Â§6Previous page") || name.contentEquals("Â§6Next page")) {
 				updatePortalsMenu(p,Integer.parseInt(item.getItemMeta().getLore().get(0).substring(13))-1);
 				return;
 			} else {
 				CustomPortal portal = Dimensions.getCustomPortalManager().getCustomPortal(item.getItemMeta().getDisplayName().substring(2));
 				if (portal!=null) {
-					p.sendMessage("§7[§cDimensions§7] "+portal.getDisplayName()+":§7 Is built from §c"+portal.getOutsideMaterial()+"§7, is ignited using §c"+portal.getLighterMaterial()+"§7 and goes to §c"+portal.getWorld().getName()+"§7.");
+					p.sendMessage("Â§7[Â§cDimensionsÂ§7] "+portal.getDisplayName()+":Â§7 Is built from Â§c"+portal.getOutsideMaterial()+"Â§7, is ignited using Â§c"+portal.getLighterMaterial()+"Â§7 and goes to Â§c"+portal.getWorld().getName()+"Â§7.");
 				} else {
-					p.sendMessage("§7[§cDimensions§7] There was a problem, please try reloading the plugin.");
+					p.sendMessage("Â§7[Â§cDimensionsÂ§7] There was a problem, please try reloading the plugin.");
 				}
 			}
 		} else if (browseInventory.containsKey(p) && e.getInventory().equals(browseInventory.get(p))) {
 			e.setCancelled(true);
 			if (e.getClickedInventory()!=e.getInventory()) return;
 			String name = item.getItemMeta().getDisplayName();
-			if (name.equalsIgnoreCase("§6")) {
+			if (name.equalsIgnoreCase("Â§6")) {
 				return;
-			} else if (name.contentEquals("§6Previous page") || name.contentEquals("§6Next page")) {
+			} else if (name.contentEquals("Â§6Previous page") || name.contentEquals("Â§6Next page")) {
 				updateBrowseInventory(p,Integer.parseInt(item.getItemMeta().getLore().get(0).substring(13))-1, false);
 				return;
 			} else {
-				CachedPortal cached = cachedPortals.stream().filter(portal -> name.equals("§6"+portal.getFile())).findAny().orElseGet(null);
+				CachedPortal cached = cachedPortals.stream().filter(portal -> name.equals("Â§6"+portal.getFile())).findAny().orElseGet(null);
 				if (cached!=null)
 					if (e.isShiftClick()) {
 						try {
 							if (cached.download(p)) {
-								p.sendMessage("§7[§cDimensions§7] §aThe portal has been succesfully downloaded, please use §n/dim reload§a to apply changes.");
+								p.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§aThe portal has been succesfully downloaded, please use Â§n/dim reloadÂ§a to apply changes.");
 							}
 						} catch (IOException e1) {
-							p.sendMessage("§7[§cDimensions§7] §cThere was an issue while trying to download the file.");
+							p.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§cThere was an issue while trying to download the file.");
 							e1.printStackTrace();
 						}
 					} else {
-						p.sendMessage("§7[§cDimensions§7] §aLink to portal: "+cached.getLink());
+						p.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§aLink to portal: "+cached.getLink());
 					}
 			}
 		}
@@ -299,8 +299,8 @@ final class CachedPortal {
 	public ItemStack getItemStack() {
 		ItemStack item = new ItemStack(block);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("§6"+file);
-		meta.setLore(Arrays.asList(new String[] {"§6by §n"+creator, "§6§n"+likes+"§6 likes", "", "§6Click to get link to portal","§6Shift+Click to download portal","","§6§oportal id: "+id}));
+		meta.setDisplayName("Â§6"+file);
+		meta.setLore(Arrays.asList(new String[] {"Â§6by Â§n"+creator, "Â§6Â§n"+likes+"Â§6 likes", "", "Â§6Click to get link to portal","Â§6Shift+Click to download portal","","Â§6Â§oportal id: "+id}));
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -313,7 +313,7 @@ final class CachedPortal {
 		
 		File f = new File(CustomPortalLoader.DIRECTORY_PATH+"/"+file+".yml");
 		if (f.exists()) {
-			p.sendMessage("§7[§cDimensions§7] A portal with the same name already exists.");
+			p.sendMessage("Â§7[Â§cDimensionsÂ§7] A portal with the same name already exists.");
 			return false;
 		}
 		

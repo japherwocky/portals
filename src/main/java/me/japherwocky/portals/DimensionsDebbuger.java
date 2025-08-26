@@ -39,7 +39,7 @@ public class DimensionsDebbuger {
 	 */
 	public void print(Object... str) {
 		if (DimensionsSettings.debugLevel>=level)
-			Bukkit.getConsoleSender().sendMessage("§7[§cDimensions§7] §r"+String.join(", ",Arrays.asList(str).stream()
+			Bukkit.getConsoleSender().sendMessage("Â§7[Â§cDimensionsÂ§7] Â§r"+String.join(", ",Arrays.asList(str).stream()
 					.map((s) -> s==null?"null":s.toString())
                     .collect(Collectors.toList())));
 	}

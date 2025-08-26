@@ -17,7 +17,7 @@ import me.japherwocky.portals.Portals;
 
 public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 
-    private ArrayList<DimensionsCommand> commands = new ArrayList<DimensionsCommand>();
+    private ArrayList<PortalsCommand> commands = new ArrayList<PortalsCommand>();
     
     /**
      * Contruct the manager and set the command executor for the command /dimensions
@@ -38,7 +38,7 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 
     	commands.add(new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
     	commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
-    	commands.add(new PortalsCommand("portals", "", new String[0], "Show all portals", "", true));
+    	commands.add(new PortalsListCommand("portals", "", new String[0], "Show all portals", "", true));
 		
 		main.getCommand("dimensions").setExecutor(this);
 		
@@ -52,10 +52,10 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 		
 		if (args.length==0) args = new String[] {"info"};
 		
-		for (DimensionsCommand command : commands) {
+		for (PortalsCommand command : commands) {
 			if (!command.isThisCommand(args[0])) continue;
 			if (!command.getPermission().contentEquals("none") && !sender.hasPermission(command.getPermission())) {
-				sender.sendMessage("§7[§cDimensions§7] §4You do not have permission to execute this command");
+				sender.sendMessage("Â§7[Â§cPortalsÂ§7] Â§4You do not have permission to execute this command");
 				return true;
 			}
 			try {
@@ -83,7 +83,7 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 			return res;
 		}
 		
-		for (DimensionsCommand command : commands) {
+		for (PortalsCommand command : commands) {
 			if (!command.isThisCommand(args[0])) continue;
 			if (!command.getPermission().contentEquals("none") && !sender.hasPermission(command.getPermission())) {
 				return new ArrayList<String>();
@@ -102,9 +102,9 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 	 * Get the list of the non-admin commands
 	 * @return the list of the non-admin commands
 	 */
-	public ArrayList<DimensionsCommand> getCommands() {
-		ArrayList<DimensionsCommand> res = new ArrayList<DimensionsCommand>();
-		for (DimensionsCommand cmd : commands) {
+	public ArrayList<PortalsCommand> getCommands() {
+		ArrayList<PortalsCommand> res = new ArrayList<PortalsCommand>();
+		for (PortalsCommand cmd : commands) {
 			if (cmd.isAdminCommand()) continue;
 			res.add(cmd);
 		}
@@ -115,9 +115,9 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 	 * Get the list of the admin commands
 	 * @return the list of the admin commands
 	 */
-	public ArrayList<DimensionsCommand> getAdminCommands() {
-		ArrayList<DimensionsCommand> res = new ArrayList<DimensionsCommand>();
-		for (DimensionsCommand cmd : commands) {
+	public ArrayList<PortalsCommand> getAdminCommands() {
+		ArrayList<PortalsCommand> res = new ArrayList<PortalsCommand>();
+		for (PortalsCommand cmd : commands) {
 			if (!cmd.isAdminCommand()) continue;
 			res.add(cmd);
 		}
@@ -125,10 +125,10 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	/**
-	 * Register a new DimensionsCommand
+	 * Register a new PortalsCommand
 	 * @param cmd the command instance
 	 */
-	public void registerCommand(DimensionsCommand cmd) {
+	public void registerCommand(PortalsCommand cmd) {
 		commands.add(cmd);
 	}
 	
@@ -136,7 +136,7 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 	 * Unregister a command
 	 * @param cmd the instance of the command
 	 */
-	public void unregisterCommand(DimensionsCommand cmd) {
+	public void unregisterCommand(PortalsCommand cmd) {
 		commands.remove(cmd);
 	}
 	
