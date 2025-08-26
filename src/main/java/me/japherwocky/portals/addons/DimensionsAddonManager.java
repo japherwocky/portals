@@ -12,11 +12,11 @@ import java.util.ServiceLoader;
 
 import org.bukkit.event.HandlerList;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsDebbuger;
 
 /**
- * Loads and enables all the Dimensions addons
+ * Loads and enables all the Portals addons
  *
  */
 
@@ -24,7 +24,7 @@ public class DimensionsAddonManager {
 
 	private final String ADDONS_PATH = "./plugins/Dimensions/Addons/";
 	
-	private Dimensions pl;
+	private Portals pl;
 
 	private ServiceLoader<DimensionsAddon> loader;
 	
@@ -37,7 +37,7 @@ public class DimensionsAddonManager {
 	 * Constructor of the Addon manager. Creates the directory containing the addons and loads all the addons using ServiceLoader
 	 * @param pl The instance of the plugin
 	 */
-	public DimensionsAddonManager(Dimensions pl) {
+	public DimensionsAddonManager(Portals pl) {
 		this.pl = pl;
 		
 		
@@ -46,7 +46,7 @@ public class DimensionsAddonManager {
 	    
 	    ArrayList<URL> urls = new ArrayList<URL>();
 	    for(File file : dir.listFiles((file, name) -> name.endsWith(".jar"))) {
-	    	if (file.getName().equals("PatreonCosmeticsAddon.jar")) continue; //Prevent error after embedding the addon into main Dimensions plugin
+	    	if (file.getName().equals("PatreonCosmeticsAddon.jar")) continue; //Prevent error after embedding the addon into main Portals plugin
 	    	try {
 				urls.add(file.toURI().toURL());
 			} catch (MalformedURLException e) {

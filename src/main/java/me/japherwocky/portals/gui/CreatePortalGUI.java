@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.builder.CreatePortalInstance;
 
 public abstract class CreatePortalGUI {
@@ -43,7 +43,7 @@ public abstract class CreatePortalGUI {
 	public boolean handleChatAsync(String input) {
 		if (waitingResponse=="no") return false;
 		
-		Bukkit.getScheduler().runTask(Dimensions.getInstance(), () -> {
+		Bukkit.getScheduler().runTask(Portals.getInstance(), () -> {
 			if (handleChat(input)) waitingResponse = "no";
 		});
 		

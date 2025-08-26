@@ -20,7 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsDebbuger;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.customportal.CustomPortal;
@@ -213,7 +213,7 @@ public class CompletePortal {
 		int delay = customPortal.getTeleportDelay()*20;
 		if ((en instanceof Player) && (((Player) en).getGameMode()==GameMode.CREATIVE || ((Player) en).getGameMode()==GameMode.SPECTATOR)) delay = 0;
 		
-		queue.put(en, Bukkit.getScheduler().scheduleSyncDelayedTask(Dimensions.getInstance(), new Runnable() {
+		queue.put(en, Bukkit.getScheduler().scheduleSyncDelayedTask(Portals.getInstance(), new Runnable() {
 			
 			@Override
 			public void run() {
@@ -367,10 +367,10 @@ public class CompletePortal {
 		
 		CompletePortal destination = null;
 		if (DimensionsSettings.searchFirstClonePortal) 
-			destination = Dimensions.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, true, true);
+			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, true, true);
 		
 		if (destination==null)
-			destination = Dimensions.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, DimensionsSettings.searchSameAxis, DimensionsSettings.searchSameSize);
+			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, DimensionsSettings.searchSameAxis, DimensionsSettings.searchSameSize);
 		
 
 		DimensionsDebbuger.DEBUG.print("First try for destination (check for already existing portal): "+destination);
@@ -405,7 +405,7 @@ public class CompletePortal {
 
 			DimensionsDebbuger.DEBUG.print("Identify built structure: "+(geom==null?"NOPE":"Yep"));
 			if (geom==null) return null;
-			destination = Dimensions.getCompletePortalManager().createNew(new CompletePortal(customPortal, newLocation.getWorld(), geom), null, CustomPortalIgniteCause.EXIT_PORTAL, null);
+			destination = Portals.getCompletePortalManager().createNew(new CompletePortal(customPortal, newLocation.getWorld(), geom), null, CustomPortalIgniteCause.EXIT_PORTAL, null);
 			DimensionsDebbuger.DEBUG.print("Created portal instance: "+(destination==null?"NOPE":"Yep"));
 			if (destination==null) return null;
 		}
@@ -479,7 +479,7 @@ public class CompletePortal {
 						if (destinationWorld.getWorldBorder().isInside(checkLocation)) {
 							
 							//TODO check location
-							if (Dimensions.getCompletePortalManager().getCompletePortal(checkLocation, true, true)==null) {
+							if (Portals.getCompletePortalManager().getCompletePortal(checkLocation, true, true)==null) {
 								if (canBuildPortal(checkLocation, zAxis, destinationWorld, height, width, true)) return checkLocation;
 								if (backupLocation==null && canBuildPortal(checkLocation, !zAxis, destinationWorld, height, width, true)) backupLocation = checkLocation.clone();
 								if (backupLocation2==null && canBuildPortal(checkLocation, zAxis, destinationWorld, height, width, false)) backupLocation2 = checkLocation.clone();
@@ -555,7 +555,7 @@ public class CompletePortal {
 		if (p==null && customPortal.canSpawnEntities()) {
 
 			Bukkit.getScheduler().cancelTask(entitiesTask);
-			entitiesTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Dimensions.getInstance(), new Runnable() {
+			entitiesTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Portals.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {
@@ -577,7 +577,7 @@ public class CompletePortal {
 		if (p==null) {
 			Bukkit.getScheduler().cancelTask(particlesTask);
 			if (customPortal.isEnableParticles()) {
-				particlesTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Dimensions.getInstance(), new Runnable() {
+				particlesTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Portals.getInstance(), new Runnable() {
 					
 					@Override
 					public void run() {
@@ -599,7 +599,7 @@ public class CompletePortal {
 		
 		for (PortalEntity en : spawnedEntities) {
 			en.destroy(p);
-			Bukkit.getScheduler().runTaskLater(Dimensions.getInstance(), new Runnable() {
+			Bukkit.getScheduler().runTaskLater(Portals.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {

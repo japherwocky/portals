@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.builder.CreatePortalInstance;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.gui.CreatePortalGUI;
@@ -44,7 +44,7 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 	@Override
 	public void open() {
 		
-		ArrayList<CustomPortal> portalList = Dimensions.getCustomPortalManager().getCustomPortals();
+		ArrayList<CustomPortal> portalList = Portals.getCustomPortalManager().getCustomPortals();
 		
 		maxPage = (int) Math.floor(portalList.size()/MAX_ITEMS_PER_PAGE);
 		ItemStack[] contents = inventory.getContents();
@@ -69,7 +69,7 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 	@Override
 	public void handleClick(int index, boolean rightClick, boolean shiftClick) {
 
-		ArrayList<CustomPortal> portalList = Dimensions.getCustomPortalManager().getCustomPortals();
+		ArrayList<CustomPortal> portalList = Portals.getCustomPortalManager().getCustomPortals();
 		
 		if (index<=44) {
 			int itemIndex = (int) (index+MAX_ITEMS_PER_PAGE*page);
@@ -94,7 +94,7 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 			
 		case 49:
 			p.closeInventory();
-			Dimensions.getCreatePortalManager().clear(p);
+			Portals.getCreatePortalManager().clear(p);
 			break;
 		}
 	}

@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.japherwocky.portals.AxisOrFace;
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.addons.DimensionsAddonPlayerGUIAction;
 import me.japherwocky.portals.completePortal.CompletePortal;
@@ -268,7 +268,7 @@ public class CustomPortal {
 		PortalGeometry temp = PortalGeometry.getPortalGeometry(this).getPortal(this, loc);
 		if (temp==null) return null;
 		
-		return Dimensions.getCompletePortalManager().createNew(new CompletePortal(this, loc.getWorld(), temp), player, CustomPortalIgniteCause.PLAYER, item);
+		return Portals.getCompletePortalManager().createNew(new CompletePortal(this, loc.getWorld(), temp), player, CustomPortalIgniteCause.PLAYER, item);
 		
 	}
 	

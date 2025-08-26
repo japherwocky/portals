@@ -13,7 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsDebbuger;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
@@ -29,7 +29,7 @@ import me.japherwocky.portals.settings.DimensionsSettings;
 
 public class CompletePortalManager {
 	
-	//private Dimensions pl;
+	//private Portals pl;
 	
 	private CompletePortalLoader loader;
 	
@@ -39,7 +39,7 @@ public class CompletePortalManager {
 	 * Constructor of the manager
 	 * @param pl
 	 */
-	public CompletePortalManager(Dimensions pl) {
+	public CompletePortalManager(Portals pl) {
 		//this.pl = pl;
 		this.loader = new CompletePortalLoader();
 	}

@@ -23,7 +23,7 @@ import org.bukkit.entity.EntityType;
 import com.comphenix.protocol.utility.MinecraftReflection;
 
 import me.japherwocky.portals.AxisOrFace;
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.addons.DimensionsAddon;
 import me.japherwocky.portals.completePortal.PortalGeometry;
 
@@ -176,7 +176,7 @@ public class CustomPortalLoader {
 			CustomPortal portal = new CustomPortal(portalID, displayName, enabled, outsideMaterial, outsideBlockDir, insideMaterial, lighterMaterial, particlesColor,breakEffect,minimumHeight,maximumHeight, maximumWidth, minimumWidth,
 					worldName,buildExitPortal, fixedExitPortalWidth, fixedExitPortalHeight, allowedWorlds, teleportDelay, enableParticles, entityTransformation, spawningDelay[0], spawningDelay[1], entitySpawning);
 			portal.setInsideBlockData(insideMaterial.createBlockData());
-			for (DimensionsAddon addon : Dimensions.getAddonManager().getAddons()) {
+			for (DimensionsAddon addon : Portals.getAddonManager().getAddons()) {
 				addon.registerPortal(portalConfig, portal);
 			}
 			res.add(portal);

@@ -2,7 +2,7 @@ package me.japherwocky.portals.customportal;
 
 import java.util.ArrayList;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 
 /**
  * Manages all custom portals
@@ -11,7 +11,7 @@ import me.japherwocky.portals.Dimensions;
 
 public class CustomPortalManager {
 	
-	Dimensions pl;
+	Portals pl;
 	
 	ArrayList<CustomPortal> customPortals = new ArrayList<CustomPortal>();
 	
@@ -19,7 +19,7 @@ public class CustomPortalManager {
 	 * Constructor of the manager
 	 * @param pl
 	 */
-	public CustomPortalManager(Dimensions pl) {
+	public CustomPortalManager(Portals pl) {
 		this.pl = pl;
 		
 		customPortals.addAll((new CustomPortalLoader()).loadAll());

@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 
@@ -21,12 +21,12 @@ public class ClearCommand extends DimensionsCommand {
 	public void execute(CommandSender sender, String[] args) {
 		
 		if (args.length==2) {
-			Iterator<CompletePortal> iterator = Dimensions.getCompletePortalManager().getCompletePortals().iterator();
+			Iterator<CompletePortal> iterator = Portals.getCompletePortalManager().getCompletePortals().iterator();
 			while (iterator.hasNext()) {
 				CompletePortal complete = iterator.next();
 				if (args[1].equalsIgnoreCase("all") || (args[1].equalsIgnoreCase(complete.getCenter().getWorld().getName())) || (args[1].equalsIgnoreCase(complete.getCustomPortal().getPortalId()))) {
 					iterator.remove();
-					Dimensions.getCompletePortalManager().removePortal(complete, CustomPortalDestroyCause.PLUGIN, null);
+					Portals.getCompletePortalManager().removePortal(complete, CustomPortalDestroyCause.PLUGIN, null);
 				}
 			}
 			sender.sendMessage("§7[§cDimensions§7] §aRemoved §c"+args[1]+"§a portals");
@@ -44,7 +44,7 @@ public class ClearCommand extends DimensionsCommand {
 
 		res.add("all");
 		Bukkit.getWorlds().forEach(w -> res.add(w.getName()));
-		Dimensions.getCustomPortalManager().getCustomPortals().forEach(w -> res.add(w.getPortalId()));
+		Portals.getCustomPortalManager().getCustomPortals().forEach(w -> res.add(w.getPortalId()));
 		
 		return res;
 	}

@@ -6,13 +6,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 
 public class CreatePortalManager {
 
 	public static HashMap<Player, CreatePortalInstance> map = new HashMap<Player, CreatePortalInstance>();
 	
-	public CreatePortalManager(Dimensions pl) {
+	public CreatePortalManager(Portals pl) {
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, () -> {
 			map.values().forEach(inst -> inst.spawnParticles());

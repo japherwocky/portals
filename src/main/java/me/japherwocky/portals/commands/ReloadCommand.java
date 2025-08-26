@@ -2,7 +2,7 @@ package me.japherwocky.portals.commands;
 
 import org.bukkit.command.CommandSender;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 
 public class ReloadCommand extends DimensionsCommand {
 	
@@ -14,7 +14,7 @@ public class ReloadCommand extends DimensionsCommand {
 	public void execute(CommandSender sender, String[] args) {
 
 		try {
-			Dimensions.getInstance().reload();
+			Portals.getInstance().reload();
 			sender.sendMessage("§7[§cDimensions§7]§a Reload complete");
 		} catch (Exception e) {
 			sender.sendMessage("§7[§cDimensions§7]§c There was a problem while trying to reload Dimensions. Please check console for more information");

@@ -1,6 +1,6 @@
 name: Portals
 version: '3.2.10'
-main: me.japherwocky.portals.Dimensions
+main: me.japherwocky.portals.Portals
 api-version: '1.21'
 authors: [astaspasta, japherwocky]
 description: Allow players to easily build portals to another world

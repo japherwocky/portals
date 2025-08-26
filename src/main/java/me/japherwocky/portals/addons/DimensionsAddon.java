@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.customportal.CustomPortal;
 
 /**
- * The abstract class that is parent to all the addons that are being loaded by Dimensions
+ * The abstract class that is parent to all the addons that are being loaded by Portals
  *
  */
 
@@ -132,18 +132,18 @@ public abstract class DimensionsAddon {
 	//Functions to override
 	/**
 	 * Run when loading the addon
-	 * @param pl the instance of the Dimensions plugin
+	 * @param pl the instance of the Portals plugin
 	 * @return true if the addon was loaded without any missing dependencies
 	 */
-	public boolean onLoad(Dimensions pl) {
+	public boolean onLoad(Portals pl) {
 		return true;
 	}
 	
 	/**
 	 * Run when the addon is being enabled
-	 * @param pl the instance of the Dimensions plugin
+	 * @param pl the instance of the Portals plugin
 	 */
-	public void onEnable(Dimensions pl) {
+	public void onEnable(Portals pl) {
 	}
 	
 	/**

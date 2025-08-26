@@ -8,10 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 
 /**
- * Class to register and manage the Dimensions commands
+ * Class to register and manage the Portals commands
  *
  */
 
@@ -21,9 +21,9 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
     
     /**
      * Contruct the manager and set the command executor for the command /dimensions
-     * @param main the instance of the Dimensions lpugin
+     * @param main the instance of the Portals lpugin
      */
-    public DimensionsCommandManager(Dimensions main) {
+    public DimensionsCommandManager(Portals main) {
 
     	commands.add(new HelpCommand("help", "", new String[] {"h"}, "List all commands", "none", false));
     	commands.add(new InfoCommand("info", "", new String[0], "Info about the plugin", "none", false));

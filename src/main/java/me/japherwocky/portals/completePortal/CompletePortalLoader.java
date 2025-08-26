@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalIgniteCause;
 
@@ -63,7 +63,7 @@ public class CompletePortalLoader {
 		try {
 
 			for (HashMap<String, Object> portal : portals) {
-				CustomPortal customPortal = Dimensions.getCustomPortalManager().getCustomPortal((String) portal.get("customPortal"));
+				CustomPortal customPortal = Portals.getCustomPortalManager().getCustomPortal((String) portal.get("customPortal"));
 				World world = Bukkit.getWorld((String) portal.get("world"));
 				Location loc = new Location(world, (double) portal.get("centerX"), (double) portal.get("centerY"), (double) portal.get("centerZ"));
 				PortalGeometry geom = PortalGeometry.getPortalGeometry(customPortal).getPortal(customPortal, loc);
@@ -74,14 +74,14 @@ public class CompletePortalLoader {
 				if (portal.containsKey("linkedPortalWorld")) {
 					World linkedWorld = Bukkit.getWorld((String) portal.get("linkedPortalWorld"));
 					Location linkedLoc = new Location(linkedWorld, (double) portal.get("linkedPortalCenterX"), (double) portal.get("linkedPortalCenterY"), (double) portal.get("linkedPortalCenterZ"));
-					linked = Dimensions.getCompletePortalManager().getCompletePortal(linkedLoc, false, false);
+					linked = Portals.getCompletePortalManager().getCompletePortal(linkedLoc, false, false);
 					
 				}
 				
 				CompletePortal completePortal = new CompletePortal(customPortal, world, geom, linked);
 				completePortal.setTags(gson.fromJson((String) portal.get("portalTags"), new TypeToken<HashMap<String, Object>>() { }.getType()));
 				
-				Dimensions.getCompletePortalManager().createNew(completePortal, null, CustomPortalIgniteCause.LOAD_PORTAL, null);
+				Portals.getCompletePortalManager().createNew(completePortal, null, CustomPortalIgniteCause.LOAD_PORTAL, null);
 				
 				
 			}

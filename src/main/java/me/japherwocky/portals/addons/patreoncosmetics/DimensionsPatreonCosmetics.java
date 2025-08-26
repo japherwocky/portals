@@ -26,7 +26,7 @@ import org.bukkit.plugin.Plugin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.addons.patreoncosmetics.cosmetics.CosmeticEffect;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.events.CustomPortalBreakEvent;
@@ -44,7 +44,7 @@ public class DimensionsPatreonCosmetics implements Listener {
 	private UUID localUUID;
 	private HashMap<String, CosmeticEffect> localCosmeticsMap;
 	
-	public DimensionsPatreonCosmetics(Dimensions main) {
+	public DimensionsPatreonCosmetics(Portals main) {
 		this.pl = main;
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
@@ -61,8 +61,8 @@ public class DimensionsPatreonCosmetics implements Listener {
 		localCosmeticsMap.put("onPortalTick", CosmeticEffect.valueOf(DimensionsSettings.getConfig().getString("CosmeticsAddon.PortalTick", "NOTHING")));
 		
 
-		Dimensions.getCommandManager().registerCommand(new PatreonCommand("patreon", "[player]", new String[0], "Check your or a player's patreon status", "none", false, this));
-		Dimensions.getCommandManager().registerCommand(new PatreonDisableCommand("disablePatreon", "", new String[0], "Disable your patreon effects for this session", "none", false, this));
+		Portals.getCommandManager().registerCommand(new PatreonCommand("patreon", "[player]", new String[0], "Check your or a player's patreon status", "none", false, this));
+		Portals.getCommandManager().registerCommand(new PatreonDisableCommand("disablePatreon", "", new String[0], "Disable your patreon effects for this session", "none", false, this));
 		
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, pl);

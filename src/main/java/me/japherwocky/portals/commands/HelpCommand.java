@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsUtils;
 
 public class HelpCommand extends DimensionsCommand {
@@ -22,7 +22,7 @@ public class HelpCommand extends DimensionsCommand {
 		String head = "§7[§cDimensions§7] Commands list:";
 		int page = 0;
 		if (args.length>1 && DimensionsUtils.isInt(args[1]) && !args[1].equals("0")) page = Integer.parseInt(args[1])-1;
-		ArrayList<DimensionsCommand> commandList = Dimensions.getCommandManager().getCommands();
+		ArrayList<DimensionsCommand> commandList = Portals.getCommandManager().getCommands();
 		for (int i =(int) Math.max(page*commandsPerPage, 0);i<Math.min(page*commandsPerPage+(commandList.size()-commandsPerPage*page), commandsPerPage*(1+page));i++) {
 			DimensionsCommand cmd = (DimensionsCommand) commandList.toArray()[i];
         	head += "\n/dim "+cmd.getCommand()+" "+cmd.getArgs()+" §c-§7 "+cmd.getDescription();
@@ -39,7 +39,7 @@ public class HelpCommand extends DimensionsCommand {
 
 		if (args.length!=2) return res;
 		
-		for (int i =1 ;i<=((int) Math.ceil(Dimensions.getCommandManager().getCommands().size()/commandsPerPage));i++)
+		for (int i =1 ;i<=((int) Math.ceil(Portals.getCommandManager().getCommands().size()/commandsPerPage));i++)
 			res.add(i+"");
 		
 		return res;

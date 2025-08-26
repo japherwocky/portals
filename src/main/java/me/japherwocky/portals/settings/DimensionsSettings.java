@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 
 /**
@@ -71,7 +71,7 @@ public class DimensionsSettings {
 	private static HashMap<String, WorldConfiguration> worldConfigurations = new HashMap<String, WorldConfiguration>();
 	
 	private static FileConfiguration config;
-	private static Dimensions main;
+	private static Portals main;
 
 	private static ArrayList<String> ignoredSettings = new ArrayList<String>(Arrays.asList(new String[] {
 			"fallbackWorld",
@@ -82,7 +82,7 @@ public class DimensionsSettings {
 			"ignoredSettings"
 	}));
 
-	public DimensionsSettings(Dimensions main) {
+	public DimensionsSettings(Portals main) {
 		DimensionsSettings.main = main;
 		main.reloadConfig();
 		

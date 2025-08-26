@@ -53,7 +53,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.completePortal.PortalEntitySolid;
@@ -64,12 +64,12 @@ import me.japherwocky.portals.settings.DimensionsSettings;
 
 public class PortalListener implements Listener {
 
-	//private Dimensions pl;
+	//private Portals pl;
 	
 	private PacketListener packetListener1;
 	//private PacketListener packetListener2;
 	
-	public PortalListener(Dimensions pl) {
+	public PortalListener(Portals pl) {
 		//this.pl = pl;
 		//PacketType.Play.Server.UNLOAD_CHUNK = new PacketType(Protocol.PLAY, Sender.SERVER, 0x22, "MapChunk", "SPacketChunkData");
 		
@@ -77,7 +77,7 @@ public class PortalListener implements Listener {
 			@Override
 			public void onPacketSending(PacketEvent event) {
 				if (event.getPacketType() == PacketType.Play.Server.MAP_CHUNK) {
-					for (CompletePortal complete : Dimensions.getCompletePortalManager().getCompletePortals(event.getPlayer().getWorld(), event.getPacket().getIntegers().read(0), event.getPacket().getIntegers().read(1))) {
+					for (CompletePortal complete : Portals.getCompletePortalManager().getCompletePortals(event.getPlayer().getWorld(), event.getPacket().getIntegers().read(0), event.getPacket().getIntegers().read(1))) {
 						complete.fill(event.getPlayer());
 					}
 					
@@ -90,7 +90,7 @@ public class PortalListener implements Listener {
 				
 				@Override
 				public void run() {
-					for (CompletePortal portal : Dimensions.getCompletePortalManager().getCompletePortals()) {
+					for (CompletePortal portal : Portals.getCompletePortalManager().getCompletePortals()) {
 						portal.updatePortal();
 					}
 				}
@@ -102,7 +102,7 @@ public class PortalListener implements Listener {
 				if (event.getPacketType() == PacketType.Play.Server.UNLOAD_CHUNK) {
 
 					System.out.println("TTtttt");
-					for (CompletePortal complete : Dimensions.getCompletePortalManager().getCompletePortals(event.getPacket().getIntegers().read(0), event.getPacket().getIntegers().read(1))) {
+					for (CompletePortal complete : Portals.getCompletePortalManager().getCompletePortals(event.getPacket().getIntegers().read(0), event.getPacket().getIntegers().read(1))) {
 						System.out.println(complete.getWorld()+", "+complete.getCenter());
 						complete.destroy(event.getPlayer());
 					}
@@ -132,9 +132,9 @@ public class PortalListener implements Listener {
 		if (to.getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
 		
 
-		CompletePortal complTo = Dimensions.getCompletePortalManager().getCompletePortal(to, false, false);
+		CompletePortal complTo = Portals.getCompletePortalManager().getCompletePortal(to, false, false);
 		
-		CompletePortal complFrom = Dimensions.getCompletePortalManager().getCompletePortal(from, false, false);
+		CompletePortal complFrom = Portals.getCompletePortalManager().getCompletePortal(from, false, false);
 		
 		if (DimensionsSettings.enableNetherPortalEffect && complTo!=null) {
 			p.sendBlockChange(to, DimensionsUtils.getNetherPortalEffect(complTo.getPortalGeometry().iszAxis()));
@@ -167,7 +167,7 @@ public class PortalListener implements Listener {
 				int rad = (int) ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK)?Math.min(Math.ceil(e.getClickedBlock().getLocation().distance(e.getPlayer().getEyeLocation())),5):5);
 				List<Block> los = e.getPlayer().getLineOfSight(null, rad);
 				for (Block block : los) {
-					if (Dimensions.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
+					if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
 						e.setCancelled(true);
 						break;
 					}
@@ -177,8 +177,8 @@ public class PortalListener implements Listener {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         	//if (e.getItem() == null) return;
         	Block block = e.getClickedBlock().getRelative(e.getBlockFace());
-        	if (Dimensions.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) return;
-        	for (CustomPortal portals : Dimensions.getCustomPortalManager().getCustomPortals()) {
+        	if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) return;
+        	for (CustomPortal portals : Portals.getCustomPortalManager().getCustomPortals()) {
     			if (portals.tryIgnite(e.getPlayer(), e.getItem(), block.getLocation()) != null) {
     				e.setCancelled(true);
 					if (e.getPlayer().getGameMode()!=GameMode.CREATIVE && DimensionsSettings.consumeItems) {
@@ -219,9 +219,9 @@ public class PortalListener implements Listener {
 				List<Block> los = p.getLineOfSight(null, 5);
 				for (Block block : los) {
 					if (!DimensionsUtils.isAir(block)) break;
-					CompletePortal portal = Dimensions.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
+					CompletePortal portal = Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
 					if (portal!=null) {
-						Dimensions.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
+						Portals.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
 						break;
 					}
 				}
@@ -245,7 +245,7 @@ public class PortalListener implements Listener {
 			int rad = (int) Math.ceil(eventBlock.getLocation().distance(p.getEyeLocation()));
 			List<Block> los = p.getLineOfSight(null, rad);
 			for (Block block : los) {
-				if (Dimensions.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
+				if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
 					return true;
 				}
 			}
@@ -256,8 +256,8 @@ public class PortalListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onExplode(ExplosionPrimeEvent e) {
 		Entity exploder = e.getEntity();
-		for (CompletePortal portal : Dimensions.getCompletePortalManager().getNearestPortals(exploder.getLocation(),(int) (e.getRadius()+2))) {
-			if (!Dimensions.getCompletePortalManager().removePortal(portal,CustomPortalDestroyCause.ENTITY, exploder)) {
+		for (CompletePortal portal : Portals.getCompletePortalManager().getNearestPortals(exploder.getLocation(),(int) (e.getRadius()+2))) {
+			if (!Portals.getCompletePortalManager().removePortal(portal,CustomPortalDestroyCause.ENTITY, exploder)) {
 				e.setCancelled(true);
 				break;
 			}
@@ -266,7 +266,7 @@ public class PortalListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onLiquidFlow(BlockFromToEvent e) {
-		if (Dimensions.getCompletePortalManager().getCompletePortal(e.getBlock().getLocation(), false, false)!=null || Dimensions.getCompletePortalManager().getCompletePortal(e.getToBlock().getLocation(), false, false)!=null) {
+		if (Portals.getCompletePortalManager().getCompletePortal(e.getBlock().getLocation(), false, false)!=null || Portals.getCompletePortalManager().getCompletePortal(e.getToBlock().getLocation(), false, false)!=null) {
 			e.setCancelled(true);
 		}
 	}
@@ -368,10 +368,10 @@ public class PortalListener implements Listener {
 		}
 		if (!DimensionsSettings.listenToEvents.contains(cause.name())) return false;
 		
-		List<CompletePortal> portals = Dimensions.getCompletePortalManager().getCompletePortals(block.getLocation(), true, false);
+		List<CompletePortal> portals = Portals.getCompletePortalManager().getCompletePortals(block.getLocation(), true, false);
 		boolean cancel = false;
         for (CompletePortal portal : portals) {
-        	cancel = !Dimensions.getCompletePortalManager().removePortal(portal, cause, ent) || cancel;
+        	cancel = !Portals.getCompletePortalManager().removePortal(portal, cause, ent) || cancel;
         }
 		return cancel;
 	}
@@ -380,7 +380,7 @@ public class PortalListener implements Listener {
 	public void onDamage(EntityDamageEvent e) {
 		DamageCause cause = e.getCause();
 		if (!((e.getEntity() instanceof LivingEntity) && (cause.equals(DamageCause.SUFFOCATION) || cause.equals(DamageCause.LAVA) || cause.equals(DamageCause.DROWNING) || cause.equals(DamageCause.HOT_FLOOR)))) return;
-		if (Dimensions.getCompletePortalManager().getCompletePortal(e.getEntity().getLocation(), false ,false)!=null) e.setCancelled(true);
+		if (Portals.getCompletePortalManager().getCompletePortal(e.getEntity().getLocation(), false ,false)!=null) e.setCancelled(true);
 	}
 	
 	
@@ -388,7 +388,7 @@ public class PortalListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		
-		CompletePortal compl = Dimensions.getCompletePortalManager().getCompletePortal(e.getPlayer().getLocation(), false, false);
+		CompletePortal compl = Portals.getCompletePortalManager().getCompletePortal(e.getPlayer().getLocation(), false, false);
 		if (compl!=null) {
 			compl.pushToHold(e.getPlayer());
 		}
@@ -399,6 +399,6 @@ public class PortalListener implements Listener {
 	public void onSave(WorldSaveEvent e) {
 		if (System.currentTimeMillis()-lastSave<5000) return;
 		lastSave = System.currentTimeMillis();
-		//Dimensions.getCompletePortalManager().save(false);
+		//Portals.getCompletePortalManager().save(false);
 	}
 }

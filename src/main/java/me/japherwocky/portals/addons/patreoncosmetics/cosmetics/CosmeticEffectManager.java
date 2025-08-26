@@ -7,7 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.completePortal.CompletePortal;
 
@@ -51,7 +51,7 @@ public class CosmeticEffectManager {
 			Location loc2 = location.clone().add(zAxis?-0.5:0,0,zAxis?0:-0.5);
 			for (int j=0;j<3;j++) {
 				final int i = j;
-				Bukkit.getScheduler().scheduleSyncDelayedTask(Dimensions.getInstance(), new Runnable() {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Portals.getInstance(), new Runnable() {
 					
 					@Override
 					public void run() {

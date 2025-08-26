@@ -30,7 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalLoader;
 
@@ -52,7 +52,7 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 		
 		gson = new GsonBuilder().create();
 		
-		Bukkit.getPluginManager().registerEvents(this, Dimensions.getInstance());
+		Bukkit.getPluginManager().registerEvents(this, Portals.getInstance());
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 			((Player) sender).openInventory(mainInventory);
 		} else {
 			String msg = "§7[§cDimensions§7] Portals list:";
-			for (CustomPortal portal : Dimensions.getCustomPortalManager().getCustomPortals()) {
+			for (CustomPortal portal : Portals.getCustomPortalManager().getCustomPortals()) {
 				msg +="\n["+(portal.isEnabled()?"§aEnabled":"§cDisabled")+"§7] "+ portal.getPortalId();
 			}
 			
@@ -100,7 +100,7 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 	}
 	
 	private void updatePortalsMenu(Player p, int page) {
-		ArrayList<CustomPortal> portals = Dimensions.getCustomPortalManager().getCustomPortals();
+		ArrayList<CustomPortal> portals = Portals.getCustomPortalManager().getCustomPortals();
 		
 		Inventory inv = Bukkit.createInventory(null, 54, "My portals | Page §4"+(page+1)+"§c/"+((int)Math.ceil(portals.size()/45f)));
 		
@@ -226,7 +226,7 @@ public class PortalsCommand extends DimensionsCommand implements Listener {
 				updatePortalsMenu(p,Integer.parseInt(item.getItemMeta().getLore().get(0).substring(13))-1);
 				return;
 			} else {
-				CustomPortal portal = Dimensions.getCustomPortalManager().getCustomPortal(item.getItemMeta().getDisplayName().substring(2));
+				CustomPortal portal = Portals.getCustomPortalManager().getCustomPortal(item.getItemMeta().getDisplayName().substring(2));
 				if (portal!=null) {
 					p.sendMessage("§7[§cDimensions§7] "+portal.getDisplayName()+":§7 Is built from §c"+portal.getOutsideMaterial()+"§7, is ignited using §c"+portal.getLighterMaterial()+"§7 and goes to §c"+portal.getWorld().getName()+"§7.");
 				} else {

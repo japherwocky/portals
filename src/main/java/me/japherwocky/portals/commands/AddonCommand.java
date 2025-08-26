@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.addons.DimensionsAddon;
 
 public class AddonCommand extends DimensionsCommand implements Listener {
@@ -34,12 +34,12 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 		super(command,args,aliases,description, permission, adminCommand);
 		
 		
-		mainGUI = Bukkit.createInventory(null, 9, "§cDimensions addons manager");
+		mainGUI = Bukkit.createInventory(null, 9, "§cPortals addons manager");
 		
 		installedAddonsItemStack = new ItemStack(Material.COMMAND_BLOCK, 1);
 		ItemMeta installedAddonsItemStackMeta = installedAddonsItemStack.getItemMeta();
 		installedAddonsItemStackMeta.setDisplayName("§aInstalled addons");
-		installedAddonsItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7There are currently", "§a"+Dimensions.getAddonManager().getAddons().size()+"§7 addons installed"})));
+		installedAddonsItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7There are currently", "§a"+Portals.getAddonManager().getAddons().size()+"§7 addons installed"})));
 		installedAddonsItemStack.setItemMeta(installedAddonsItemStackMeta);
 		mainGUI.addItem(installedAddonsItemStack);
 		
@@ -51,9 +51,9 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 		mainGUI.addItem(installAddonsItemStack);
 		
 		
-		installedAddonsGUI = Bukkit.createInventory(null, (int) Math.ceil(Dimensions.getAddonManager().getAddons().size()/9f)*9, "§cDimensions addons manager");
+		installedAddonsGUI = Bukkit.createInventory(null, (int) Math.ceil(Portals.getAddonManager().getAddons().size()/9f)*9, "§cPortals addons manager");
 		
-		for (DimensionsAddon addon : Dimensions.getAddonManager().getAddons()) {
+		for (DimensionsAddon addon : Portals.getAddonManager().getAddons()) {
 			ItemStack item = new ItemStack(Material.GREEN_STAINED_GLASS, 1);
 			ItemMeta itemMeta = item.getItemMeta();
 			itemMeta.setDisplayName("§a"+addon.getName());
@@ -65,7 +65,7 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 		}
 		
 		
-		manageAddonGUI = Bukkit.createInventory(null, 9, "§cDimensions addons manager");
+		manageAddonGUI = Bukkit.createInventory(null, 9, "§cPortals addons manager");
 		
 		addonInfoItemStack = new ItemStack(Material.COMMAND_BLOCK, 1);
 		ItemMeta addonInfoItemStackMeta = addonInfoItemStack.getItemMeta();
@@ -89,7 +89,7 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 		manageAddonGUI.addItem(unloadAddonItemStack);
 		
 
-		Bukkit.getServer().getPluginManager().registerEvents(this, Dimensions.getInstance());
+		Bukkit.getServer().getPluginManager().registerEvents(this, Portals.getInstance());
 	}
 	
 	@Override
@@ -116,7 +116,7 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 				e.getWhoClicked().sendMessage("§7This feature is not ready yet. It will be added in the future.");
 				e.setCancelled(true);
 			} else if (e.getClickedInventory().equals(installedAddonsGUI)) {
-				DimensionsAddon addon = Dimensions.getAddonManager().getAddonByName(e.getCurrentItem().getItemMeta().getDisplayName().replaceFirst("§a", ""));
+				DimensionsAddon addon = Portals.getAddonManager().getAddonByName(e.getCurrentItem().getItemMeta().getDisplayName().replaceFirst("§a", ""));
 				if (addon==null) {
 					e.getWhoClicked().sendMessage("§cThere was a problem while trying to access the addon");
 				} else {
@@ -131,12 +131,12 @@ public class AddonCommand extends DimensionsCommand implements Listener {
 				}
 				e.setCancelled(true);
 			} else if (e.getView().getTitle()!=null) {
-				DimensionsAddon addon = Dimensions.getAddonManager().getAddonByName(e.getView().getTitle());
+				DimensionsAddon addon = Portals.getAddonManager().getAddonByName(e.getView().getTitle());
 				if (addon!=null) {
 					if (e.getCurrentItem().isSimilar(updateAddonItemStack)) {
 						e.getWhoClicked().sendMessage("§a"+addon.getName()+" v"+addon.getVersion()+" will be updated after a restart");
 					} else if (e.getCurrentItem().isSimilar(unloadAddonItemStack)) {
-						Dimensions.getAddonManager().unload(addon);
+						Portals.getAddonManager().unload(addon);
 						e.getWhoClicked().sendMessage("§a"+addon.getName()+" v"+addon.getVersion()+" has been unloaded");
 						e.getWhoClicked().openInventory(installedAddonsGUI);
 					} else if (e.getSlot()==0) e.getWhoClicked().openInventory(installedAddonsGUI);

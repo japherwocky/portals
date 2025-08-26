@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.addons.DimensionsAddonPlayerGUIAction;
 import me.japherwocky.portals.builder.CreatePortalInstance;
 import me.japherwocky.portals.gui.CreatePortalGUI;
@@ -100,7 +100,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 
 			if (actionList.get(itemIndex).execute(instance.getPlayer(), instance.selectedPortal)) {
 				p.closeInventory();
-				Dimensions.getCreatePortalManager().clear(p);
+				Portals.getCreatePortalManager().clear(p);
 			}
 			
 			return;

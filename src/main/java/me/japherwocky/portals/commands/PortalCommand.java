@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.japherwocky.portals.Dimensions;
+import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.customportal.CustomPortal;
@@ -29,7 +29,7 @@ public class PortalCommand extends DimensionsCommand {
 			List<Block> los = ((Player) sender).getLineOfSight(null, 5);
 			for (Block block : los) {
 				if (!DimensionsUtils.isAir(block)) break;
-				CompletePortal compl = Dimensions.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
+				CompletePortal compl = Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
 				if (compl!=null) {
 					CustomPortal portal = compl.getCustomPortal();
 					sender.sendMessage("§7[§cDimensions§7] "+portal.getDisplayName()+":§7 Is built from §c"+portal.getOutsideMaterial()+"§7, is ignited using §c"+portal.getLighterMaterial()+"§7 and this specific portal goes to §c"+(compl.getLinkedPortal()==null?portal.getWorld().getName():compl.getLinkedPortal().getWorld().getName())+"§7.");
@@ -39,7 +39,7 @@ public class PortalCommand extends DimensionsCommand {
 			
 			sender.sendMessage("§7[§cDimensions§7] Could not find a portal where you look at.");
 		} else if (args.length==2) {
-			CustomPortal portal = Dimensions.getCustomPortalManager().getCustomPortal(args[1]);
+			CustomPortal portal = Portals.getCustomPortalManager().getCustomPortal(args[1]);
 			if (portal!=null) {
 				sender.sendMessage("§7[§cDimensions§7] "+portal.getDisplayName()+":§7 Is built from §c"+portal.getOutsideMaterial()+"§7, is ignited using §c"+portal.getLighterMaterial()+"§7 and goes to §c"+portal.getWorld().getName()+"§7.");
 			} else {
@@ -56,7 +56,7 @@ public class PortalCommand extends DimensionsCommand {
 
 		if (args.length!=2) return res;
 		
-		Dimensions.getCustomPortalManager().getCustomPortals().forEach(p -> res.add(p.getPortalId()));
+		Portals.getCustomPortalManager().getCustomPortals().forEach(p -> res.add(p.getPortalId()));
 		
 		return res;
 	}
