@@ -1,0 +1,39 @@
+name: Portals
+version: '3.2.10'
+main: me.xxastaspastaxx.dimensions.Dimensions
+api-version: '1.21'
+authors: [astaspasta, japherwocky]
+description: Allow players to easily build portals to another world
+website: https://github.com/japherwocky/portals
+dependencies:
+  - name: ProtocolLib
+    required: true
+  - name: BetterPortals
+    required: false
+  - name: Vault
+    required: false
+  - name: WorldEdit
+    required: false
+  - name: WorldGuard
+    required: false
+  - name: BentoBox
+    required: false
+  - name: IridiumSkyblock
+    required: false
+  - name: SuperiorSkyblock2
+    required: false
+  - name: Oraxen
+    required: false
+  - name: ItemsAdder
+    required: false
+  - name: CustomItems
+    required: false
+  - name: ModelEngine
+    required: false
+  - name: LightAPI
+    required: false
+commands:
+  dimensions:
+    description: Main command
+    usage: /<command>
+    aliases: [dim]
