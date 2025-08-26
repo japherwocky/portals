@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.PortalsUtils;
-import me.japherwocky.portals.addons.DimensionsAddonPlayerGUIAction;
+import me.japherwocky.portals.addons.PortalsAddonPlayerGUIAction;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.completePortal.PortalGeometry;
 

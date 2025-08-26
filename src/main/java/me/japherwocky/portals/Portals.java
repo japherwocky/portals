@@ -7,8 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.japherwocky.portals.addons.DimensionsAddon;
-import me.japherwocky.portals.addons.DimensionsAddonManager;
+import me.japherwocky.portals.addons.PortalsAddon;
+import me.japherwocky.portals.addons.PortalsAddonManager;
 import me.japherwocky.portals.addons.patreoncosmetics.DimensionsPatreonCosmetics;
 import me.japherwocky.portals.builder.CreatePortalManager;
 import me.japherwocky.portals.commands.DimensionsCommandManager;
@@ -27,7 +27,7 @@ public class Portals extends JavaPlugin {
 	
 	private static Portals instance;
 	private static DimensionsCommandManager commandManager;
-	private static DimensionsAddonManager addonsManager;
+	private static PortalsAddonManager addonsManager;
 	private static CompletePortalManager completePortalManager;
 	private static CustomPortalManager customPortalManager;
 	private static CreatePortalManager createPortalManager;
@@ -42,7 +42,7 @@ public class Portals extends JavaPlugin {
 		new PortalsSettings(this);
  
 		PortalsDebbuger.VERY_LOW.print("Loading addons...");
-		addonsManager = new DimensionsAddonManager(this);
+		addonsManager = new PortalsAddonManager(this);
 		PortalsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
 		
 	}
@@ -112,7 +112,7 @@ public class Portals extends JavaPlugin {
 	        
 	        metrics.addCustomChart(new Metrics.DrilldownPie("used_addons", () -> {
 	            Map<String, Map<String, Integer>> map = new HashMap<>();
-	            for (DimensionsAddon addon : getAddonManager().getAddons()) {
+	            for (PortalsAddon addon : getAddonManager().getAddons()) {
 	                Map<String, Integer> entry = new HashMap<>();
 	                entry.put(addon.getVersion(),1);
 	                map.put(addon.getName(), entry);
@@ -165,7 +165,7 @@ public class Portals extends JavaPlugin {
 		return customPortalManager;
 	}
 	
-	public static DimensionsAddonManager getAddonManager() {
+	public static PortalsAddonManager getAddonManager() {
 		return addonsManager;
 	}
 	
