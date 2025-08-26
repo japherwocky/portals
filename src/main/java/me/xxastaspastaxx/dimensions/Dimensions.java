@@ -7,9 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.xxastaspastaxx.dimensions.addons.DimensionsAddon;
-import me.xxastaspastaxx.dimensions.addons.DimensionsAddonManager;
-import me.xxastaspastaxx.dimensions.addons.patreoncosmetics.DimensionsPatreonCosmetics;
+
 import me.xxastaspastaxx.dimensions.builder.CreatePortalManager;
 import me.xxastaspastaxx.dimensions.commands.DimensionsCommandManager;
 import me.xxastaspastaxx.dimensions.completePortal.CompletePortalManager;
@@ -25,12 +23,9 @@ public class Dimensions extends JavaPlugin {
 	
 	private static Dimensions instance;
 	private static DimensionsCommandManager commandManager;
-	private static DimensionsAddonManager addonsManager;
 	private static CompletePortalManager completePortalManager;
 	private static CustomPortalManager customPortalManager;
 	private static CreatePortalManager createPortalManager;
-	
-	private static DimensionsPatreonCosmetics patreonCosmetics;
 	
 	public void onLoad() {
 		
@@ -39,9 +34,7 @@ public class Dimensions extends JavaPlugin {
 		DimensionsDebbuger.VERY_LOW.print("Loading Dimensions settings...");
 		new DimensionsSettings(this);
  
-		DimensionsDebbuger.VERY_LOW.print("Loading addons...");
-		addonsManager = new DimensionsAddonManager(this);
-		DimensionsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
+
 		
 	}
 	
@@ -50,11 +43,7 @@ public class Dimensions extends JavaPlugin {
 		DimensionsDebbuger.DEBUG.print("Registering commands...");
 		commandManager = new DimensionsCommandManager(this);
 		
-		if (DimensionsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new DimensionsPatreonCosmetics(this);
-		
-		DimensionsDebbuger.VERY_LOW.print("Enabling addons...");
-		addonsManager.enableAddons();
+
 		
 		DimensionsDebbuger.VERY_LOW.print("Loading portals...");
 		customPortalManager = new CustomPortalManager(this);
@@ -108,21 +97,9 @@ public class Dimensions extends JavaPlugin {
 	            return map;
 	        }));
 	        
-	        metrics.addCustomChart(new Metrics.DrilldownPie("used_addons", () -> {
-	            Map<String, Map<String, Integer>> map = new HashMap<>();
-	            for (DimensionsAddon addon : getAddonManager().getAddons()) {
-	                Map<String, Integer> entry = new HashMap<>();
-	                entry.put(addon.getVersion(),1);
-	                map.put(addon.getName(), entry);
-	            }
-	            return map;
-	        }));
 	}
 	
 	public void reload() {
-		if (patreonCosmetics!=null)
-			patreonCosmetics.disable();
-		addonsManager.unloadAll();
 		completePortalManager.save();
 		HandlerList.unregisterAll(this);
 		
@@ -130,11 +107,8 @@ public class Dimensions extends JavaPlugin {
 		DimensionsSettings.setDefaultWorld();
 
 		commandManager = new DimensionsCommandManager(this);
-		
-		if (DimensionsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new DimensionsPatreonCosmetics(this);
 
-		addonsManager.enableAddons();
+
 
 		customPortalManager = new CustomPortalManager(this);
 		completePortalManager = new CompletePortalManager(this);
@@ -147,7 +121,7 @@ public class Dimensions extends JavaPlugin {
 	
 	public void onDisable() {
 		
-		addonsManager.onDisable();
+
 		completePortalManager.save();
 	}
 	
@@ -163,9 +137,7 @@ public class Dimensions extends JavaPlugin {
 		return customPortalManager;
 	}
 	
-	public static DimensionsAddonManager getAddonManager() {
-		return addonsManager;
-	}
+
 	
 	public static DimensionsCommandManager getCommandManager() {
 		return commandManager;

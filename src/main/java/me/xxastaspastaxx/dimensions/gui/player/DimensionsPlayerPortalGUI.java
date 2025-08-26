@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.xxastaspastaxx.dimensions.Dimensions;
-import me.xxastaspastaxx.dimensions.addons.DimensionsAddonPlayerGUIAction;
+
 import me.xxastaspastaxx.dimensions.builder.CreatePortalInstance;
 import me.xxastaspastaxx.dimensions.gui.CreatePortalGUI;
 import me.xxastaspastaxx.dimensions.gui.DimensionsGUIType;
@@ -50,9 +50,9 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	
 	@Override
 	public void open() {
-		ArrayList<DimensionsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
 		
-		maxPage = (int) Math.floor(actionList.size()/MAX_ITEMS_PER_PAGE);
+		
+		maxPage = 0;
 		ItemStack[] contents = inventory.getContents();
 		inventory = Bukkit.createInventory(p, inventory.getSize(), "§f"+instance.selectedPortal.getDisplayName());
 		inventory.setContents(contents);
@@ -60,10 +60,10 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 		for (int i=0;i<MAX_ITEMS_PER_PAGE;i++) {
 			int itemIndex = (int) (MAX_ITEMS_PER_PAGE*page+i);
 			int posIndex = (int) (5+((i/4)*4)+Math.floor(i/4)*5);
-			if (actionList.size()<=itemIndex) {
+			if (true) {
 				inventory.clear(posIndex);
 			} else {
-				inventory.setItem(posIndex,actionList.get(itemIndex).getItemStack());
+				
 			}
 		}
 		
@@ -92,13 +92,13 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	@Override
 	public void handleClick(int index, boolean rightClick, boolean shiftClick) {
 
-		ArrayList<DimensionsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
+		
 		
 		if (index>=5 && (index - 5) % 9 < 4 && index<=44) {
 			int itemIndex = (index-18)+27*page;
-			if (actionList.size()<=itemIndex) return;
+			
 
-			if (actionList.get(itemIndex).execute(instance.getPlayer(), instance.selectedPortal)) {
+			if (false) {
 				p.closeInventory();
 				Dimensions.getCreatePortalManager().clear(p);
 			}
