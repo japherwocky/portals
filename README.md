@@ -1,6 +1,6 @@
 # Portals
 
-This is a fork of the [Dimensions3](https://www.spigotmc.org/resources/dimensions-custom-portals.83982/) plugin, restructured and maintained by japherwocky.
+This is a fork of the [Dimensions3](https://www.spigotmc.org/resources/dimensions-custom-portals.83982/) plugin (which appears to be abandoned), restructured and maintained by japherwocky.
 
 ## Original Resources
 - [Spigot page](https://www.spigotmc.org/resources/dimensions-custom-portals.83982/)

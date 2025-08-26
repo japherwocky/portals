@@ -27,183 +27,167 @@ public class PortalsAddonManager {
 	private Portals pl;
 
 	private ServiceLoader<PortalsAddon> loader;
-	private ArrayList<PortalsAddon> addons = new ArrayList<PortalsAddon>();
+	
+	private ArrayList<PortalsAddon> loadedAddons = new ArrayList<PortalsAddon>();
+	
+	
+	private URL[] urls;
 	
 	/**
-	 * Constructor of PortalsAddonManager
-	 * 
-	 * @param pl The main class of the plugin
+	 * Constructor of the Addon manager. Creates the directory containing the addons and loads all the addons using ServiceLoader
+	 * @param pl The instance of the plugin
 	 */
 	public PortalsAddonManager(Portals pl) {
 		this.pl = pl;
 		
-		File addonsFolder = new File(ADDONS_PATH);
-		if (!addonsFolder.exists())
-			addonsFolder.mkdirs();
 		
-		File[] addonFiles = addonsFolder.listFiles();
-		
-		if (addonFiles.length == 0)
-			return;
-		
-		ArrayList<URL> urls = new ArrayList<URL>();
-		
-		for (File file : addonFiles) {
-			if (file.getName().endsWith(".jar")) {
-				try {
-					urls.add(file.toURI().toURL());
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		if (urls.isEmpty())
-			return;
-		
-		URLClassLoader ucl = new URLClassLoader(urls.toArray(new URL[0]), this.getClass().getClassLoader());
-		
-		loader = ServiceLoader.load(PortalsAddon.class, ucl);
-		
-		Iterator<PortalsAddon> iterator = loader.iterator();
-		
-		while (true) {
-			try {
-				if (!iterator.hasNext())
-					break;
-				
-				PortalsAddon addon = iterator.next();
-				
-				addons.add(addon);
-				
-				PortalsDebbuger.VERY_LOW.print("Found addon: "+addon.getName()+" v"+addon.getVersion());
-				
-			} catch (ServiceConfigurationError e) {
+		File dir = new File(ADDONS_PATH);
+	    if(!dir.exists()) dir.mkdirs();
+	    
+	    ArrayList<URL> urls = new ArrayList<URL>();
+	    for(File file : dir.listFiles((file, name) -> name.endsWith(".jar"))) {
+	    	if (file.getName().equals("PatreonCosmeticsAddon.jar")) continue; //Prevent error after embedding the addon into main Portals plugin
+	    	try {
+				urls.add(file.toURI().toURL());
+			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-		}
+	    	
+	    }
+	    this.urls = urls.toArray(new URL[0]);
+		loader = ServiceLoader.load(PortalsAddon.class, URLClassLoader.newInstance(this.urls, Portals.class.getClassLoader()));
 		
-		addons.sort((a1, a2) -> {
-			return a2.getPriority().getPriority() - a1.getPriority().getPriority();
-		});
+		Iterator<PortalsAddon> iter = loader.iterator();
+		while (iter.hasNext()) {
+			try {
+				PortalsAddon addon = iter.next();
+				if (addon.onLoad(pl)) {
+					PortalsDebbuger.MEDIUM.print("Loaded addon: "+addon.getName()+" v"+addon.getVersion());
+					loadedAddons.add(addon);
+				} else {
+					PortalsDebbuger.MEDIUM.print("Failed to load addon: "+addon.getName()+" v"+addon.getVersion());
+				}
+			} catch (ServiceConfigurationError e) {
+				String addonName = e.getMessage().substring(e.getMessage().lastIndexOf('.')+1);
+				addonName = addonName.substring(0,addonName.indexOf(' ')-1);
+				PortalsDebbuger.MEDIUM.print("Failed to load addon: "+addonName);
+			}
+		}
 	}
 	
 	/**
 	 * Enable all the addons
 	 */
 	public void enableAddons() {
-		for (PortalsAddon addon : addons) {
-			try {
-				addon.onEnable();
-				PortalsDebbuger.VERY_LOW.print("Enabled addon: "+addon.getName()+" v"+addon.getVersion());
-			} catch (Exception e) {
-				PortalsDebbuger.VERY_LOW.print("Failed to enable addon: "+addon.getName()+" v"+addon.getVersion());
-				e.printStackTrace();
-			}
+		for (PortalsAddon addon : loadedAddons) {
+			PortalsDebbuger.MEDIUM.print("Enabling addon: "+addon.getName()+" v"+addon.getVersion());
+			addon.onEnable(pl);
 		}
+	}
+
+	/*public PortalsAddon downloadAndExportAddon(String jarName, String updateJarURL) {
+	    try {
+	    	URLConnection urlConn = new URL(updateJarURL).openConnection();
+	    	urlConn.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)");
+	    	
+	    	File file = new File(ADDONS_PATH+jarName);
+	    	
+	    	if (file.exists()) {
+	    		FileOutputStream fos = new FileOutputStream(file);
+		    	fos.flush();
+		    	fos.write(urlConn.getInputStream().readAllBytes());
+		    	fos.close();
+	    	} else {
+	    		Files.copy(urlConn.getInputStream(), Paths.get(ADDONS_PATH+jarName), StandardCopyOption.REPLACE_EXISTING);
+	    	}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	    
+	    return null;
+		//return loader.load(new File(ADDONS_PATH+jarName), PortalsAddon.class, urls);
+		
+	}*/
+
+	/**
+	 * Get the instance of the addon from the addon's name if loaded
+	 * @param addonName the name of the addon
+	 * @return the instance of the addon or null
+	 */
+	public PortalsAddon getAddonByName(String addonName) {
+		for (PortalsAddon addon : loadedAddons) {
+			if (addon.getName().contentEquals(addonName)) return addon;
+		}
+		return null;
+	}
+
+	/**
+	 * Get the list of the loaded addons
+	 * @return List of PortalsAddon
+	 */
+	public ArrayList<PortalsAddon> getAddons() {
+		return loadedAddons;
 	}
 	
 	/**
 	 * Disable all the addons
 	 */
 	public void onDisable() {
-		for (PortalsAddon addon : addons) {
-			try {
-				addon.onDisable();
-				PortalsDebbuger.VERY_LOW.print("Disabled addon: "+addon.getName()+" v"+addon.getVersion());
-			} catch (Exception e) {
-				PortalsDebbuger.VERY_LOW.print("Failed to disable addon: "+addon.getName()+" v"+addon.getVersion());
-				e.printStackTrace();
-			}
+		for (PortalsAddon addon : loadedAddons) {
+			addon.onDisable();
 		}
+
+		PortalsAddon.resetOptions();
 	}
 	
 	/**
-	 * Unload all the addons
+	 * Disable all addons and cancel their running tasks
 	 */
 	public void unloadAll() {
-		for (PortalsAddon addon : addons) {
-			try {
-				addon.onDisable();
-				PortalsDebbuger.VERY_LOW.print("Disabled addon: "+addon.getName()+" v"+addon.getVersion());
-			} catch (Exception e) {
-				PortalsDebbuger.VERY_LOW.print("Failed to disable addon: "+addon.getName()+" v"+addon.getVersion());
-				e.printStackTrace();
-			}
+
+		for (PortalsAddon addon : loadedAddons) {
+			unload(addon);
 		}
 		
-		HandlerList.unregisterAll(pl);
+		PortalsAddon.resetOptions();
+	}
+	
+	ArrayList<String> dontUnload = new ArrayList<String>(Arrays.asList(new String[] {"me.japherwocky.portals.listener.PortalListener", "me.japherwocky.portals.commands.AddonCommand"}));
+	
+	/**
+	 * Unload the given addon
+	 * @param plugin the addon to unload
+	 * @return true
+	 */
+	public boolean unload(PortalsAddon plugin) {
+		plugin.onDisable();
 		
-		addons.clear();
-	}
-	
-	/**
-	 * Get all the addons
-	 * 
-	 * @return All the addons
-	 */
-	public ArrayList<PortalsAddon> getAddons() {
-		return addons;
-	}
-	
-	/**
-	 * Get an addon by its name
-	 * 
-	 * @param name The name of the addon
-	 * @return The addon, or null if not found
-	 */
-	public PortalsAddon getAddonByName(String name) {
-		for (PortalsAddon addon : addons) {
-			if (addon.getName().equalsIgnoreCase(name)) {
-				return addon;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Unload an addon
-	 * 
-	 * @param addon The addon to unload
-	 */
-	public void unload(PortalsAddon addon) {
+		HandlerList.getRegisteredListeners(pl).stream().filter(r -> !dontUnload.contains(r.getListener().getClass().getName())).forEach(r -> HandlerList.unregisterAll(r.getListener()));
+//		
+//		for (RegisteredListener r : HandlerList.getRegisteredListeners(pl)) {
+//			String s = r.getListener().getClass().getName();
+//			if (dontUnload.contains(s)) continue;
+//			
+//			HandlerList.unregisterAll(r.getListener());
+//		}
+//		
+		return true;
+    }
+
+	/*public boolean update(PortalsAddon addon) {
 		try {
-			addon.onDisable();
-			PortalsDebbuger.VERY_LOW.print("Disabled addon: " + addon.getName() + " v" + addon.getVersion());
+			if (!addon.needsUpdate()) return false;
+			PortalsDebbuger.debug("Found new version for "+addon.getName()+". Updating addon...", PortalsDebbuger.MEDIUM);
+		
+			addon = downloadAndExportAddon(jarFiles.get(addon).getName(), addon.getUpdateJarURL());
+			PortalsDebbuger.debug("Update complete for "+addon.getName()+".", PortalsDebbuger.MEDIUM);
 		} catch (Exception e) {
-			PortalsDebbuger.VERY_LOW.print("Failed to disable addon: " + addon.getName() + " v" + addon.getVersion());
+			PortalsDebbuger.debug("Could not update", PortalsDebbuger.MEDIUM);
 			e.printStackTrace();
+			return false;
 		}
 		
-		addons.remove(addon);
-	}
-	
-	/**
-	 * Load an addon from a file
-	 * 
-	 * @param file The file to load the addon from
-	 */
-	public void loadAddon(File file) {
-		try {
-			URL url = file.toURI().toURL();
-			URLClassLoader ucl = new URLClassLoader(new URL[] { url }, this.getClass().getClassLoader());
-			
-			ServiceLoader<PortalsAddon> newLoader = ServiceLoader.load(PortalsAddon.class, ucl);
-			Iterator<PortalsAddon> iterator = newLoader.iterator();
-			
-			while (iterator.hasNext()) {
-				PortalsAddon addon = iterator.next();
-				addons.add(addon);
-				addon.onEnable();
-				PortalsDebbuger.VERY_LOW.print("Loaded and enabled addon: " + addon.getName() + " v" + addon.getVersion());
-			}
-			
-			addons.sort((a1, a2) -> {
-				return a2.getPriority().getPriority() - a1.getPriority().getPriority();
-			});
-		} catch (Exception e) {
-			PortalsDebbuger.VERY_LOW.print("Failed to load addon from file: " + file.getName());
-			e.printStackTrace();
-		}
-	}
+		return true;
+	}*/
 }
