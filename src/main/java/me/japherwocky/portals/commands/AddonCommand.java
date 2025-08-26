@@ -95,7 +95,8 @@ public class AddonCommand implements CommandExecutor, TabCompleter {
 			}
 			
 			addonManager.unload(addon);
-			addonManager.loadAddon(addon.getFile());
+			// Addon system is being removed
+			// addonManager.loadAddon(addon.getFile());
 			
 			sender.sendMessage("§aAddon reloaded");
 			

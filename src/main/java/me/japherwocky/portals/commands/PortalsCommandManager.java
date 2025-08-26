@@ -20,7 +20,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
     private ArrayList<PortalsCommand> commands = new ArrayList<PortalsCommand>();
     
     /**
-     * Contruct the manager and set the command executor for the command /portals
+     * Contruct the manager and set the command executor for the command /dimensions
      * @param main the instance of the Portals lpugin
      */
     public PortalsCommandManager(Portals main) {
@@ -38,7 +38,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
 
     	commands.add(new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
     	commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
-    	commands.add(new PortalsCommand("portals", "", new String[0], "Show all portals", "", true));
+    	// Removed PortalsListCommand
 		
 		main.getCommand("portals").setExecutor(this);
 		
@@ -55,7 +55,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
 		for (PortalsCommand command : commands) {
 			if (!command.isThisCommand(args[0])) continue;
 			if (!command.getPermission().contentEquals("none") && !sender.hasPermission(command.getPermission())) {
-				sender.sendMessage("§7[§cPortals§7] §4You do not have permission to execute this command");
+				sender.sendMessage("Â§7[Â§cPortalsÂ§7] Â§4You do not have permission to execute this command");
 				return true;
 			}
 			try {
