@@ -33,7 +33,7 @@ import me.japherwocky.portals.completePortal.PortalGeometry;
 
 public class CustomPortalLoader {
 	
-	public static final String DIRECTORY_PATH = "./plugins/Dimensions/Portals";
+	public static final String DIRECTORY_PATH = "./plugins/Portals/Portals";
 	public static final File PORTALS_DIRECTORY = new File(DIRECTORY_PATH);
 	public static final String CONFIG_VERSION = "3.0.1";
 	

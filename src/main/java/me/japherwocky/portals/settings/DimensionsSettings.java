@@ -145,7 +145,7 @@ public class DimensionsSettings {
 		}
 	}
 
-	/**Get the ./plugins/Dimensions/config.yml instance of FileConfiguration */
+	/**Get the ./plugins/Portals/config.yml instance of FileConfiguration */
 	public static FileConfiguration getConfig() {
 		return config;
 	}
