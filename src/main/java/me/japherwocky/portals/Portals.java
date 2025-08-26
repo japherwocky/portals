@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.japherwocky.portals.addons.DimensionsAddon;
 import me.japherwocky.portals.addons.PortalsAddon;
 import me.japherwocky.portals.addons.PortalsAddonManager;
 import me.japherwocky.portals.addons.patreoncosmetics.DimensionsPatreonCosmetics;
