@@ -29,25 +29,25 @@ public class PatreonCommand extends DimensionsCommand {
 		if (args.length>=2) {
 			Player p2;
 			if ((p2 = Bukkit.getPlayer(args[1]))!=null) {
-				p.sendMessage("§7[§cDimensions§7] "+getStatusString(p2));
+				p.sendMessage("Â§7[Â§cDimensionsÂ§7] "+getStatusString(p2));
 			} else {
-				p.sendMessage("§7[§cDimensions§7] §cCould not find player "+args[1]);
+				p.sendMessage("Â§7[Â§cDimensionsÂ§7] Â§cCould not find player "+args[1]);
 			}
 		} else {
-			p.sendMessage("§7[§cDimensions§7] "+getStatusString(p));
+			p.sendMessage("Â§7[Â§cDimensionsÂ§7] "+getStatusString(p));
 		}
 	}
 	
 	public String getStatusString(Player p) {
-		String res = "§7Player: §a"+p.getName()+" §7\nUUID: §a"+p.getUniqueId().toString()+"\n";
-		res+="§7Supporter: "+(main.getUsers().containsKey(p.getUniqueId())?"§atrue":"§cfalse")+"\n";
-		res+="§7Effects:\n";
+		String res = "Â§7Player: Â§a"+p.getName()+" Â§7\nUUID: Â§a"+p.getUniqueId().toString()+"\n";
+		res+="Â§7Supporter: "+(main.getUsers().containsKey(p.getUniqueId())?"Â§atrue":"Â§cfalse")+"\n";
+		res+="Â§7Effects:\n";
 		if (main.getUsers().containsKey(p.getUniqueId())) {
 			for (String s : main.getUsers().get(p.getUniqueId()).keySet()) {
-				res+="  §a"+s+": "+main.getUsers().get(p.getUniqueId()).get(s)+"\n";
+				res+="  Â§a"+s+": "+main.getUsers().get(p.getUniqueId()).get(s)+"\n";
 			}
 		} else {
-			res+="  §cNo active effects";
+			res+="  Â§cNo active effects";
 		}
 		return res;
 	}
