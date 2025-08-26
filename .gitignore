@@ -55,3 +55,7 @@ test/
 
 # Don't ignore pom.xml
 !pom.xml
+
+# Don't ignore GitHub workflows
+!.github/
+!.github/**
