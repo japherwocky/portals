@@ -20,7 +20,7 @@ public abstract class PortalsAddon {
 	private String addonDescription;
 	private String addonAuthor;
 	private java.io.File addonFile;
-	private DimensionsAddonPriority addonPriority = DimensionsAddonPriority.NORMAL;
+	private PortalsAddonPriority addonPriority = PortalsAddonPriority.NORMAL;
 
 	private static HashMap<CompletePortal, HashMap<String, Object>> addonOptionsOverride = new HashMap<CompletePortal, HashMap<String, Object>>();
 	private static HashMap<CustomPortal, HashMap<String, Object>> addonOptions = new HashMap<CustomPortal, HashMap<String, Object>>();
@@ -57,7 +57,7 @@ public abstract class PortalsAddon {
 	 * @param addonDescription The description of the addon
 	 * @param addonPriority The priority of the addon
 	 */
-	public PortalsAddon(String addonName, String addonVersion, String addonDescription, DimensionsAddonPriority addonPriority) {
+	public PortalsAddon(String addonName, String addonVersion, String addonDescription, PortalsAddonPriority addonPriority) {
 		this.addonName = addonName;
 		this.addonVersion = addonVersion;
 		this.addonDescription = addonDescription;
@@ -178,7 +178,7 @@ public abstract class PortalsAddon {
 	 * 
 	 * @return The priority of the addon
 	 */
-	public DimensionsAddonPriority getPriority() {
+	public PortalsAddonPriority getPriority() {
 		return addonPriority;
 	}
 	

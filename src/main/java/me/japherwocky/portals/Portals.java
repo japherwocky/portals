@@ -7,16 +7,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.japherwocky.portals.addons.DimensionsAddon;
+import me.japherwocky.portals.addons.PortalsAddon;
 import me.japherwocky.portals.addons.PortalsAddonManager;
-import me.japherwocky.portals.addons.patreoncosmetics.DimensionsPatreonCosmetics;
+import me.japherwocky.portals.addons.patreoncosmetics.PortalsPatreonCosmetics;
 import me.japherwocky.portals.builder.CreatePortalManager;
-import me.japherwocky.portals.commands.DimensionsCommandManager;
+import me.japherwocky.portals.commands.PortalsCommandManager;
 import me.japherwocky.portals.completePortal.CompletePortalManager;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalManager;
 import me.japherwocky.portals.listener.PortalListener;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
 /**
  * Main class of the plugin
@@ -24,7 +24,7 @@ import me.japherwocky.portals.settings.DimensionsSettings;
 public class Portals extends JavaPlugin {
 	
 	private static Portals instance;
-	private static DimensionsCommandManager commandManager;
+	private static PortalsCommandManager commandManager;
 	private static PortalsAddonManager addonsManager;
 	private static CompletePortalManager completePortalManager;
 	private static CustomPortalManager customPortalManager;
