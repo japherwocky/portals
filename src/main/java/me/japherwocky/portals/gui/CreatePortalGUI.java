@@ -10,14 +10,14 @@ import me.japherwocky.portals.builder.CreatePortalInstance;
 
 public abstract class CreatePortalGUI {
 	
-	public DimensionsGUIType guiType;
+	public PortalsGUIType guiType;
 	public Inventory inventory;
 	public CreatePortalInstance instance;
 	public Player p;
 	
 	public String waitingResponse = "no";
 	
-	public CreatePortalGUI(CreatePortalInstance instance, DimensionsGUIType guiType) {
+	public CreatePortalGUI(CreatePortalInstance instance, PortalsGUIType guiType) {
 		this.instance = instance;
 		this.guiType = guiType;
 		this.p = instance.getPlayer();
@@ -57,7 +57,7 @@ public abstract class CreatePortalGUI {
 	}
 
 	public void updateItem(int index, String title, String[] lore, int toggleGlow) {
-		DimensionsGUIUtils.updateItem(inventory, index, title, lore, toggleGlow);
+		PortalsGUIUtils.updateItem(inventory, index, title, lore, toggleGlow);
 		
 	}
 	

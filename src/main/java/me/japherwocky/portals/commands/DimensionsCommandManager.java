@@ -38,7 +38,7 @@ public class DimensionsCommandManager implements CommandExecutor, TabCompleter {
 
     	commands.add(new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
     	commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
-    	commands.add(new PortalsListCommand("portals", "", new String[0], "Show all portals", "", true));
+    	// Removed PortalsListCommand
 		
 		main.getCommand("dimensions").setExecutor(this);
 		

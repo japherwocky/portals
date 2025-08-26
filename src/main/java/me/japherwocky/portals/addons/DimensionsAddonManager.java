@@ -55,7 +55,7 @@ public class DimensionsAddonManager {
 	    	
 	    }
 	    this.urls = urls.toArray(new URL[0]);
-		loader = ServiceLoader.load(DimensionsAddon.class, URLClassLoader.newInstance(this.urls, Dimensions.class.getClassLoader()));
+		loader = ServiceLoader.load(DimensionsAddon.class, URLClassLoader.newInstance(this.urls, Portals.class.getClassLoader()));
 		
 		Iterator<DimensionsAddon> iter = loader.iterator();
 		while (iter.hasNext()) {
