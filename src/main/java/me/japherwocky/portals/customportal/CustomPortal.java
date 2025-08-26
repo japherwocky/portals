@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.addons.DimensionsAddonPlayerGUIAction;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.completePortal.PortalGeometry;
@@ -295,7 +295,7 @@ public class CustomPortal {
 	 * Get the next entity type to spawn from the list
 	 */
 	public EntityType getNextSpawn() {
-		return entitySpawnList.keySet().stream().filter(type -> entitySpawnList.get(type)>=DimensionsUtils.getRandom(0, 100)).findAny().orElse(null);
+		return entitySpawnList.keySet().stream().filter(type -> entitySpawnList.get(type)>=PortalsUtils.getRandom(0, 100)).findAny().orElse(null);
 	}
 	
 	/**
@@ -309,7 +309,7 @@ public class CustomPortal {
 	 * Get a random spawn delay for the spawn task
 	 */
 	public int getSpawnDelay() {
-		return DimensionsUtils.getRandom(spawnDelayMin, spawnDelayMax)/50;
+		return PortalsUtils.getRandom(spawnDelayMin, spawnDelayMax)/50;
 	}
 
 	/**
