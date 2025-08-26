@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.PortalsUtils;
-import me.japherwocky.portals.addons.PortalsAddonPlayerGUIAction;
+// Removed addon import
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.completePortal.PortalGeometry;
 
@@ -68,7 +68,7 @@ public class CustomPortal {
 	private int spawnDelayMax;
 	private HashMap<EntityType, Integer> entitySpawnList;
 	
-	private ArrayList<PortalsAddonPlayerGUIAction> playerGUIActions = new ArrayList<PortalsAddonPlayerGUIAction>();
+	// Removed addon player GUI actions
 	
 	/**
 	 * Constructor of CustomPortal
@@ -331,15 +331,5 @@ public class CustomPortal {
 	/**
 	 * @return list of the actions that can be executed by addons
 	 */
-	public ArrayList<PortalsAddonPlayerGUIAction> getAddonPlayerGUIActions() {
-		return playerGUIActions;
-	}
-	
-	public void add(ArrayList<PortalsAddonPlayerGUIAction> newPlayerGUIActions) {
-		playerGUIActions.addAll(newPlayerGUIActions);
-	}
-	
-	public void add(PortalsAddonPlayerGUIAction newPlayerGUIAction) {
-		playerGUIActions.add(newPlayerGUIAction);
-	}
+	// Removed addon player GUI actions methods
 }

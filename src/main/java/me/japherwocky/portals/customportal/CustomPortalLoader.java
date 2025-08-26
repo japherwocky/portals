@@ -24,7 +24,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.addons.DimensionsAddon;
+// Removed addon import
 import me.japherwocky.portals.completePortal.PortalGeometry;
 
 /**
@@ -133,7 +133,7 @@ public class CustomPortalLoader {
 			int minimumWidth = portalConfig.getInt("Portal.MinimumWidth", 3);
 			
 			String worldName = portalConfig.getString("World.Name", "world");
-			/*if (DimensionsSettings.generateNewWorlds && !Bukkit.getServer().getWorlds().contains(Bukkit.getWorld(worldName))) {
+			/*if (PortalsSettings.generateNewWorlds && !Bukkit.getServer().getWorlds().contains(Bukkit.getWorld(worldName))) {
 				Bukkit.getServer().createWorld(new WorldCreator(worldName));
 			}*/
 			
@@ -176,9 +176,7 @@ public class CustomPortalLoader {
 			CustomPortal portal = new CustomPortal(portalID, displayName, enabled, outsideMaterial, outsideBlockDir, insideMaterial, lighterMaterial, particlesColor,breakEffect,minimumHeight,maximumHeight, maximumWidth, minimumWidth,
 					worldName,buildExitPortal, fixedExitPortalWidth, fixedExitPortalHeight, allowedWorlds, teleportDelay, enableParticles, entityTransformation, spawningDelay[0], spawningDelay[1], entitySpawning);
 			portal.setInsideBlockData(insideMaterial.createBlockData());
-			for (DimensionsAddon addon : Portals.getAddonManager().getAddons()) {
-				addon.registerPortal(portalConfig, portal);
-			}
+			// Removed addon registration
 			res.add(portal);
 		}
 		
