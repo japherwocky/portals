@@ -1,155 +1,159 @@
 package me.japherwocky.portals.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.addons.DimensionsAddon;
+import me.japherwocky.portals.PortalsDebbuger;
+import me.japherwocky.portals.addons.PortalsAddon;
+import me.japherwocky.portals.addons.PortalsAddonManager;
 
-public class AddonCommand extends DimensionsCommand implements Listener {
+/**
+ * Command to manage addons
+ *
+ */
 
-	private Inventory mainGUI;
-	private ItemStack installedAddonsItemStack;
-	private ItemStack installAddonsItemStack;
+public class AddonCommand implements CommandExecutor, TabCompleter {
 	
-	private Inventory installedAddonsGUI;
+	private Portals plugin;
 	
-	private Inventory manageAddonGUI;
-	private ItemStack updateAddonItemStack;
-	private ItemStack unloadAddonItemStack;
-	private ItemStack addonInfoItemStack;
-	
-	public AddonCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand) {
-		super(command,args,aliases,description, permission, adminCommand);
-		
-		
-		mainGUI = Bukkit.createInventory(null, 9, "§cPortals addons manager");
-		
-		installedAddonsItemStack = new ItemStack(Material.COMMAND_BLOCK, 1);
-		ItemMeta installedAddonsItemStackMeta = installedAddonsItemStack.getItemMeta();
-		installedAddonsItemStackMeta.setDisplayName("§aInstalled addons");
-		installedAddonsItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7There are currently", "§a"+Portals.getAddonManager().getAddons().size()+"§7 addons installed"})));
-		installedAddonsItemStack.setItemMeta(installedAddonsItemStackMeta);
-		mainGUI.addItem(installedAddonsItemStack);
-		
-		installAddonsItemStack = new ItemStack(Material.COMMAND_BLOCK_MINECART, 1);
-		ItemMeta installAddonsItemStackkMeta = installAddonsItemStack.getItemMeta();
-		installAddonsItemStackkMeta.setDisplayName("§aBrowse addons");
-		installAddonsItemStackkMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7Currently unavailable"})));
-		installAddonsItemStack.setItemMeta(installAddonsItemStackkMeta);
-		mainGUI.addItem(installAddonsItemStack);
-		
-		
-		installedAddonsGUI = Bukkit.createInventory(null, (int) Math.ceil(Portals.getAddonManager().getAddons().size()/9f)*9, "§cPortals addons manager");
-		
-		for (DimensionsAddon addon : Portals.getAddonManager().getAddons()) {
-			ItemStack item = new ItemStack(Material.GREEN_STAINED_GLASS, 1);
-			ItemMeta itemMeta = item.getItemMeta();
-			itemMeta.setDisplayName("§a"+addon.getName());
-			itemMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7"+addon.getDescription(), "§7v"+addon.getVersion(), "§7Click for more options"})));
-			item.setItemMeta(itemMeta);
-			
-
-			installedAddonsGUI.addItem(item);
-		}
-		
-		
-		manageAddonGUI = Bukkit.createInventory(null, 9, "§cPortals addons manager");
-		
-		addonInfoItemStack = new ItemStack(Material.COMMAND_BLOCK, 1);
-		ItemMeta addonInfoItemStackMeta = addonInfoItemStack.getItemMeta();
-		addonInfoItemStackMeta.setDisplayName("§4Something went wrong");
-		addonInfoItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7Something went wrong"})));
-		addonInfoItemStack.setItemMeta(addonInfoItemStackMeta);
-		manageAddonGUI.addItem(addonInfoItemStack);
-		
-		updateAddonItemStack = new ItemStack(Material.GREEN_BANNER, 1);
-		ItemMeta updateAddonItemStackMeta = updateAddonItemStack.getItemMeta();
-		updateAddonItemStackMeta.setDisplayName("§cUpdate addon");
-		updateAddonItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7Click to update the addon"})));
-		updateAddonItemStack.setItemMeta(updateAddonItemStackMeta);
-		manageAddonGUI.addItem(updateAddonItemStack);
-
-		unloadAddonItemStack = new ItemStack(Material.RED_BANNER, 1);
-		ItemMeta unloadAddonItemStackMeta = unloadAddonItemStack.getItemMeta();
-		unloadAddonItemStackMeta.setDisplayName("§cUnload addon");
-		unloadAddonItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7Click to unload the addon"})));
-		unloadAddonItemStack.setItemMeta(unloadAddonItemStackMeta);
-		manageAddonGUI.addItem(unloadAddonItemStack);
-		
-
-		Bukkit.getServer().getPluginManager().registerEvents(this, Portals.getInstance());
+	public AddonCommand(Portals plugin) {
+		this.plugin = plugin;
 	}
-	
+
 	@Override
-	public void execute(CommandSender sender, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (sender instanceof Player) {
-			((Player) sender).openInventory(mainGUI);
-		} else {
-			sender.sendMessage("§cYou must be a player to use this command.");
+		if (args.length == 0) {
+			sender.sendMessage("Â§cUsage: /portalsaddon <list|info|reload|unload> [addon]");
+			return true;
 		}
 		
+		if (args[0].equalsIgnoreCase("list")) {
+			
+			PortalsAddonManager addonManager = plugin.getAddonManager();
+			
+			if (addonManager.getAddons().size() == 0) {
+				sender.sendMessage("Â§cNo addons loaded");
+				return true;
+			}
+			
+			sender.sendMessage("Â§aLoaded addons:");
+			
+			for (PortalsAddon addon : addonManager.getAddons()) {
+				sender.sendMessage("Â§a- Â§e" + addon.getName() + " Â§7v" + addon.getVersion() + " Â§7by Â§e" + addon.getAuthor());
+			}
+			
+			return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("info")) {
+			
+			if (args.length < 2) {
+				sender.sendMessage("Â§cUsage: /portalsaddon info <addon>");
+				return true;
+			}
+			
+			PortalsAddonManager addonManager = plugin.getAddonManager();
+			
+			PortalsAddon addon = addonManager.getAddonByName(args[1]);
+			
+			if (addon == null) {
+				sender.sendMessage("Â§cAddon not found");
+				return true;
+			}
+			
+			sender.sendMessage("Â§aAddon info:");
+			sender.sendMessage("Â§a- Â§eName: Â§7" + addon.getName());
+			sender.sendMessage("Â§a- Â§eVersion: Â§7" + addon.getVersion());
+			sender.sendMessage("Â§a- Â§eAuthor: Â§7" + addon.getAuthor());
+			sender.sendMessage("Â§a- Â§eDescription: Â§7" + addon.getDescription());
+			
+			return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("reload")) {
+			
+			if (args.length < 2) {
+				sender.sendMessage("Â§cUsage: /portalsaddon reload <addon>");
+				return true;
+			}
+			
+			PortalsAddonManager addonManager = plugin.getAddonManager();
+			
+			PortalsAddon addon = addonManager.getAddonByName(args[1]);
+			
+			if (addon == null) {
+				sender.sendMessage("Â§cAddon not found");
+				return true;
+			}
+			
+			addonManager.unload(addon);
+			addonManager.loadAddon(addon.getFile());
+			
+			sender.sendMessage("Â§aAddon reloaded");
+			
+			return true;
+		}
+		
+		if (args[0].equalsIgnoreCase("unload")) {
+			
+			if (args.length < 2) {
+				sender.sendMessage("Â§cUsage: /portalsaddon unload <addon>");
+				return true;
+			}
+			
+			PortalsAddonManager addonManager = plugin.getAddonManager();
+			
+			PortalsAddon addon = addonManager.getAddonByName(args[1]);
+			
+			if (addon == null) {
+				sender.sendMessage("Â§cAddon not found");
+				return true;
+			}
+			
+			addonManager.unload(addon);
+			
+			sender.sendMessage("Â§aAddon unloaded");
+			
+			return true;
+		}
+		
+		sender.sendMessage("Â§cUsage: /portalsaddon <list|info|reload|unload> [addon]");
+		
+		return true;
 	}
-	
-	@EventHandler(ignoreCancelled = true)
-	public void onItemClick(InventoryClickEvent e) {
-		if (e.getInventory()==null || e.getCurrentItem()==null || e.getClickedInventory()==null || e.getWhoClicked()==null || !(e.getWhoClicked() instanceof Player)) return;
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
+		List<String> completions = new ArrayList<>();
 		
-		try {
-			if (e.getCurrentItem().isSimilar(installedAddonsItemStack)) {
-				e.getWhoClicked().openInventory(installedAddonsGUI);
-				e.setCancelled(true);
-			} else if (e.getCurrentItem().isSimilar(installAddonsItemStack)) {
-				e.getWhoClicked().sendMessage("§7This feature is not ready yet. It will be added in the future.");
-				e.setCancelled(true);
-			} else if (e.getClickedInventory().equals(installedAddonsGUI)) {
-				DimensionsAddon addon = Portals.getAddonManager().getAddonByName(e.getCurrentItem().getItemMeta().getDisplayName().replaceFirst("§a", ""));
-				if (addon==null) {
-					e.getWhoClicked().sendMessage("§cThere was a problem while trying to access the addon");
-				} else {
-					Inventory guiClone = Bukkit.createInventory(e.getWhoClicked(), 9, addon.getName());
-					guiClone.setContents(manageAddonGUI.getContents());
-					
-					ItemMeta addonInfoItemStackMeta = addonInfoItemStack.getItemMeta();
-					addonInfoItemStackMeta.setDisplayName("§c"+addon.getName());
-					addonInfoItemStackMeta.setLore(new ArrayList<String>(Arrays.asList(new String[] {"§7"+addon.getDescription(), "§7v"+addon.getVersion()})));
-					guiClone.getItem(0).setItemMeta(addonInfoItemStackMeta);
-					e.getWhoClicked().openInventory(guiClone);
-				}
-				e.setCancelled(true);
-			} else if (e.getView().getTitle()!=null) {
-				DimensionsAddon addon = Portals.getAddonManager().getAddonByName(e.getView().getTitle());
-				if (addon!=null) {
-					if (e.getCurrentItem().isSimilar(updateAddonItemStack)) {
-						e.getWhoClicked().sendMessage("§a"+addon.getName()+" v"+addon.getVersion()+" will be updated after a restart");
-					} else if (e.getCurrentItem().isSimilar(unloadAddonItemStack)) {
-						Portals.getAddonManager().unload(addon);
-						e.getWhoClicked().sendMessage("§a"+addon.getName()+" v"+addon.getVersion()+" has been unloaded");
-						e.getWhoClicked().openInventory(installedAddonsGUI);
-					} else if (e.getSlot()==0) e.getWhoClicked().openInventory(installedAddonsGUI);
-					
-					e.setCancelled(true);
+		if (args.length == 1) {
+			completions.add("list");
+			completions.add("info");
+			completions.add("reload");
+			completions.add("unload");
+		}
+		
+		if (args.length == 2) {
+			
+			if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("unload")) {
+				
+				PortalsAddonManager addonManager = plugin.getAddonManager();
+				
+				for (PortalsAddon addon : addonManager.getAddons()) {
+					completions.add(addon.getName());
 				}
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			e.setCancelled(true);
 		}
 		
-		
+		return completions;
 	}
-	
 }

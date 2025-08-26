@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.japherwocky.portals.addons.PortalsAddon;
+import me.japherwocky.portals.addons.DimensionsAddon;
 import me.japherwocky.portals.addons.PortalsAddonManager;
 import me.japherwocky.portals.addons.patreoncosmetics.DimensionsPatreonCosmetics;
 import me.japherwocky.portals.builder.CreatePortalManager;
@@ -16,9 +16,7 @@ import me.japherwocky.portals.completePortal.CompletePortalManager;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalManager;
 import me.japherwocky.portals.listener.PortalListener;
-import me.japherwocky.portals.settings.PortalsSettings;
-import me.japherwocky.portals.PortalsDebbuger;
-import me.japherwocky.portals.PortalsUtils;
+import me.japherwocky.portals.settings.DimensionsSettings;
 
 /**
  * Main class of the plugin
@@ -38,51 +36,51 @@ public class Portals extends JavaPlugin {
 		
 		instance = this;
 		
-		PortalsDebbuger.VERY_LOW.print("Loading Portals settings...");
-		new PortalsSettings(this);
+		DimensionsDebbuger.VERY_LOW.print("Loading Dimensions settings...");
+		new DimensionsSettings(this);
  
-		PortalsDebbuger.VERY_LOW.print("Loading addons...");
+		DimensionsDebbuger.VERY_LOW.print("Loading addons...");
 		addonsManager = new PortalsAddonManager(this);
-		PortalsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
+		DimensionsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
 		
 	}
 	
 	public void onEnable() {
 
-		PortalsDebbuger.DEBUG.print("Registering commands...");
+		DimensionsDebbuger.DEBUG.print("Registering commands...");
 		commandManager = new DimensionsCommandManager(this);
 		
-		if (PortalsSettings.enablePatreonCosmetics)
+		if (DimensionsSettings.enablePatreonCosmetics)
 			patreonCosmetics = new DimensionsPatreonCosmetics(this);
 		
-		PortalsDebbuger.VERY_LOW.print("Enabling addons...");
+		DimensionsDebbuger.VERY_LOW.print("Enabling addons...");
 		addonsManager.enableAddons();
 		
-		PortalsDebbuger.VERY_LOW.print("Loading portals...");
+		DimensionsDebbuger.VERY_LOW.print("Loading portals...");
 		customPortalManager = new CustomPortalManager(this);
-		PortalsDebbuger.MEDIUM.print("Found "+customPortalManager.getCustomPortals().size()+" portals.");
+		DimensionsDebbuger.MEDIUM.print("Found "+customPortalManager.getCustomPortals().size()+" portals.");
 		completePortalManager = new CompletePortalManager(this);
 		
-		PortalsDebbuger.VERY_LOW.print("Instatiating GUIs...");
+		DimensionsDebbuger.VERY_LOW.print("Instatiating GUIs...");
 		createPortalManager = new CreatePortalManager(this);
 
-		PortalsDebbuger.DEBUG.print("Registering Listener class...");
+		DimensionsDebbuger.DEBUG.print("Registering Listener class...");
 		new PortalListener(this);
 		
 		//Use a task in order to load portals only after all plugins have loaded and have generated/loaded their worlds
 		//Portals require a world instance in order to be loaded and we can only have that if the plugin has loaded the required worlds
 
-		PortalsDebbuger.DEBUG.print("Portals has been loaded. Waiting for server to tick before loading saved portals...");
+		DimensionsDebbuger.DEBUG.print("Dimensions has been loaded. Waiting for server to tick before loading saved portals...");
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			
 			@Override
 			public void run() {
 				
-				PortalsSettings.setDefaultWorld();
+				DimensionsSettings.setDefaultWorld();
 
-				PortalsDebbuger.DEBUG.print("Loading saved portals...");
+				DimensionsDebbuger.DEBUG.print("Loading saved portals...");
 				completePortalManager.loadAll();
-				PortalsDebbuger.DEBUG.print("Loading complete...");
+				DimensionsDebbuger.DEBUG.print("Loading complete...");
 				
 			}
 		}, 1);
@@ -112,7 +110,7 @@ public class Portals extends JavaPlugin {
 	        
 	        metrics.addCustomChart(new Metrics.DrilldownPie("used_addons", () -> {
 	            Map<String, Map<String, Integer>> map = new HashMap<>();
-	            for (PortalsAddon addon : getAddonManager().getAddons()) {
+	            for (DimensionsAddon addon : getAddonManager().getAddons()) {
 	                Map<String, Integer> entry = new HashMap<>();
 	                entry.put(addon.getVersion(),1);
 	                map.put(addon.getName(), entry);
@@ -128,12 +126,12 @@ public class Portals extends JavaPlugin {
 		completePortalManager.save();
 		HandlerList.unregisterAll(this);
 		
-		new PortalsSettings(this);
-		PortalsSettings.setDefaultWorld();
+		new DimensionsSettings(this);
+		DimensionsSettings.setDefaultWorld();
 
 		commandManager = new DimensionsCommandManager(this);
 		
-		if (PortalsSettings.enablePatreonCosmetics)
+		if (DimensionsSettings.enablePatreonCosmetics)
 			patreonCosmetics = new DimensionsPatreonCosmetics(this);
 
 		addonsManager.enableAddons();

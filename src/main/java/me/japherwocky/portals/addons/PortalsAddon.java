@@ -18,6 +18,8 @@ public abstract class PortalsAddon {
 	private String addonName;
 	private String addonVersion;
 	private String addonDescription;
+	private String addonAuthor;
+	private java.io.File addonFile;
 	private DimensionsAddonPriority addonPriority = DimensionsAddonPriority.NORMAL;
 
 	private static HashMap<CompletePortal, HashMap<String, Object>> addonOptionsOverride = new HashMap<CompletePortal, HashMap<String, Object>>();
@@ -133,6 +135,42 @@ public abstract class PortalsAddon {
 	 */
 	public String getDescription() {
 		return addonDescription;
+	}
+	
+	/**
+	 * Get the author of the addon
+	 * 
+	 * @return The author of the addon
+	 */
+	public String getAuthor() {
+		return addonAuthor;
+	}
+	
+	/**
+	 * Set the author of the addon
+	 * 
+	 * @param author The author of the addon
+	 */
+	public void setAuthor(String author) {
+		this.addonAuthor = author;
+	}
+	
+	/**
+	 * Get the file of the addon
+	 * 
+	 * @return The file of the addon
+	 */
+	public java.io.File getFile() {
+		return addonFile;
+	}
+	
+	/**
+	 * Set the file of the addon
+	 * 
+	 * @param file The file of the addon
+	 */
+	public void setFile(java.io.File file) {
+		this.addonFile = file;
 	}
 	
 	/**
@@ -325,4 +363,3 @@ public abstract class PortalsAddon {
 		addonOptionsOverride.clear();
 	}
 }
-

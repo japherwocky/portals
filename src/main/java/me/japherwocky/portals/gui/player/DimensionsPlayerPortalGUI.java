@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.addons.DimensionsAddonPlayerGUIAction;
+import me.japherwocky.portals.addons.PortalsAddonPlayerGUIAction;
 import me.japherwocky.portals.builder.CreatePortalInstance;
 import me.japherwocky.portals.gui.CreatePortalGUI;
 import me.japherwocky.portals.gui.DimensionsGUIType;
@@ -50,7 +50,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	
 	@Override
 	public void open() {
-		ArrayList<DimensionsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
+		ArrayList<PortalsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
 		
 		maxPage = (int) Math.floor(actionList.size()/MAX_ITEMS_PER_PAGE);
 		ItemStack[] contents = inventory.getContents();
@@ -92,7 +92,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	@Override
 	public void handleClick(int index, boolean rightClick, boolean shiftClick) {
 
-		ArrayList<DimensionsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
+		ArrayList<PortalsAddonPlayerGUIAction> actionList = instance.selectedPortal.getAddonPlayerGUIActions();
 		
 		if (index>=5 && (index - 5) % 9 < 4 && index<=44) {
 			int itemIndex = (index-18)+27*page;

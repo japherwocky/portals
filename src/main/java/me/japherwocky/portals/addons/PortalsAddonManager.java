@@ -145,5 +145,65 @@ public class PortalsAddonManager {
 	public ArrayList<PortalsAddon> getAddons() {
 		return addons;
 	}
+	
+	/**
+	 * Get an addon by its name
+	 * 
+	 * @param name The name of the addon
+	 * @return The addon, or null if not found
+	 */
+	public PortalsAddon getAddonByName(String name) {
+		for (PortalsAddon addon : addons) {
+			if (addon.getName().equalsIgnoreCase(name)) {
+				return addon;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Unload an addon
+	 * 
+	 * @param addon The addon to unload
+	 */
+	public void unload(PortalsAddon addon) {
+		try {
+			addon.onDisable();
+			PortalsDebbuger.VERY_LOW.print("Disabled addon: " + addon.getName() + " v" + addon.getVersion());
+		} catch (Exception e) {
+			PortalsDebbuger.VERY_LOW.print("Failed to disable addon: " + addon.getName() + " v" + addon.getVersion());
+			e.printStackTrace();
+		}
+		
+		addons.remove(addon);
+	}
+	
+	/**
+	 * Load an addon from a file
+	 * 
+	 * @param file The file to load the addon from
+	 */
+	public void loadAddon(File file) {
+		try {
+			URL url = file.toURI().toURL();
+			URLClassLoader ucl = new URLClassLoader(new URL[] { url }, this.getClass().getClassLoader());
+			
+			ServiceLoader<PortalsAddon> newLoader = ServiceLoader.load(PortalsAddon.class, ucl);
+			Iterator<PortalsAddon> iterator = newLoader.iterator();
+			
+			while (iterator.hasNext()) {
+				PortalsAddon addon = iterator.next();
+				addons.add(addon);
+				addon.onEnable();
+				PortalsDebbuger.VERY_LOW.print("Loaded and enabled addon: " + addon.getName() + " v" + addon.getVersion());
+			}
+			
+			addons.sort((a1, a2) -> {
+				return a2.getPriority().getPriority() - a1.getPriority().getPriority();
+			});
+		} catch (Exception e) {
+			PortalsDebbuger.VERY_LOW.print("Failed to load addon from file: " + file.getName());
+			e.printStackTrace();
+		}
+	}
 }
-

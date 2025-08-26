@@ -68,7 +68,7 @@ public class CustomPortal {
 	private int spawnDelayMax;
 	private HashMap<EntityType, Integer> entitySpawnList;
 	
-	private ArrayList<DimensionsAddonPlayerGUIAction> playerGUIActions = new ArrayList<DimensionsAddonPlayerGUIAction>();
+	private ArrayList<PortalsAddonPlayerGUIAction> playerGUIActions = new ArrayList<PortalsAddonPlayerGUIAction>();
 	
 	/**
 	 * Constructor of CustomPortal
@@ -323,15 +323,15 @@ public class CustomPortal {
 	/**
 	 * @return list of the actions that can be executed by addons
 	 */
-	public ArrayList<DimensionsAddonPlayerGUIAction> getAddonPlayerGUIActions() {
+	public ArrayList<PortalsAddonPlayerGUIAction> getAddonPlayerGUIActions() {
 		return playerGUIActions;
 	}
 	
-	public void add(ArrayList<DimensionsAddonPlayerGUIAction> newPlayerGUIActions) {
+	public void add(ArrayList<PortalsAddonPlayerGUIAction> newPlayerGUIActions) {
 		playerGUIActions.addAll(newPlayerGUIActions);
 	}
 	
-	public void add(DimensionsAddonPlayerGUIAction newPlayerGUIAction) {
+	public void add(PortalsAddonPlayerGUIAction newPlayerGUIAction) {
 		playerGUIActions.add(newPlayerGUIAction);
 	}
 }
