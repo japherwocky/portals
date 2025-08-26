@@ -9,7 +9,7 @@
     <version>3.2.10</version>
     <packaging>jar</packaging>
 
-    <name>Portals</name>
+    <name>Portals</name> <!-- Renamed from Dimensions3 -->
     <description>Allow players to easily build portals to another world</description>
     <url>https://github.com/japherwocky/portals</url>
 
