@@ -1,0 +1,15 @@
+name: Portals
+main: me.japherwocky.portals.Portals
+api-version: 1.20
+version: 3.2.10
+description: Allow players to easily build portals to another world
+author: japherwocky
+website: https://github.com/japherwocky/portals
+depend: [ProtocolLib]
+
+commands:
+  portals:
+    description: Main command for the Portals plugin
+    usage: /portals [command]
+    aliases: [portal]
+
