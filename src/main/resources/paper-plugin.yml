@@ -1,6 +1,6 @@
 name: Portals
 version: '3.2.10'
-main: me.xxastaspastaxx.dimensions.Dimensions
+main: me.japherwocky.portals.Dimensions
 api-version: '1.21'
 authors: [astaspasta, japherwocky]
 description: Allow players to easily build portals to another world
@@ -33,7 +33,7 @@ dependencies:
   - name: LightAPI
     required: false
 commands:
-  dimensions:
+  portals:
     description: Main command
     usage: /<command>
-    aliases: [dim]
+    aliases: [portal, dim, dimensions]
