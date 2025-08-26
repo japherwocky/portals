@@ -147,6 +147,14 @@ public class CustomPortal {
 	public String getDisplayName() {
 		return displayName;
 	}
+	
+	/**
+	 * Get the name of the portal
+	 * @return the display name of the portal
+	 */
+	public String getName() {
+		return displayName;
+	}
 	public boolean isEnabled() {
 		return enabled;
 	}

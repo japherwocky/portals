@@ -20,7 +20,7 @@ public abstract class PortalsAddon {
 	private String addonDescription;
 	private String addonAuthor;
 	private java.io.File addonFile;
-	private DimensionsAddonPriority addonPriority = DimensionsAddonPriority.NORMAL;
+	private PortalsAddonPriority addonPriority = PortalsAddonPriority.NORMAL;
 
 	private static HashMap<CompletePortal, HashMap<String, Object>> addonOptionsOverride = new HashMap<CompletePortal, HashMap<String, Object>>();
 	private static HashMap<CustomPortal, HashMap<String, Object>> addonOptions = new HashMap<CustomPortal, HashMap<String, Object>>();
@@ -57,11 +57,20 @@ public abstract class PortalsAddon {
 	 * @param addonDescription The description of the addon
 	 * @param addonPriority The priority of the addon
 	 */
-	public PortalsAddon(String addonName, String addonVersion, String addonDescription, DimensionsAddonPriority addonPriority) {
+	public PortalsAddon(String addonName, String addonVersion, String addonDescription, PortalsAddonPriority addonPriority) {
 		this.addonName = addonName;
 		this.addonVersion = addonVersion;
 		this.addonDescription = addonDescription;
 		this.addonPriority = addonPriority;
+	}
+	
+	/**
+	 * Run when loading the addon
+	 * @param pl the instance of the Portals plugin
+	 * @return true if the addon was loaded without any missing dependencies
+	 */
+	public boolean onLoad(Portals pl) {
+		return true;
 	}
 	
 	/**
@@ -73,6 +82,14 @@ public abstract class PortalsAddon {
 	 * Called when the addon is being disabled
 	 */
 	public abstract void onDisable();
+	
+	/**
+	 * Run when the addon is being enabled
+	 * @param pl the instance of the Portals plugin
+	 */
+	public void onEnable(Portals pl) {
+		onEnable();
+	}
 	
 	/**
 	 * Called when a portal is being created
@@ -178,7 +195,7 @@ public abstract class PortalsAddon {
 	 * 
 	 * @return The priority of the addon
 	 */
-	public DimensionsAddonPriority getPriority() {
+	public PortalsAddonPriority getPriority() {
 		return addonPriority;
 	}
 	
@@ -361,5 +378,22 @@ public abstract class PortalsAddon {
 	public static void clearAllAddonOptions() {
 		addonOptions.clear();
 		addonOptionsOverride.clear();
+	}
+	
+	/**
+	 * This runs when we reload the plugin <b>AFTER</b> all the addons have been disabled in order to reset all the data
+	 */
+	public static void resetOptions() {
+		addonOptions.clear();
+		addonOptionsOverride.clear();
+	}
+	
+	/**
+	 * This function provides the portal config file for each portal that is being loaded and addons can get data from it.
+	 * @param portalConfig the YamlConfiguration for the portal loading
+	 * @param portal the portal loading
+	 */
+	public void registerPortal(YamlConfiguration portalConfig, CustomPortal portal) {
+		// Default implementation does nothing
 	}
 }
