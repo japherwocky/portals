@@ -6,10 +6,11 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 /**
- * Parent class of commands that are being executed with <b>/dim [command]</b>
- *
+ * Parent class of commands that are being executed with <b>/portal [command]</b>
+ * @deprecated Use PortalsCommand instead
  */
 
+@Deprecated
 public abstract class DimensionsCommand extends PortalsCommand {
 	
 	/**

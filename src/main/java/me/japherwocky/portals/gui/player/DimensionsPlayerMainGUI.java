@@ -11,8 +11,8 @@ import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.builder.CreatePortalInstance;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.gui.CreatePortalGUI;
-import me.japherwocky.portals.gui.DimensionsGUIType;
-import me.japherwocky.portals.gui.DimensionsGUIUtils;
+import me.japherwocky.portals.gui.PortalsGUIType;
+import me.japherwocky.portals.gui.PortalsGUIUtils;
 
 public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 	
@@ -22,21 +22,21 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 	int maxPage = 0;
 	
 	public DimensionsPlayerMainGUI(CreatePortalInstance instance) {
-		super(instance, DimensionsGUIType.PLAYER_MAIN);
+		super(instance, PortalsGUIType.PLAYER_MAIN);
 	}
 	
 	@Override
 	public Inventory createInventory() {
-		Inventory inv = Bukkit.createInventory(p, 54, "§cDimensions");
+		Inventory inv = Bukkit.createInventory(p, 54, "§cPortals");
 
 		for (int i=0;i<9;i++) {
-			inv.setItem(45+i, DimensionsGUIUtils.BLACK_GLASS);
+			inv.setItem(45+i, PortalsGUIUtils.BLACK_GLASS);
 		}
 		
 		//Navigation
-		inv.setItem(48, DimensionsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Previous page"));
-		inv.setItem(49, DimensionsGUIUtils.createItem(Material.RED_STAINED_GLASS_PANE, "§cClose"));
-		inv.setItem(50, DimensionsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Next page"));
+		inv.setItem(48, PortalsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Previous page"));
+		inv.setItem(49, PortalsGUIUtils.createItem(Material.RED_STAINED_GLASS_PANE, "§cClose"));
+		inv.setItem(50, PortalsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Next page"));
 		
 		return inv;
 	}
@@ -56,7 +56,7 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 			if (portalList.size()<=itemIndex) {
 				inventory.clear(i);
 			} else {
-				inventory.setItem(i,DimensionsGUIUtils.createPortalItem(portalList.get(itemIndex)));
+				inventory.setItem(i,PortalsGUIUtils.createPortalItem(portalList.get(itemIndex)));
 			}
 		}
 
@@ -76,7 +76,7 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 			if (portalList.size()<=itemIndex) return;
 
 			instance.selectedPortal = portalList.get(itemIndex);
-			instance.guiMap.get(DimensionsGUIType.PLAYER_PORTAL).open();
+			instance.guiMap.get(PortalsGUIType.PLAYER_PORTAL).open();
 			
 			return;
 		}
@@ -105,3 +105,4 @@ public class DimensionsPlayerMainGUI extends CreatePortalGUI {
 	}
 
 }
+

@@ -1,6 +1,6 @@
 package me.japherwocky.portals.gui;
 
-public enum DimensionsGUIType {
+public enum PortalsGUIType {
 	
 	PLAYER_MAIN,
 	PLAYER_PORTAL,
@@ -8,3 +8,4 @@ public enum DimensionsGUIType {
 	ADMIN_MAIN,
 	
 }
+
