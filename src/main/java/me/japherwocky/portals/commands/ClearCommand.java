@@ -11,7 +11,7 @@ import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 
-public class ClearCommand extends DimensionsCommand {
+public class ClearCommand extends PortalsCommand {
 	
 	public ClearCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand) {
 		super(command,args,aliases,description, permission, adminCommand);
@@ -29,9 +29,9 @@ public class ClearCommand extends DimensionsCommand {
 					Portals.getCompletePortalManager().removePortal(complete, CustomPortalDestroyCause.PLUGIN, null);
 				}
 			}
-			sender.sendMessage("§7[§cDimensions§7] §aRemoved §c"+args[1]+"§a portals");
+			sender.sendMessage("Â§7[Â§cPortalsÂ§7] Â§aRemoved Â§c"+args[1]+"Â§a portals");
 		} else {
-			sender.sendMessage("§7[§cDimensions§7] Missing argument. Please use /dim "+this.getCommand()+" "+this.getArgs());
+			sender.sendMessage("Â§7[Â§cPortalsÂ§7] Missing argument. Please use /dim "+this.getCommand()+" "+this.getArgs());
 		}
 		
 	}

@@ -11,8 +11,8 @@ import me.japherwocky.portals.Portals;
 
 import me.japherwocky.portals.builder.CreatePortalInstance;
 import me.japherwocky.portals.gui.CreatePortalGUI;
-import me.japherwocky.portals.gui.DimensionsGUIType;
-import me.japherwocky.portals.gui.DimensionsGUIUtils;
+import me.japherwocky.portals.gui.PortalsGUIType;
+import me.japherwocky.portals.gui.PortalsGUIUtils;
 
 public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	
@@ -22,7 +22,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	int maxPage = 0;
 	
 	public DimensionsPlayerPortalGUI(CreatePortalInstance instance) {
-		super(instance, DimensionsGUIType.PLAYER_PORTAL);
+		super(instance, PortalsGUIType.PLAYER_PORTAL);
 	}
 	
 	@Override
@@ -30,16 +30,16 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 		Inventory inv = Bukkit.createInventory(p, 54, "{{portal_displayName}}");
 
 		for (int i=0;i<6;i++) {
-			inv.setItem(4+(9*i), DimensionsGUIUtils.BLACK_GLASS);
+			inv.setItem(4+(9*i), PortalsGUIUtils.BLACK_GLASS);
 		}
-		inv.setItem(50, DimensionsGUIUtils.BLACK_GLASS);
-		inv.setItem(53, DimensionsGUIUtils.BLACK_GLASS);
+		inv.setItem(50, PortalsGUIUtils.BLACK_GLASS);
+		inv.setItem(53, PortalsGUIUtils.BLACK_GLASS);
 		
 		//Navigation
-		inv.setItem(51, DimensionsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Previous page"));
-		inv.setItem(52, DimensionsGUIUtils.createItem(Material.BIRCH_BOAT, "§7Next page"));
+		inv.setItem(51, PortalsGUIUtils.createItem(Material.BIRCH_BOAT, "Â§7Previous page"));
+		inv.setItem(52, PortalsGUIUtils.createItem(Material.BIRCH_BOAT, "Â§7Next page"));
 		
-		ItemStack closeItemStack = DimensionsGUIUtils.createItem(Material.GREEN_STAINED_GLASS_PANE, "§aClose");
+		ItemStack closeItemStack = PortalsGUIUtils.createItem(Material.GREEN_STAINED_GLASS_PANE, "Â§aClose");
 		inv.setItem(45, closeItemStack);
 		inv.setItem(46, closeItemStack);
 		inv.setItem(47, closeItemStack);
@@ -54,7 +54,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 		
 		maxPage = 0;
 		ItemStack[] contents = inventory.getContents();
-		inventory = Bukkit.createInventory(p, inventory.getSize(), "§f"+instance.selectedPortal.getDisplayName());
+		inventory = Bukkit.createInventory(p, inventory.getSize(), "Â§f"+instance.selectedPortal.getDisplayName());
 		inventory.setContents(contents);
 		
 		for (int i=0;i<MAX_ITEMS_PER_PAGE;i++) {
@@ -67,7 +67,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 			}
 		}
 		
-		ItemStack portalBlock = DimensionsGUIUtils.createItem(instance.selectedPortal.getOutsideMaterial(), "§f"+instance.selectedPortal.getOutsideMaterial().name(), new String[] {"§7Build using this block."});
+		ItemStack portalBlock = PortalsGUIUtils.createItem(instance.selectedPortal.getOutsideMaterial(), "Â§f"+instance.selectedPortal.getOutsideMaterial().name(), new String[] {"Â§7Build using this block."});
 		for (int i=0;i<4;i++) {
 			inventory.setItem(i, portalBlock);
 			inventory.setItem(36+i, portalBlock);
@@ -78,9 +78,9 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 		}
 		
 		if (instance.selectedPortal.getLighterMaterial()==null) {
-			inventory.setItem(29, DimensionsGUIUtils.createItem(Material.BARRIER, "§f{{customItem}}", new String[] {"§7This should have been replaced by the responsible addon","§7Please make sure everything is setup correctly"}));
+			inventory.setItem(29, PortalsGUIUtils.createItem(Material.BARRIER, "Â§f{{customItem}}", new String[] {"Â§7This should have been replaced by the responsible addon","Â§7Please make sure everything is setup correctly"}));
 		} else {
-			inventory.setItem(29, DimensionsGUIUtils.createItem(instance.selectedPortal.getLighterMaterial(), "§f"+instance.selectedPortal.getLighterMaterial().name(), new String[] {"§7Ignite using this item."}));
+			inventory.setItem(29, PortalsGUIUtils.createItem(instance.selectedPortal.getLighterMaterial(), "Â§f"+instance.selectedPortal.getLighterMaterial().name(), new String[] {"Â§7Ignite using this item."}));
 		}
 		
 		inventory.getItem(51).setType(page==0?Material.MINECART:Material.CHEST_MINECART);
@@ -121,7 +121,7 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 		case 46:
 		case 47:
 		case 48:
-			instance.guiMap.get(DimensionsGUIType.PLAYER_MAIN).open();
+			instance.guiMap.get(PortalsGUIType.PLAYER_MAIN).open();
 			break;
 		}
 	}
@@ -132,3 +132,4 @@ public class DimensionsPlayerPortalGUI extends CreatePortalGUI {
 	}
 
 }
+

@@ -36,41 +36,41 @@ public class Portals extends JavaPlugin {
 		
 		instance = this;
 		
-		DimensionsDebbuger.VERY_LOW.print("Loading Dimensions settings...");
+		PortalsDebbuger.VERY_LOW.print("Loading Portals settings...");
 		new DimensionsSettings(this);
  
-		DimensionsDebbuger.VERY_LOW.print("Loading addons...");
+		PortalsDebbuger.VERY_LOW.print("Loading addons...");
 		addonsManager = new PortalsAddonManager(this);
-		DimensionsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
+		PortalsDebbuger.VERY_LOW.print("Loaded "+addonsManager.getAddons().size()+" addons.");
 		
 	}
 	
 	public void onEnable() {
 
-		DimensionsDebbuger.DEBUG.print("Registering commands...");
+		PortalsDebbuger.DEBUG.print("Registering commands...");
 		commandManager = new DimensionsCommandManager(this);
 		
 		if (DimensionsSettings.enablePatreonCosmetics)
 			patreonCosmetics = new DimensionsPatreonCosmetics(this);
 		
-		DimensionsDebbuger.VERY_LOW.print("Enabling addons...");
+		PortalsDebbuger.VERY_LOW.print("Enabling addons...");
 		addonsManager.enableAddons();
 		
-		DimensionsDebbuger.VERY_LOW.print("Loading portals...");
+		PortalsDebbuger.VERY_LOW.print("Loading portals...");
 		customPortalManager = new CustomPortalManager(this);
-		DimensionsDebbuger.MEDIUM.print("Found "+customPortalManager.getCustomPortals().size()+" portals.");
+		PortalsDebbuger.MEDIUM.print("Found "+customPortalManager.getCustomPortals().size()+" portals.");
 		completePortalManager = new CompletePortalManager(this);
 		
-		DimensionsDebbuger.VERY_LOW.print("Instatiating GUIs...");
+		PortalsDebbuger.VERY_LOW.print("Instatiating GUIs...");
 		createPortalManager = new CreatePortalManager(this);
 
-		DimensionsDebbuger.DEBUG.print("Registering Listener class...");
+		PortalsDebbuger.DEBUG.print("Registering Listener class...");
 		new PortalListener(this);
 		
 		//Use a task in order to load portals only after all plugins have loaded and have generated/loaded their worlds
 		//Portals require a world instance in order to be loaded and we can only have that if the plugin has loaded the required worlds
 
-		DimensionsDebbuger.DEBUG.print("Dimensions has been loaded. Waiting for server to tick before loading saved portals...");
+		PortalsDebbuger.DEBUG.print("Portals has been loaded. Waiting for server to tick before loading saved portals...");
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			
 			@Override
@@ -78,9 +78,9 @@ public class Portals extends JavaPlugin {
 				
 				DimensionsSettings.setDefaultWorld();
 
-				DimensionsDebbuger.DEBUG.print("Loading saved portals...");
+				PortalsDebbuger.DEBUG.print("Loading saved portals...");
 				completePortalManager.loadAll();
-				DimensionsDebbuger.DEBUG.print("Loading complete...");
+				PortalsDebbuger.DEBUG.print("Loading complete...");
 				
 			}
 		}, 1);

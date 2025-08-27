@@ -12,13 +12,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.japherwocky.portals.customportal.CustomPortal;
 
-public class DimensionsGUIUtils {
+public class PortalsGUIUtils {
 	
 	//Constants
 	public static ItemStack BLACK_GLASS = createBlackGlass();
 	private static ItemStack createBlackGlass() {
 		if (BLACK_GLASS!=null) return BLACK_GLASS;
-		return createItem(Material.BLACK_STAINED_GLASS_PANE, "ง7");
+		return createItem(Material.BLACK_STAINED_GLASS_PANE, "ยง7");
 	}
 	
 	private static Enchantment DECOR_ENCHANT = Enchantment.getByName("DAMAGE_ALL") == null ? Enchantment.getByName("SMITE") : Enchantment.getByName("DAMAGE_ALL");
@@ -103,7 +103,7 @@ public class DimensionsGUIUtils {
 
 
 	public static ItemStack createPortalItem(CustomPortal customPortal) {
-		return createItem(customPortal.getOutsideMaterial(), "งf"+customPortal.getDisplayName());
+		return createItem(customPortal.getOutsideMaterial(), "ยงf"+customPortal.getDisplayName());
 	}
 	
 }

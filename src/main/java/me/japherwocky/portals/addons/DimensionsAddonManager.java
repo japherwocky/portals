@@ -13,7 +13,7 @@ import java.util.ServiceLoader;
 import org.bukkit.event.HandlerList;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsDebbuger;
+import me.japherwocky.portals.PortalsDebbuger;
 
 /**
  * Loads and enables all the Portals addons
@@ -62,15 +62,15 @@ public class DimensionsAddonManager {
 			try {
 				DimensionsAddon addon = iter.next();
 				if (addon.onLoad(pl)) {
-					DimensionsDebbuger.MEDIUM.print("Loaded addon: "+addon.getName()+" v"+addon.getVersion());
+					PortalsDebbuger.MEDIUM.print("Loaded addon: "+addon.getName()+" v"+addon.getVersion());
 					loadedAddons.add(addon);
 				} else {
-					DimensionsDebbuger.MEDIUM.print("Failed to load addon: "+addon.getName()+" v"+addon.getVersion());
+					PortalsDebbuger.MEDIUM.print("Failed to load addon: "+addon.getName()+" v"+addon.getVersion());
 				}
 			} catch (ServiceConfigurationError e) {
 				String addonName = e.getMessage().substring(e.getMessage().lastIndexOf('.')+1);
 				addonName = addonName.substring(0,addonName.indexOf(' ')-1);
-				DimensionsDebbuger.MEDIUM.print("Failed to load addon: "+addonName);
+				PortalsDebbuger.MEDIUM.print("Failed to load addon: "+addonName);
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class DimensionsAddonManager {
 	 */
 	public void enableAddons() {
 		for (DimensionsAddon addon : loadedAddons) {
-			DimensionsDebbuger.MEDIUM.print("Enabling addon: "+addon.getName()+" v"+addon.getVersion());
+			PortalsDebbuger.MEDIUM.print("Enabling addon: "+addon.getName()+" v"+addon.getVersion());
 			addon.onEnable(pl);
 		}
 	}
@@ -178,12 +178,12 @@ public class DimensionsAddonManager {
 	/*public boolean update(DimensionsAddon addon) {
 		try {
 			if (!addon.needsUpdate()) return false;
-			DimensionsDebbuger.debug("Found new version for "+addon.getName()+". Updating addon...", DimensionsDebbuger.MEDIUM);
+			PortalsDebbuger.debug("Found new version for "+addon.getName()+". Updating addon...", PortalsDebbuger.MEDIUM);
 		
 			addon = downloadAndExportAddon(jarFiles.get(addon).getName(), addon.getUpdateJarURL());
-			DimensionsDebbuger.debug("Update complete for "+addon.getName()+".", DimensionsDebbuger.MEDIUM);
+			PortalsDebbuger.debug("Update complete for "+addon.getName()+".", PortalsDebbuger.MEDIUM);
 		} catch (Exception e) {
-			DimensionsDebbuger.debug("Could not update", DimensionsDebbuger.MEDIUM);
+			PortalsDebbuger.debug("Could not update", PortalsDebbuger.MEDIUM);
 			e.printStackTrace();
 			return false;
 		}

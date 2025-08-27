@@ -4,9 +4,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
-public class InfoCommand extends DimensionsCommand {
+public class InfoCommand extends PortalsCommand {
 	
 	public InfoCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand) {
 		super(command,args,aliases,description, permission, adminCommand);
@@ -15,10 +15,10 @@ public class InfoCommand extends DimensionsCommand {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		
-		if (DimensionsSettings.showPortalsToPlayers) {
+		if (PortalsSettings.showPortalsToPlayers) {
 			Portals.getCreatePortalManager().handle((Player) sender);
 		} else {
-			sender.sendMessage("§7[§cDimensions§7] Version "+ Portals.getInstance().getDescription().getVersion());
+			sender.sendMessage("Â§7[Â§cPortalsÂ§7] Version "+ Portals.getInstance().getDescription().getVersion());
 		}
 	}
 	

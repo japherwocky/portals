@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsDebbuger;
+import me.japherwocky.portals.PortalsDebbuger;
 import me.japherwocky.portals.DimensionsUtils;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalIgniteCause;
@@ -225,7 +225,7 @@ public class CompletePortal {
 				
 				if (tags.containsKey("disableTP")) {
 					tags.remove("disableTP");
-					DimensionsDebbuger.DEBUG.print("DISABLE");
+					PortalsDebbuger.DEBUG.print("DISABLE");
 					return;
 				}
 				
@@ -358,11 +358,11 @@ public class CompletePortal {
 		if (linkedPortal!=null) return linkedPortal;
 		
 		Location newLocation = getDestinationLocation(overrideLocation, overrideWorld);
-		DimensionsDebbuger.DEBUG.print("New Location: "+newLocation);
+		PortalsDebbuger.DEBUG.print("New Location: "+newLocation);
 		World destinationWorld = newLocation.getWorld();
-		DimensionsDebbuger.DEBUG.print("Destination World: "+destinationWorld);
+		PortalsDebbuger.DEBUG.print("Destination World: "+destinationWorld);
 		double ratio = getWorldRatio(destinationWorld);
-		DimensionsDebbuger.DEBUG.print("Ratio: "+ratio);
+		PortalsDebbuger.DEBUG.print("Ratio: "+ratio);
 		//===============
 		
 		CompletePortal destination = null;
@@ -373,40 +373,40 @@ public class CompletePortal {
 			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, DimensionsSettings.searchSameAxis, DimensionsSettings.searchSameSize);
 		
 
-		DimensionsDebbuger.DEBUG.print("First try for destination (check for already existing portal): "+destination);
+		PortalsDebbuger.DEBUG.print("First try for destination (check for already existing portal): "+destination);
 		if (destination!=null) {
-			DimensionsDebbuger.DEBUG.print("Destination not null. DestLocation: "+destination.getCenter());
+			PortalsDebbuger.DEBUG.print("Destination not null. DestLocation: "+destination.getCenter());
 		}
 		
 		if (destination==null) {
-			DimensionsDebbuger.DEBUG.print("Destination not found, attempting to create a portal: ");
+			PortalsDebbuger.DEBUG.print("Destination not found, attempting to create a portal: ");
 			if (!buildNewPortal) {
-				DimensionsDebbuger.DEBUG.print("buildExitPortal var is false, skipping this time");
+				PortalsDebbuger.DEBUG.print("buildExitPortal var is false, skipping this time");
 				return null;
 			}
 			boolean zAxis = portalGeometry.iszAxis();
 			byte width = portalGeometry.getPortalWidth(customPortal);
 			byte height = portalGeometry.getPortalHeight(customPortal);
 
-			DimensionsDebbuger.DEBUG.print("Exit portal info: zAxis: "+zAxis+", width: "+width+", height: "+height);
+			PortalsDebbuger.DEBUG.print("Exit portal info: zAxis: "+zAxis+", width: "+width+", height: "+height);
 
 			//TODO find best location
 			Location checkLocation = getSafeLocation(newLocation, zAxis, destinationWorld, height, width);
-			DimensionsDebbuger.DEBUG.print("SafeLocation found: "+checkLocation);
+			PortalsDebbuger.DEBUG.print("SafeLocation found: "+checkLocation);
 			if (checkLocation!=null) newLocation = checkLocation;
-			DimensionsDebbuger.DEBUG.print("Final location: "+newLocation);
+			PortalsDebbuger.DEBUG.print("Final location: "+newLocation);
 			
 
-			DimensionsDebbuger.DEBUG.print("Attempting to build portal...");
+			PortalsDebbuger.DEBUG.print("Attempting to build portal...");
 			portalGeometry.buildPortal(newLocation, destinationWorld, customPortal);
-			DimensionsDebbuger.DEBUG.print("Portal should be built at: "+newLocation);
+			PortalsDebbuger.DEBUG.print("Portal should be built at: "+newLocation);
 			
 			PortalGeometry geom = PortalGeometry.getPortalGeometry(customPortal).getPortal(customPortal, newLocation.add(zAxis?0:1,1,zAxis?1:0));
 
-			DimensionsDebbuger.DEBUG.print("Identify built structure: "+(geom==null?"NOPE":"Yep"));
+			PortalsDebbuger.DEBUG.print("Identify built structure: "+(geom==null?"NOPE":"Yep"));
 			if (geom==null) return null;
 			destination = Portals.getCompletePortalManager().createNew(new CompletePortal(customPortal, newLocation.getWorld(), geom), null, CustomPortalIgniteCause.EXIT_PORTAL, null);
-			DimensionsDebbuger.DEBUG.print("Created portal instance: "+(destination==null?"NOPE":"Yep"));
+			PortalsDebbuger.DEBUG.print("Created portal instance: "+(destination==null?"NOPE":"Yep"));
 			if (destination==null) return null;
 		}
 		
@@ -415,7 +415,7 @@ public class CompletePortal {
 			destination.setLinkedPortal(this);
 		}
 		
-		DimensionsDebbuger.DEBUG.print("Final destination portal "+(destination==null?"Houston, we have a problem":destination.getCenter()));
+		PortalsDebbuger.DEBUG.print("Final destination portal "+(destination==null?"Houston, we have a problem":destination.getCenter()));
 		
 		return destination;
 	}

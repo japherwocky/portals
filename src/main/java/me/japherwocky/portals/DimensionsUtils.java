@@ -14,8 +14,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 /**
  * Contains methods that are commonly used
- *
+ * @deprecated Use PortalsUtils instead
  */
+@Deprecated
 public class DimensionsUtils {
 	
 	/** 

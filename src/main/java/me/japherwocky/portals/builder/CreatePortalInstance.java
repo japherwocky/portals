@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.gui.CreatePortalGUI;
-import me.japherwocky.portals.gui.DimensionsGUIType;
+import me.japherwocky.portals.gui.PortalsGUIType;
 import me.japherwocky.portals.gui.player.DimensionsPlayerMainGUI;
 import me.japherwocky.portals.gui.player.DimensionsPlayerPortalGUI;
 
@@ -18,8 +18,8 @@ public class CreatePortalInstance {
 	//public CreateStructureAction selectedAction = null;
 	public CreatePortalOptions options = new CreatePortalOptions();
 	
-	public HashMap<DimensionsGUIType, CreatePortalGUI> guiMap = new HashMap<DimensionsGUIType, CreatePortalGUI>();
-	private DimensionsGUIType currentGUI = DimensionsGUIType.PLAYER_MAIN;
+	public HashMap<PortalsGUIType, CreatePortalGUI> guiMap = new HashMap<PortalsGUIType, CreatePortalGUI>();
+	private PortalsGUIType currentGUI = PortalsGUIType.PLAYER_MAIN;
 
 	public CustomPortal selectedPortal = null;
 	
@@ -29,10 +29,10 @@ public class CreatePortalInstance {
 		this.p = p;
 		
 		if (player) {
-			guiMap.put(DimensionsGUIType.PLAYER_MAIN, new DimensionsPlayerMainGUI(this));
-			guiMap.put(DimensionsGUIType.PLAYER_PORTAL, new DimensionsPlayerPortalGUI(this));
+			guiMap.put(PortalsGUIType.PLAYER_MAIN, new DimensionsPlayerMainGUI(this));
+			guiMap.put(PortalsGUIType.PLAYER_PORTAL, new DimensionsPlayerPortalGUI(this));
 		} else {
-//			guiMap.put(DimensionsGUIType.ADMIN_MAIN, new CreateStructureMainGUI(this));
+//			guiMap.put(PortalsGUIType.ADMIN_MAIN, new CreateStructureMainGUI(this));
 		}
 		
 		//Actions
@@ -71,7 +71,7 @@ public class CreatePortalInstance {
 		guiMap.get(currentGUI).open();
 	}
 	
-	public void setCurrentGUI(DimensionsGUIType type) {
+	public void setCurrentGUI(PortalsGUIType type) {
 		currentGUI = type;
 	}
 	

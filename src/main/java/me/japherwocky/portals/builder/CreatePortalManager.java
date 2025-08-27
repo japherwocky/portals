@@ -43,7 +43,7 @@ public class CreatePortalManager {
 //			
 //			instance.options.actions = structure.getActions();
 //			
-//			instance.guiMap.get(DimensionsGUIType.ACTIONS).open();
+//			instance.guiMap.get(PortalsGUIType.ACTIONS).open();
 //			map.put(p, instance);
 		}
 	}
