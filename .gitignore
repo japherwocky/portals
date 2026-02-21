@@ -53,6 +53,9 @@ Thumbs.db
 dimensions/target/
 test/
 
+# IDE specific
+.factorypath
+
 # Don't ignore pom.xml
 !pom.xml
 
