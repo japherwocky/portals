@@ -18,6 +18,7 @@ public abstract class PortalsAddon {
 	private String addonName;
 	private String addonVersion;
 	private String addonDescription;
+	private String addonAuthor;
 	private PortalsAddonPriority addonPriority = PortalsAddonPriority.NORMAL;
 
 	private static HashMap<CompletePortal, HashMap<String, Object>> addonOptionsOverride = new HashMap<CompletePortal, HashMap<String, Object>>();
@@ -32,9 +33,23 @@ public abstract class PortalsAddon {
 	 * @param addonPriority Priority to enable the addon
 	 */
 	public PortalsAddon(String addonName, String addonVersion, String addonDescription, PortalsAddonPriority addonPriority) {
+		this(addonName, addonVersion, addonDescription, "", addonPriority);
+	}
+
+	/**
+	 * Constructor of PortalsAddon
+	 * 
+	 * @param addonName The name of the addon
+	 * @param addonVersion The version of the addon
+	 * @param addonDescription A short description of the addon
+	 * @param addonAuthor The author of the addon
+	 * @param addonPriority Priority to enable the addon
+	 */
+	public PortalsAddon(String addonName, String addonVersion, String addonDescription, String addonAuthor, PortalsAddonPriority addonPriority) {
 		this.addonName = addonName;
 		this.addonVersion = addonVersion;
 		this.addonDescription = addonDescription;
+		this.addonAuthor = addonAuthor;
 		this.addonPriority = addonPriority;
 	}
 	
@@ -60,6 +75,14 @@ public abstract class PortalsAddon {
 	 */
 	public String getDescription() {
 		return addonDescription;
+	}
+	
+	/**
+	 * Get the author of the addon
+	 * @return the author of the addon
+	 */
+	public String getAuthor() {
+		return addonAuthor;
 	}
 	
 	/**

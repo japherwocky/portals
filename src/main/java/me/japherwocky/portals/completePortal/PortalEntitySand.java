@@ -18,6 +18,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
  *
  */
 
+@SuppressWarnings({"deprecation", "removal"})
 public class PortalEntitySand extends PortalEntity {
 
 	private int fallingBlockId;
@@ -67,8 +68,8 @@ public class PortalEntitySand extends PortalEntity {
 		metaPacket.setEntityID(fallingBlockId);
 		dataWatcher = new WrappedDataWatcher();
 		
-		WrappedDataWatcher.WrappedDataWatcherObject noGravity = new WrappedDataWatcher.WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class));
-		WrappedDataWatcher.WrappedDataWatcherObject ticksLived = new WrappedDataWatcher.WrappedDataWatcherObject(1, WrappedDataWatcher.Registry.get(Integer.class));
+		WrappedDataWatcher.WrappedDataWatcherObject noGravity = new WrappedDataWatcher.WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class, true));
+		WrappedDataWatcher.WrappedDataWatcherObject ticksLived = new WrappedDataWatcher.WrappedDataWatcherObject(1, WrappedDataWatcher.Registry.get(Integer.class, true));
 
 		dataWatcher.setObject(noGravity, true);
 		dataWatcher.setObject(ticksLived, Integer.MAX_VALUE);

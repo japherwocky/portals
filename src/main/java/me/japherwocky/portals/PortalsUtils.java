@@ -107,6 +107,7 @@ public class PortalsUtils {
 		return face==BlockFace.WEST || face==BlockFace.EAST;
 	}
 
+	@SuppressWarnings({"deprecation", "removal"})
 	public static void cloneEntity(Entity en, Entity newEn) {
 		newEn.setCustomName(en.getCustomName());
 		newEn.setCustomNameVisible(en.isCustomNameVisible());
@@ -116,7 +117,8 @@ public class PortalsUtils {
 		newEn.setGlowing(en.isGlowing());
 		newEn.setGravity(en.hasGravity());
 		newEn.setInvulnerable(en.isInvulnerable());
-		newEn.setLastDamageCause(en.getLastDamageCause());
+		var damage = en.getLastDamageCause();
+		newEn.setLastDamageCause(damage);
 		newEn.setOp(en.isOp());
 		newEn.setPersistent(en.isPersistent());
 		newEn.setPortalCooldown(en.getPortalCooldown());
