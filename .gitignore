@@ -56,6 +56,10 @@ test/
 # IDE specific
 .factorypath
 
+# Local Maven
+apache-maven-*/
+*.zip
+
 # Don't ignore pom.xml
 !pom.xml
 
