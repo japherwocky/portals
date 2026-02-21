@@ -48,7 +48,7 @@ public class PortalsPlayerMainGUI extends CreatePortalGUI {
 		
 		maxPage = (int) Math.floor(portalList.size()/MAX_ITEMS_PER_PAGE);
 		ItemStack[] contents = inventory.getContents();
-		inventory = Bukkit.createInventory(p, inventory.getSize(), "Â§6Portals. Page "+(page+1)+"/"+(maxPage+1));
+		inventory = Bukkit.createInventory(p, inventory.getSize(), "§6Portals. Page "+(page+1)+"/"+(maxPage+1));
 		inventory.setContents(contents);
 		
 		for (int i=0;i<MAX_ITEMS_PER_PAGE;i++) {
@@ -105,3 +105,4 @@ public class PortalsPlayerMainGUI extends CreatePortalGUI {
 	}
 
 }
+

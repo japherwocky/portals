@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 /**
- * Parent class of commands that are being executed with <b>/portal [command]</b>
+ * Parent class of commands that are being executed with <b>/portals [command]</b>
  *
  */
 

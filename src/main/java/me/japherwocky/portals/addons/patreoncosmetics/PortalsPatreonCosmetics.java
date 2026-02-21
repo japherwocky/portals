@@ -32,9 +32,9 @@ import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.events.CustomPortalBreakEvent;
 import me.japherwocky.portals.events.CustomPortalIgniteEvent;
 import me.japherwocky.portals.events.CustomPortalUseEvent;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
-public class DimensionsPatreonCosmetics implements Listener {
+public class PortalsPatreonCosmetics implements Listener {
 	
 	private Plugin pl;
 	private HashMap<CompletePortal, Integer> tasks = new HashMap<CompletePortal, Integer>();
@@ -44,21 +44,21 @@ public class DimensionsPatreonCosmetics implements Listener {
 	private UUID localUUID;
 	private HashMap<String, CosmeticEffect> localCosmeticsMap;
 	
-	public DimensionsPatreonCosmetics(Portals main) {
+	public PortalsPatreonCosmetics(Portals main) {
 		this.pl = main;
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			verifyPlayer(p);
 		}
 
-		String tmp = DimensionsSettings.getConfig().getString("CosmeticsAddon.PlayerUUID", "");
+		String tmp = PortalsSettings.getConfig().getString("CosmeticsAddon.PlayerUUID", "");
 		if (!tmp.equals("")) localUUID = UUID.fromString((String) tmp);
 		
 		localCosmeticsMap = new HashMap<String, CosmeticEffect>();
-		localCosmeticsMap.put("postIgnitePortal", CosmeticEffect.valueOf(DimensionsSettings.getConfig().getString("CosmeticsAddon.IgnitePortal", "NOTHING")));
-		localCosmeticsMap.put("postDestroyPortal", CosmeticEffect.valueOf(DimensionsSettings.getConfig().getString("CosmeticsAddon.DestroyPortal", "NOTHING")));
-		localCosmeticsMap.put("postUsePortal", CosmeticEffect.valueOf(DimensionsSettings.getConfig().getString("CosmeticsAddon.UsePortal", "NOTHING")));
-		localCosmeticsMap.put("onPortalTick", CosmeticEffect.valueOf(DimensionsSettings.getConfig().getString("CosmeticsAddon.PortalTick", "NOTHING")));
+		localCosmeticsMap.put("postIgnitePortal", CosmeticEffect.valueOf(PortalsSettings.getConfig().getString("CosmeticsAddon.IgnitePortal", "NOTHING")));
+		localCosmeticsMap.put("postDestroyPortal", CosmeticEffect.valueOf(PortalsSettings.getConfig().getString("CosmeticsAddon.DestroyPortal", "NOTHING")));
+		localCosmeticsMap.put("postUsePortal", CosmeticEffect.valueOf(PortalsSettings.getConfig().getString("CosmeticsAddon.UsePortal", "NOTHING")));
+		localCosmeticsMap.put("onPortalTick", CosmeticEffect.valueOf(PortalsSettings.getConfig().getString("CosmeticsAddon.PortalTick", "NOTHING")));
 		
 
 		Portals.getCommandManager().registerCommand(new PatreonCommand("patreon", "[player]", new String[0], "Check your or a player's patreon status", "none", false, this));

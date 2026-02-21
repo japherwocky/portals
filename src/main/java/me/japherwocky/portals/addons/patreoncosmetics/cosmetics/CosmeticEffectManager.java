@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.completePortal.CompletePortal;
 
 public class CosmeticEffectManager {
@@ -37,7 +37,7 @@ public class CosmeticEffectManager {
 	            double angle = i * increment;
 	            double x = location.getX() + (radius * Math.cos(angle));
 	            double z = location.getZ() + (radius * Math.sin(angle));
-	            Location loc = new Location(location.getWorld(), x, location.getY()+DimensionsUtils.getRandom(-5, 5), z);
+	            Location loc = new Location(location.getWorld(), x, location.getY()+PortalsUtils.getRandom(-5, 5), z);
 	            Vector v = genVec(loc,location);
 	            location.getWorld().spawnParticle(smokeParticle, loc, 0, v.getX(),v.getY(),v.getZ());
 	        }

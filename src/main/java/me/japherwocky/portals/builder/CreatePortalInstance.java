@@ -8,8 +8,8 @@ import org.bukkit.inventory.Inventory;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.gui.CreatePortalGUI;
 import me.japherwocky.portals.gui.PortalsGUIType;
-import me.japherwocky.portals.gui.player.DimensionsPlayerMainGUI;
-import me.japherwocky.portals.gui.player.DimensionsPlayerPortalGUI;
+import me.japherwocky.portals.gui.player.PortalsPlayerMainGUI;
+import me.japherwocky.portals.gui.player.PortalsPlayerPortalGUI;
 
 public class CreatePortalInstance {
 	
@@ -29,8 +29,8 @@ public class CreatePortalInstance {
 		this.p = p;
 		
 		if (player) {
-			guiMap.put(PortalsGUIType.PLAYER_MAIN, new DimensionsPlayerMainGUI(this));
-			guiMap.put(PortalsGUIType.PLAYER_PORTAL, new DimensionsPlayerPortalGUI(this));
+			guiMap.put(PortalsGUIType.PLAYER_MAIN, new PortalsPlayerMainGUI(this));
+			guiMap.put(PortalsGUIType.PLAYER_PORTAL, new PortalsPlayerPortalGUI(this));
 		} else {
 //			guiMap.put(PortalsGUIType.ADMIN_MAIN, new CreateStructureMainGUI(this));
 		}

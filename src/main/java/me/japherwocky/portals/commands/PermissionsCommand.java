@@ -6,9 +6,9 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 
-public class PermissionsCommand extends DimensionsCommand {
+public class PermissionsCommand extends PortalsCommand {
 
 	private float commandsPerPage = 5;
 	
@@ -21,7 +21,7 @@ public class PermissionsCommand extends DimensionsCommand {
 		
 		String head = "§7[§cPortals§7] Commands list:";
 		int page = 0;
-		if (args.length>1 && DimensionsUtils.isInt(args[1]) && !args[1].equals("0")) page = Integer.parseInt(args[1])-1;
+		if (args.length>1 && PortalsUtils.isInt(args[1]) && !args[1].equals("0")) page = Integer.parseInt(args[1])-1;
 		ArrayList<PortalsCommand> commandList = Portals.getCommandManager().getCommands();
 		for (int i =(int) Math.max(page*commandsPerPage, 0);i<Math.min(page*commandsPerPage+(commandList.size()-commandsPerPage*page), commandsPerPage*(1+page));i++) {
 			PortalsCommand cmd = (PortalsCommand) commandList.toArray()[i];

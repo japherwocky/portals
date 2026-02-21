@@ -9,14 +9,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.japherwocky.portals.addons.PortalsAddon;
 import me.japherwocky.portals.addons.PortalsAddonManager;
-import me.japherwocky.portals.addons.patreoncosmetics.DimensionsPatreonCosmetics;
+import me.japherwocky.portals.addons.patreoncosmetics.PortalsPatreonCosmetics;
 import me.japherwocky.portals.builder.CreatePortalManager;
-import me.japherwocky.portals.commands.DimensionsCommandManager;
+import me.japherwocky.portals.commands.PortalsCommandManager;
 import me.japherwocky.portals.completePortal.CompletePortalManager;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalManager;
 import me.japherwocky.portals.listener.PortalListener;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
 /**
  * Main class of the plugin
@@ -24,20 +24,20 @@ import me.japherwocky.portals.settings.DimensionsSettings;
 public class Portals extends JavaPlugin {
 	
 	private static Portals instance;
-	private static DimensionsCommandManager commandManager;
+	private static PortalsCommandManager commandManager;
 	private static PortalsAddonManager addonsManager;
 	private static CompletePortalManager completePortalManager;
 	private static CustomPortalManager customPortalManager;
 	private static CreatePortalManager createPortalManager;
 	
-	private static DimensionsPatreonCosmetics patreonCosmetics;
+	private static PortalsPatreonCosmetics patreonCosmetics;
 	
 	public void onLoad() {
 		
 		instance = this;
 		
 		PortalsDebbuger.VERY_LOW.print("Loading Portals settings...");
-		new DimensionsSettings(this);
+		new PortalsSettings(this);
  
 		PortalsDebbuger.VERY_LOW.print("Loading addons...");
 		addonsManager = new PortalsAddonManager(this);
@@ -48,10 +48,10 @@ public class Portals extends JavaPlugin {
 	public void onEnable() {
 
 		PortalsDebbuger.DEBUG.print("Registering commands...");
-		commandManager = new DimensionsCommandManager(this);
+		commandManager = new PortalsCommandManager(this);
 		
-		if (DimensionsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new DimensionsPatreonCosmetics(this);
+		if (PortalsSettings.enablePatreonCosmetics)
+			patreonCosmetics = new PortalsPatreonCosmetics(this);
 		
 		PortalsDebbuger.VERY_LOW.print("Enabling addons...");
 		addonsManager.enableAddons();
@@ -76,7 +76,7 @@ public class Portals extends JavaPlugin {
 			@Override
 			public void run() {
 				
-				DimensionsSettings.setDefaultWorld();
+				PortalsSettings.setDefaultWorld();
 
 				PortalsDebbuger.DEBUG.print("Loading saved portals...");
 				completePortalManager.loadAll();
@@ -126,13 +126,13 @@ public class Portals extends JavaPlugin {
 		completePortalManager.save();
 		HandlerList.unregisterAll(this);
 		
-		new DimensionsSettings(this);
-		DimensionsSettings.setDefaultWorld();
+		new PortalsSettings(this);
+		PortalsSettings.setDefaultWorld();
 
-		commandManager = new DimensionsCommandManager(this);
+		commandManager = new PortalsCommandManager(this);
 		
-		if (DimensionsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new DimensionsPatreonCosmetics(this);
+		if (PortalsSettings.enablePatreonCosmetics)
+			patreonCosmetics = new PortalsPatreonCosmetics(this);
 
 		addonsManager.enableAddons();
 
@@ -167,7 +167,7 @@ public class Portals extends JavaPlugin {
 		return addonsManager;
 	}
 	
-	public static DimensionsCommandManager getCommandManager() {
+	public static PortalsCommandManager getCommandManager() {
 		return commandManager;
 	}
 

@@ -31,7 +31,7 @@ import me.japherwocky.portals.customportal.CustomPortalIgniteCause;
 
 public class CompletePortalLoader {
 	
-	private static final String FILE_PATH = "./plugins/Dimensions/data/savedPortals.json";
+	private static final String FILE_PATH = "./plugins/Portals/data/savedPortals.json";
 	
 	private Gson gson;
 	

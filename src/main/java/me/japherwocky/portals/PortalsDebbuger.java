@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
 /**
  * Use static instances of the class to print debug messages to the appropriate debug level set in the config
@@ -38,8 +38,8 @@ public class PortalsDebbuger {
 	 * @param str The message to print
 	 */
 	public void print(Object... str) {
-		if (DimensionsSettings.debugLevel>=level)
-			Bukkit.getConsoleSender().sendMessage("§7[§cDimensions§7] §r"+String.join(", ",Arrays.asList(str).stream()
+		if (PortalsSettings.debugLevel>=level)
+			Bukkit.getConsoleSender().sendMessage("§7[§cPortals§7] §r"+String.join(", ",Arrays.asList(str).stream()
 					.map((s) -> s==null?"null":s.toString())
                     .collect(Collectors.toList())));
 	}

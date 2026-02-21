@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 
-public class TestCommand extends DimensionsCommand {
+public class TestCommand extends PortalsCommand {
 	
 	public TestCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand) {
 		super(command,args,aliases,description, permission, adminCommand);

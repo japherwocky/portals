@@ -54,12 +54,12 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 
 import me.japherwocky.portals.Portals;
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.completePortal.CompletePortal;
 import me.japherwocky.portals.completePortal.PortalEntitySolid;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
 
 public class PortalListener implements Listener {
@@ -85,7 +85,7 @@ public class PortalListener implements Listener {
 			}
 		};
 		
-		if (DimensionsSettings.enableEntitiesTeleport) {
+		if (PortalsSettings.enableEntitiesTeleport) {
 			Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
 				
 				@Override
@@ -94,7 +94,7 @@ public class PortalListener implements Listener {
 						portal.updatePortal();
 					}
 				}
-			}, 0, DimensionsSettings.updateEveryTick);
+			}, 0, PortalsSettings.updateEveryTick);
 		}
 		/*packetListener2 = new PacketAdapter(pl, ListenerPriority.NORMAL, PacketType.Play.Server.UNLOAD_CHUNK) {
 			@Override
@@ -136,10 +136,10 @@ public class PortalListener implements Listener {
 		
 		CompletePortal complFrom = Portals.getCompletePortalManager().getCompletePortal(from, false, false);
 		
-		if (DimensionsSettings.enableNetherPortalEffect && complTo!=null) {
-			p.sendBlockChange(to, DimensionsUtils.getNetherPortalEffect(complTo.getPortalGeometry().iszAxis()));
+		if (PortalsSettings.enableNetherPortalEffect && complTo!=null) {
+			p.sendBlockChange(to, PortalsUtils.getNetherPortalEffect(complTo.getPortalGeometry().iszAxis()));
 		}
-		if (DimensionsSettings.enableNetherPortalEffect && complFrom!=null) {
+		if (PortalsSettings.enableNetherPortalEffect && complFrom!=null) {
 			if (complFrom.getPortalEntities().get(0) instanceof PortalEntitySolid) {
 				p.sendBlockChange(from, complFrom.getCustomPortal().getInsideBlockData(complFrom.getPortalGeometry().iszAxis()));
 			} else {
@@ -181,7 +181,7 @@ public class PortalListener implements Listener {
         	for (CustomPortal portals : Portals.getCustomPortalManager().getCustomPortals()) {
     			if (portals.tryIgnite(e.getPlayer(), e.getItem(), block.getLocation()) != null) {
     				e.setCancelled(true);
-					if (e.getPlayer().getGameMode()!=GameMode.CREATIVE && DimensionsSettings.consumeItems) {
+					if (e.getPlayer().getGameMode()!=GameMode.CREATIVE && PortalsSettings.consumeItems) {
 						ItemStack item = e.getItem();
 						if (item.getType().toString().contains("BUCKET") && item.getType()!=Material.BUCKET) {
 							item.setType(Material.BUCKET);
@@ -218,7 +218,7 @@ public class PortalListener implements Listener {
 			try {
 				List<Block> los = p.getLineOfSight(null, 5);
 				for (Block block : los) {
-					if (!DimensionsUtils.isAir(block)) break;
+					if (!PortalsUtils.isAir(block)) break;
 					CompletePortal portal = Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
 					if (portal!=null) {
 						Portals.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
@@ -366,7 +366,7 @@ public class PortalListener implements Listener {
 				clicked.remove(ent);
 			}
 		}
-		if (!DimensionsSettings.listenToEvents.contains(cause.name())) return false;
+		if (!PortalsSettings.listenToEvents.contains(cause.name())) return false;
 		
 		List<CompletePortal> portals = Portals.getCompletePortalManager().getCompletePortals(block.getLocation(), true, false);
 		boolean cancel = false;

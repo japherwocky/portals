@@ -8,13 +8,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.japherwocky.portals.commands.DimensionsCommand;
+import me.japherwocky.portals.commands.PortalsCommand;
 
-public class PatreonCommand extends DimensionsCommand {
+public class PatreonCommand extends PortalsCommand {
 
-	DimensionsPatreonCosmetics main;
+	PortalsPatreonCosmetics main;
 
-	public PatreonCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand, DimensionsPatreonCosmetics main) {
+	public PatreonCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand, PortalsPatreonCosmetics main) {
 		super(command,args,aliases,description, permission, adminCommand);
 		this.main = main;
 	}
@@ -29,12 +29,12 @@ public class PatreonCommand extends DimensionsCommand {
 		if (args.length>=2) {
 			Player p2;
 			if ((p2 = Bukkit.getPlayer(args[1]))!=null) {
-				p.sendMessage("§7[§cDimensions§7] "+getStatusString(p2));
+				p.sendMessage("§7[§cPortals§7] "+getStatusString(p2));
 			} else {
-				p.sendMessage("§7[§cDimensions§7] §cCould not find player "+args[1]);
+				p.sendMessage("§7[§cPortals§7] §cCould not find player "+args[1]);
 			}
 		} else {
-			p.sendMessage("§7[§cDimensions§7] "+getStatusString(p));
+			p.sendMessage("§7[§cPortals§7] "+getStatusString(p));
 		}
 	}
 	

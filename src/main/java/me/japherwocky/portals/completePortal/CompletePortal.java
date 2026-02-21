@@ -22,11 +22,11 @@ import org.bukkit.util.Vector;
 
 import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.PortalsDebbuger;
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.customportal.CustomPortal;
 import me.japherwocky.portals.customportal.CustomPortalIgniteCause;
 import me.japherwocky.portals.events.CustomPortalUseEvent;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 import me.japherwocky.portals.settings.WorldConfiguration;
 
 /**
@@ -259,7 +259,7 @@ public class CompletePortal {
 				} else {
 					Entity newEn = teleportLocation.getWorld().spawnEntity(teleportLocation, trasnformation);
 
-					DimensionsUtils.cloneEntity(en, newEn);
+					PortalsUtils.cloneEntity(en, newEn);
 					destination.pushToHold(newEn);
 					
 					en.remove();
@@ -300,7 +300,7 @@ public class CompletePortal {
 		if (destinationWorld==null) {
 			destinationWorld = customPortal.getWorld();
 			if (world.equals(destinationWorld))
-				destinationWorld = lastLinkedWorld==null?DimensionsSettings.fallbackWorld:lastLinkedWorld;
+				destinationWorld = lastLinkedWorld==null?PortalsSettings.fallbackWorld:lastLinkedWorld;
 		}
 		newLocation.setWorld(destinationWorld);
 		
@@ -327,8 +327,8 @@ public class CompletePortal {
 			
 		}
 
-		WorldConfiguration currWorldConfig = DimensionsSettings.getWorldConfiguration(world);
-		WorldConfiguration destWorldConfig = DimensionsSettings.getWorldConfiguration(destinationWorld);
+		WorldConfiguration currWorldConfig = PortalsSettings.getWorldConfiguration(world);
+		WorldConfiguration destWorldConfig = PortalsSettings.getWorldConfiguration(destinationWorld);
 		
 		//FIX the wolrd height ratio
 		int currMinWorldHeight = currWorldConfig.getMinHeight();
@@ -366,11 +366,11 @@ public class CompletePortal {
 		//===============
 		
 		CompletePortal destination = null;
-		if (DimensionsSettings.searchFirstClonePortal) 
+		if (PortalsSettings.searchFirstClonePortal) 
 			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, true, true);
 		
 		if (destination==null)
-			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, DimensionsSettings.searchSameAxis, DimensionsSettings.searchSameSize);
+			destination = Portals.getCompletePortalManager().getNearestPortal(newLocation, this, ratio, PortalsSettings.searchSameAxis, PortalsSettings.searchSameSize);
 		
 
 		PortalsDebbuger.DEBUG.print("First try for destination (check for already existing portal): "+destination);
@@ -426,8 +426,8 @@ public class CompletePortal {
 	 * @return the world ratio
 	 */
 	public double getWorldRatio(World destinationWorld) {
-		double currWorldSize = DimensionsSettings.getWorldConfiguration(world).getSize();
-		double worldSize = DimensionsSettings.getWorldConfiguration(destinationWorld).getSize();
+		double currWorldSize = PortalsSettings.getWorldConfiguration(world).getSize();
+		double worldSize = PortalsSettings.getWorldConfiguration(destinationWorld).getSize();
 		double ratio = worldSize/currWorldSize;
 		
 		return ratio;
@@ -438,13 +438,13 @@ public class CompletePortal {
 		Location backupLocation2 = null;
 		Location checkLocation;
 	
-		WorldConfiguration destWorldConfig = DimensionsSettings.getWorldConfiguration(destinationWorld);
+		WorldConfiguration destWorldConfig = PortalsSettings.getWorldConfiguration(destinationWorld);
 		int maxWorldHeight = destWorldConfig.getMaxHeight()-height;
 		
-		for (int m =0;m<DimensionsSettings.safeSpotSearchRadius;m++) {
+		for (int m =0;m<PortalsSettings.safeSpotSearchRadius;m++) {
 			checkLocation = newLocation.clone();
 
-			boolean isCenter = !DimensionsSettings.safeSpotSearchAllY || m<DimensionsSettings.safeSpotSearchRadius-1;
+			boolean isCenter = !PortalsSettings.safeSpotSearchAllY || m<PortalsSettings.safeSpotSearchRadius-1;
 			//tp 3042.23 109.00 2005.12
 			///tp 2039.49 108.00 1006.62
 			int y = 0;
@@ -538,9 +538,9 @@ public class CompletePortal {
 				if (checkPlatform && y==checkLocation.getY() && (!block.getRelative(BlockFace.DOWN).getRelative(zAxis?BlockFace.WEST:BlockFace.SOUTH).getType().isSolid() || !block.getRelative(BlockFace.DOWN).getRelative(zAxis?BlockFace.EAST:BlockFace.NORTH).getType().isSolid())) return false;
 				
 				if ((y==checkLocation.getY() || y==maxY) || ((side==(zAxis?checkLocation.getZ():checkLocation.getX())) || side==maxSide)) {
-					if (!customPortal.isPortalBlock(block) && !DimensionsUtils.isAir(block)) return false;
+					if (!customPortal.isPortalBlock(block) && !PortalsUtils.isAir(block)) return false;
 				} else {
-					if (!DimensionsUtils.isAir(block)) return false;
+					if (!PortalsUtils.isAir(block)) return false;
 				}
 			}
 		}
@@ -606,7 +606,7 @@ public class CompletePortal {
 					en.summon(p);
 					
 				}
-			}, DimensionsSettings.portalInsideDelay);
+			}, PortalsSettings.portalInsideDelay);
 		}
 	}
 

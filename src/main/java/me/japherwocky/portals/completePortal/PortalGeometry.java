@@ -10,7 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
-import me.japherwocky.portals.DimensionsUtils;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.customportal.CustomPortal;
 
 /**
@@ -223,7 +223,7 @@ public class PortalGeometry {
 				Block block = new Location(world, zAxis?min.getX():side, y, !zAxis?min.getZ():side).getBlock();
 				if ((y==min.getY() || y==max.getY()) || ((side==(zAxis?min.getZ():min.getX())) || (side==(zAxis?max.getZ():max.getX())))) {
 					if (!customPortal.isPortalBlock(block)) return null;
-				} else if (!DimensionsUtils.isAir(block)) return null;
+				} else if (!PortalsUtils.isAir(block)) return null;
 			}
 		}
 		

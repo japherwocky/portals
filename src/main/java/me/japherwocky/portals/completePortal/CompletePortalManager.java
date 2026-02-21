@@ -20,7 +20,7 @@ import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 import me.japherwocky.portals.customportal.CustomPortalIgniteCause;
 import me.japherwocky.portals.events.CustomPortalBreakEvent;
 import me.japherwocky.portals.events.CustomPortalIgniteEvent;
-import me.japherwocky.portals.settings.DimensionsSettings;
+import me.japherwocky.portals.settings.PortalsSettings;
 
 /**
  * Manages all the complete portals
@@ -150,11 +150,11 @@ public class CompletePortalManager {
 	 * @param predicate if it tests true, then the portal will be included in the search
 	 */
 	public CompletePortal getNearestPortal(Location teleportLocation, CompletePortal sample, double ratio, boolean sameAxis, boolean sameSize, Predicate<CompletePortal> predicate) {
-		double closestDistance =  Math.pow(DimensionsSettings.searchRadius*ratio,2);
+		double closestDistance =  Math.pow(PortalsSettings.searchRadius*ratio,2);
 		CompletePortal closestPortal = null;
 		for(CompletePortal complete : completePortals) {
 			if (!complete.getCustomPortal().equals(sample.getCustomPortal()) || !complete.getCenter().getWorld().equals(teleportLocation.getWorld())) continue;
-			if (DimensionsSettings.ignoreLinkedPortals && complete.getLinkedPortal()!=null) continue;
+			if (PortalsSettings.ignoreLinkedPortals && complete.getLinkedPortal()!=null) continue;
 			if (sameAxis && sample.getPortalGeometry().iszAxis()!=complete.getPortalGeometry().iszAxis()) continue;
 			if (sameSize && (sample.getPortalGeometry().getPortalWidth()!=complete.getPortalGeometry().getPortalWidth() || sample.getPortalGeometry().getPortalHeight()!=complete.getPortalGeometry().getPortalHeight())) continue;
 			if (!predicate.test(closestPortal)) continue;

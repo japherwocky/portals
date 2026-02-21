@@ -20,8 +20,8 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
     private ArrayList<PortalsCommand> commands = new ArrayList<PortalsCommand>();
     
     /**
-     * Contruct the manager and set the command executor for the command /dimensions
-     * @param main the instance of the Portals lpugin
+     * Contruct the manager and set the command executor for the command /portals
+     * @param main the instance of the Portals plugin
      */
     public PortalsCommandManager(Portals main) {
 
@@ -40,7 +40,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
     	commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
     	// Removed PortalsListCommand
 		
-		main.getCommand("portals").setExecutor(this);
+		main.getCommand("dimensions").setExecutor(this);
 		
 	}
     

@@ -153,7 +153,7 @@ public class PortalsAddonManager {
 		PortalsAddon.resetOptions();
 	}
 	
-	ArrayList<String> dontUnload = new ArrayList<String>(Arrays.asList(new String[] {"me.japherwocky.portals.listener.PortalListener", "me.japherwocky.portals.commands.AddonCommand"}));
+	ArrayList<String> dontUnload = new ArrayList<String>(Arrays.asList(new String[] {"me.xxastaspastaxx.dimensions.listener.PortalListener", "me.xxastaspastaxx.dimensions.commands.AddonCommand"}));
 	
 	/**
 	 * Unload the given addon

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-public class WorldsCommand extends DimensionsCommand {
+public class WorldsCommand extends PortalsCommand {
 	
 	public WorldsCommand(String command, String args, String[] aliases, String description, String permission, boolean adminCommand) {
 		super(command,args,aliases,description, permission, adminCommand);

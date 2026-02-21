@@ -16,7 +16,6 @@ import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 
 /**
  * The class creates the config file with the defined variables inside the class for easier access to the config
- *
  */
 
 public class PortalsSettings {

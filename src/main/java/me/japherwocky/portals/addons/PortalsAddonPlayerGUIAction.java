@@ -12,4 +12,3 @@ public abstract class PortalsAddonPlayerGUIAction {
 	public abstract boolean execute(Player player, CustomPortal selectedPortal);
 
 }
-

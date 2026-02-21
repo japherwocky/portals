@@ -3,7 +3,7 @@ package me.xxastaspastaxx.dimensions;
 import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.addons.PortalsAddonManager;
 import me.japherwocky.portals.builder.CreatePortalManager;
-import me.japherwocky.portals.commands.DimensionsCommandManager;
+import me.japherwocky.portals.commands.PortalsCommandManager;
 import me.japherwocky.portals.completePortal.CompletePortalManager;
 import me.japherwocky.portals.customportal.CustomPortalManager;
 
@@ -29,7 +29,7 @@ public class Dimensions {
         return Portals.getAddonManager();
     }
     
-    public static DimensionsCommandManager getCommandManager() {
+    public static PortalsCommandManager getCommandManager() {
         return Portals.getCommandManager();
     }
 
