@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.japherwocky.portals.addons.PortalsAddon;
 import me.japherwocky.portals.addons.PortalsAddonManager;
-import me.japherwocky.portals.addons.patreoncosmetics.PortalsPatreonCosmetics;
 import me.japherwocky.portals.builder.CreatePortalManager;
 import me.japherwocky.portals.commands.PortalsCommandManager;
 import me.japherwocky.portals.completePortal.CompletePortalManager;
@@ -30,7 +29,6 @@ public class Portals extends JavaPlugin {
 	private static CustomPortalManager customPortalManager;
 	private static CreatePortalManager createPortalManager;
 	
-	private static PortalsPatreonCosmetics patreonCosmetics;
 	
 	public void onLoad() {
 		
@@ -49,9 +47,6 @@ public class Portals extends JavaPlugin {
 
 		PortalsDebbuger.DEBUG.print("Registering commands...");
 		commandManager = new PortalsCommandManager(this);
-		
-		if (PortalsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new PortalsPatreonCosmetics(this);
 		
 		PortalsDebbuger.VERY_LOW.print("Enabling addons...");
 		addonsManager.enableAddons();
@@ -120,8 +115,6 @@ public class Portals extends JavaPlugin {
 	}
 	
 	public void reload() {
-		if (patreonCosmetics!=null)
-			patreonCosmetics.disable();
 		addonsManager.unloadAll();
 		completePortalManager.save();
 		HandlerList.unregisterAll(this);
@@ -131,9 +124,6 @@ public class Portals extends JavaPlugin {
 
 		commandManager = new PortalsCommandManager(this);
 		
-		if (PortalsSettings.enablePatreonCosmetics)
-			patreonCosmetics = new PortalsPatreonCosmetics(this);
-
 		addonsManager.enableAddons();
 
 		customPortalManager = new CustomPortalManager(this);

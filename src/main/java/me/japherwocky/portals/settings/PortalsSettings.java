@@ -23,9 +23,6 @@ public class PortalsSettings {
 	/**Config version for verion control */
 	private static final double configVersion = 1.3;
 	
-	/**Enable patreon cosmetics for your server*/
-	public static boolean enablePatreonCosmetics = true;
-	
 	/**Enable to show players the available portals*/
 	public static boolean showPortalsToPlayers = true;
 	
