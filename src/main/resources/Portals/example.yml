@@ -1,0 +1,101 @@
+# Example Portal Configuration
+# This file demonstrates all available options for custom portals.
+# Copy this file and rename it to create your own portal types.
+#
+# Config Version - Do not change
+configVersion: "3.0.1"
+
+# Enable/disable this portal type
+Enable: true
+
+# Display name shown in messages
+DisplayName: "Nether Portal"
+
+# ============================================
+# PORTAL BLOCK SETTINGS
+# ============================================
+Portal:
+  # Material used for the portal frame (outside)
+  # Use any valid Bukkit material: OBSIDIAN, COBBLESTONE, DIAMOND_BLOCK, etc.
+  Frame:
+    Material: OBSIDIAN
+    
+    # Block orientation/face requirement:
+    # - "all" - any orientation
+    # - "NORTH", "SOUTH", "EAST", "WEST", "UP", "DOWN" - specific face
+    # - "X", "Y", "Z" - axis (for orientable blocks like logs)
+    Face: all
+  
+  # Material that fills the inside of the portal
+  # Common options: NETHER_PORTAL, END_PORTAL, WATER, AIR
+  InsideMaterial: NETHER_PORTAL
+  
+  # Item used to ignite/activate the portal
+  # Set to "null" to allow any item or any block interaction
+  LighterMaterial: FLINT_AND_STEEL
+  
+  # Particle color when players enter the portal (BGR format: Blue;Green;Red)
+  # Use 0;0;0 for default, or RGB values like "255;0;0" for red
+  ParticlesColor: "0;0;0"
+  
+  # Sound played when the portal breaks
+  BreakEffect: BLOCK_GLASS_BREAK
+  
+  # Minimum/maximum height of the portal structure
+  MinimumHeight: 4
+  MaximumHeight: 15
+  
+  # Minimum/maximum width of the portal structure
+  MinimumWidth: 3
+  MaximumWidth: 14
+
+# ============================================
+# WORLD/DIMENSION SETTINGS
+# ============================================
+World:
+  # The destination world name this portal links to
+  # Must match a world loaded on your server
+  Name: world_nether
+
+Options:
+  # List of worlds where this portal can be built
+  # Use ["all"] to allow in any world
+  # Use ["world", "world_nether"] to allow only in specific worlds
+  # Use ["!world_spawn"] to exclude a specific world
+  AllowedWorlds:
+    - all
+  
+  # Build an exit portal in the destination world
+  ExitPortal:
+    Enable: true
+    
+    # Fixed width for exit portal (-1 = auto-size)
+    FixedWidth: -1
+    
+    # Fixed height for exit portal (-1 = auto-size)
+    FixedHeight: -1
+  
+  # Delay in ticks before teleporting (20 ticks = 1 second)
+  TeleportDelay: 4
+  
+  # Enable particle effects when entering the portal
+  EnableParticles: true
+
+# ============================================
+# ENTITY SETTINGS (Optional)
+# ============================================
+Entities:
+  # Transform entities into other types when they enter the portal
+  # Format: "ORIGINAL_TYPE->NEW_TYPE"
+  # Example: "PIG->ZOMBIE_PIGMAN"
+  Transformation: []
+  
+  # Entity spawning within the portal
+  Spawning:
+    # Delay range in milliseconds (min-max)
+    Delay: "5000-10000"
+    
+    # List of entities to spawn
+    # Format: "ENTITY_TYPE;WEIGHT"
+    # Example: "ZOMBIE;10"
+    List: []

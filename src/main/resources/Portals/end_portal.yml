@@ -1,0 +1,38 @@
+# Simple End Portal Configuration
+# Creates a portal that links to the End dimension using End Portal frames
+configVersion: "3.0.1"
+
+Enable: true
+DisplayName: "End Portal"
+
+Portal:
+  Frame:
+    Material: END_PORTAL_FRAME
+    Face: all
+  InsideMaterial: END_PORTAL
+  LighterMaterial: FLINT_AND_STEEL
+  ParticlesColor: "150;0;150"
+  BreakEffect: BLOCK_GLASS_BREAK
+  MinimumHeight: 4
+  MaximumHeight: 15
+  MinimumWidth: 3
+  MaximumWidth: 14
+
+World:
+  Name: world_the_end
+
+Options:
+  AllowedWorlds:
+    - all
+  ExitPortal:
+    Enable: true
+    FixedWidth: -1
+    FixedHeight: -1
+  TeleportDelay: 4
+  EnableParticles: true
+
+Entities:
+  Transformation: []
+  Spawning:
+    Delay: "5000-10000"
+    List: []
