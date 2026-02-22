@@ -1,10 +1,9 @@
 # Resource World Portal Configuration
-# Creates a portal that links to a resource_overworld (e.g., via Multiverse-Core)
+# Creates a portal that links to a resource_overworld
 # 
 # Usage with Multiverse-Core:
-#   /mv create resource_overworld normal
-#   /mv modify set generator void
-#   /mvsetspawn resource_overworld
+#   /mv create resource_world normal -g void
+#   /mv setspawn resource_world
 configVersion: "3.0.1"
 
 Enable: true
@@ -23,7 +22,7 @@ Portal:
   MaximumWidth: 14
 
 World:
-  Name: resource_overworld
+  Name: resource_world
 
 Options:
   AllowedWorlds:

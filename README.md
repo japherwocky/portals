@@ -1,16 +1,15 @@
 # Portals
 
-A Minecraft Paper/Spigot plugin for creating custom portals that link to any dimension/world.
+A Minecraft Paper/Spigot plugin for creating custom portals that link to any world or dimension.
 
 ## Features
 
-- Create portals with custom frame materials (obsidian, diamond blocks, etc.)
-- Link portals to any world or dimension
+- Create portals with custom frame materials (obsidian, cobblestone, etc.)
+- Link portals to any world
 - Configurable portal sizes
 - Custom ignition items
-- Particle effects
 - Entity transformation support
-- Extensible addon system
+- Exit portal generation
 
 ## Building
 
@@ -36,7 +35,7 @@ This repository includes example portal configs:
 
 - **[example.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/example.yml)** - A comprehensive reference showing all available options with comments
 - **[end_portal.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/end_portal.yml)** - A simple End Portal config linking to `world_the_end`
-- **[resource_overworld.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/resource_overworld.yml)** - Cobblestone portal to a resource world (works great with Multiverse-Core)
+- **[resource_overworld.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/resource_overworld.yml)** - Cobblestone portal to a resource world
 
 You can find these files in `src/main/resources/Portals/` in the source code.
 
@@ -46,36 +45,29 @@ To use these:
 3. Edit the settings as needed
 4. Run `/portals reload` or restart the server
 
-### Quick Start with Multiverse-Core
+### Quick Start
 
-Want to create a "resource world" that's a second copy of the overworld? Here's how:
-
-**1. Create the resource world with Multiverse-Core:**
+**1. Create a new world (using Multiverse-Core as an example):**
 ```bash
-/mv create resource_overworld normal
-/mv modify set generator void
-/mv setspawn resource_overworld
+/mv create resource_world normal -g void
+/mv setspawn resource_world
 ```
 
 **2. Copy the example config:**
-Copy [`resource_overworld.yml`](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/resource_overworld.yml) to `plugins/Portals/Portals/resource_overworld.yml`
+Copy `resource_overworld.yml` to `plugins/Portals/Portals/resource_overworld.yml`
 
 **3. Build your portal:**
 - Use cobblestone for the frame
 - Ignite with flint and steel
 - Step through to reach your resource world!
 
-The example config uses cobblestone frames and links to `resource_overworld`. You can customize the frame material, destination world, and more in the config file.
-
 ### Portal Options
-
-Key configuration options:
 
 | Setting | Description |
 |---------|-------------|
-| `Portal.Frame.Material` | Material for portal frame (e.g., OBSIDIAN, DIAMOND_BLOCK) |
-| `Portal.InsideMaterial` | Material inside the portal (e.g., NETHER_PORTAL) |
-| `Portal.LighterMaterial` | Item to ignite the portal (e.g., FLINT_AND_STEEL) |
+| `Portal.Frame.Material` | Material for portal frame (e.g., OBSIDIAN, COBBLESTONE) |
+| `Portal.InsideMaterial` | Material inside the portal (e.g., NETHER_PORTAL, END_PORTAL) |
+| `Portal.LighterMaterial` | Item to ignite the portal (e.g., FLINT_AND_STEEL, or "null" for any) |
 | `World.Name` | Destination world name |
 | `Options.AllowedWorlds` | Worlds where this portal can be built |
 
@@ -95,7 +87,6 @@ Key settings:
 - `searchRadius` - How far to search for portal frames
 - `fallbackWorld` - Default destination for unknown portals
 - `consumeItems` - Whether lighter items are consumed on use
-- `enableNetherPortalEffect` - Show nether portal visual effect
 
 ## Addons
 
