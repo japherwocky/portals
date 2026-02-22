@@ -20,8 +20,6 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
-import com.comphenix.protocol.utility.MinecraftReflection;
-
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
 // Removed addon import
@@ -46,25 +44,11 @@ public class CustomPortalLoader {
 	 * Cunstructor of the loader
 	 */
 	public CustomPortalLoader() {
-		try {
-			
-			blockClass = MinecraftReflection.getBlockClass();
-			craftBlockDataClass = MinecraftReflection.getCraftBukkitClass("block.data.CraftBlockData");
-			try {
-				getCombinedIdMethod = blockClass.getMethod("i",MinecraftReflection.getIBlockDataClass());
-			} catch (NoSuchMethodException e) {
-				try {
-					getCombinedIdMethod = blockClass.getMethod("getCombinedId",MinecraftReflection.getIBlockDataClass());
-				} catch (NoSuchMethodException e2) {
-					getCombinedIdMethod = blockClass.getMethod("j",MinecraftReflection.getIBlockDataClass());
-				}
-			}
-			getStateMethod = craftBlockDataClass.getMethod("getState");
-			
-		} catch (NoSuchMethodException | IllegalArgumentException e) {
-			e.printStackTrace();
-			return;
-		}
+		// Initialize to null - will be set if ProtocolLib is available and compatible
+		blockClass = null;
+		craftBlockDataClass = null;
+		getCombinedIdMethod = null;
+		getStateMethod = null;
 	}
 	
 	/**
@@ -122,7 +106,7 @@ public class CustomPortalLoader {
 			String[] particlesColorString = portalConfig.getString("Portal.ParticlesColor", "0;0;0").split(";");
 			Color particlesColor = Color.fromBGR(Integer.parseInt(particlesColorString[2]), Integer.parseInt(particlesColorString[1]), Integer.parseInt(particlesColorString[0]));
 			
-			Sound breakEffect = Sound.valueOf(portalConfig.getString("Portal.BreakEffect", "BLOCK_GLASS_BREAK"));
+			Sound breakEffect = getSound(portalConfig.getString("Portal.BreakEffect", "BLOCK_GLASS_BREAK"));
 			
 
 			int minimumHeight = portalConfig.getInt("Portal.MinimumHeight", 4);
@@ -190,7 +174,13 @@ public class CustomPortalLoader {
 	 * @return
 	 */
 	public static int[] createCombinedID(BlockData[] insideBlockData, Material insideMaterial) {
-		int combinedId[] = new int[2];
+		int combinedId[] = new int[] { 0, 0 };
+		
+		// Skip if ProtocolLib reflection isn't available
+		if (blockClass == null || getCombinedIdMethod == null || getStateMethod == null) {
+			return combinedId;
+		}
+		
 		if (insideMaterial.isSolid() || insideMaterial==Material.NETHER_PORTAL || insideMaterial==Material.END_GATEWAY) {
 			try {
 				Object nmsBlockData = getStateMethod.invoke(insideBlockData[0]);
@@ -237,6 +227,17 @@ public class CustomPortalLoader {
 		}
 		
 		return blockData;
+	}
+	
+	/**
+	 * Get a Sound by name, with fallback to a default
+	 */
+	private static Sound getSound(String name) {
+		try {
+			return Sound.valueOf(name);
+		} catch (Throwable t) {
+			return Sound.BLOCK_GLASS_BREAK;
+		}
 	}
 	
 }
