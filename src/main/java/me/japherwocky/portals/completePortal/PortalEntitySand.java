@@ -40,6 +40,24 @@ public class PortalEntitySand extends PortalEntity {
 	}
 	
 	/**
+	 * Check if the falling block is still valid, respawn if not
+	 */
+	public void ensureValid() {
+		if (fallingBlock == null || fallingBlock.isDead()) {
+			// Respawn the falling block
+			Location spawnLocation = getLocation().clone().add(0.5, 0, 0.5);
+			BlockData blockData = getLocation().getBlock().getBlockData();
+			fallingBlock = spawnLocation.getWorld().spawnFallingBlock(spawnLocation, blockData);
+			if (fallingBlock != null) {
+				fallingBlock.setDropItem(false);
+				fallingBlock.setCancelDrop(true);
+				fallingBlock.setGravity(false);
+				fallingBlock.setInvulnerable(true);
+			}
+		}
+	}
+	
+	/**
 	 * Send nothing - the entity spawns automatically for all players
 	 */
 	public void summon(Player p) {

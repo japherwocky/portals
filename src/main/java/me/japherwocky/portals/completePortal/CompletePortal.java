@@ -79,14 +79,16 @@ public class CompletePortal {
 		chunkX = c.getX();
 		chunkZ = c.getZ();
 		
-		Vector min = portalGeometry.getMin();
-		Vector max = portalGeometry.getMax();
+		Vector min = portalGeometry.getInsideMin();
+		Vector max = portalGeometry.getInsideMax();
 		boolean zAxis = portalGeometry.iszAxis();
 		
 		for (double y=min.getY();y<=max.getY();y++) {
 			for (double side=zAxis?min.getZ():min.getX();side<=(zAxis?max.getZ():max.getX());side++) {
 				PortalEntity entity;
-				if (customPortal.getInsideMaterial().isSolid() || customPortal.getInsideMaterial()==Material.NETHER_PORTAL) {
+				// Use sendBlockChange for all block types (like vanilla portals)
+				// Only use falling blocks for custom solid blocks
+				if (customPortal.getInsideMaterial().isSolid() && customPortal.getInsideMaterial()!=Material.NETHER_PORTAL) {
 					entity = new PortalEntitySand(new Location(world, zAxis?min.getX():side, y, !zAxis?min.getZ():side), customPortal.getInsideBlockData(zAxis));
 				} else {
 					entity = new PortalEntitySolid(new Location(world, zAxis?min.getX():side, y, !zAxis?min.getZ():side), customPortal.getInsideBlockData(zAxis));
@@ -585,10 +587,14 @@ public class CompletePortal {
 						
 						if (!isActive() || getTag("hidePortalParticles")!=null) return;
 						for (PortalEntity en : spawnedEntities) {
+							// Ensure falling blocks stay alive
+							if (en instanceof PortalEntitySand) {
+								((PortalEntitySand) en).ensureValid();
+							}
 							en.emitParticles(customPortal.getParticlesColor());
 						}
 					}
-				}, 20, 20);
+				}, 20, 40);
 			}
 			
 			for (Entity player : world.getNearbyEntities(getCenter(), 16*Bukkit.getViewDistance(), 255, 16*Bukkit.getViewDistance(), (player) -> player instanceof Player)) {
