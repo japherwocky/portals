@@ -44,8 +44,8 @@ public abstract class PortalEntity {
 	 * @param color the color of the particle
 	 */
 	public void emitParticles(Color color) {
-		Particle redstoneParticle = Particle.valueOf("REDSTONE") == null ? Particle.valueOf("DUST") : Particle.valueOf("REDSTONE");
-		location.getWorld().spawnParticle(redstoneParticle, location.getX(),location.getY(),location.getZ(), 3, 0.5,0.5,0.5,new Particle.DustOptions(color,2));
+		// REDSTONE was renamed to DUST in 1.21+
+		location.getWorld().spawnParticle(Particle.DUST, location.getX(),location.getY(),location.getZ(), 3, 0.5,0.5,0.5, new Particle.DustOptions(color,2));
 	}
 	
 	/**
