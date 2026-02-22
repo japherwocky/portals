@@ -163,16 +163,9 @@ public class PortalListener implements Listener {
 	public void onPortalInteract(PlayerInteractEvent e) {
 		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-			try {
-				int rad = (int) ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK)?Math.min(Math.ceil(e.getClickedBlock().getLocation().distance(e.getPlayer().getEyeLocation())),5):5);
-				List<Block> los = e.getPlayer().getLineOfSight(null, rad);
-				for (Block block : los) {
-					if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
-						e.setCancelled(true);
-						break;
-					}
-				}
-			} catch (IllegalStateException ex) {}
+			if (hasPortalInLineOfSight(e.getPlayer(), 5)) {
+				e.setCancelled(true);
+			}
 		}
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         	//if (e.getItem() == null) return;
@@ -215,17 +208,37 @@ public class PortalListener implements Listener {
 			}
 		}
 		if (e.getAnimationType()==PlayerAnimationType.ARM_SWING) {
-			try {
-				List<Block> los = p.getLineOfSight(null, 5);
-				for (Block block : los) {
-					if (!PortalsUtils.isAir(block)) break;
-					CompletePortal portal = Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
-					if (portal!=null) {
-						Portals.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
-						break;
-					}
+			checkAndRemovePortalInSight(p);
+		}
+	}
+	
+	/**
+	 * Check line of sight and remove any portal found
+	 */
+	private void checkAndRemovePortalInSight(Player p) {
+		try {
+			List<Block> los = p.getLineOfSight(null, 5);
+			for (Block block : los) {
+				if (!PortalsUtils.isAir(block)) break;
+				CompletePortal portal = Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false);
+				if (portal != null) {
+					Portals.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
+					break;
 				}
-			} catch (IllegalStateException ex) {}
+			}
+		} catch (IllegalStateException e) {
+			// Player in invalid dimension - try proximity check
+			removeNearbyPortal(p.getLocation(), p);
+		}
+	}
+	
+	/**
+	 * Remove portal near location if player is stuck inside one
+	 */
+	private void removeNearbyPortal(Location location, Player p) {
+		CompletePortal portal = Portals.getCompletePortalManager().getCompletePortal(location, false, false);
+		if (portal != null) {
+			Portals.getCompletePortalManager().removePortal(portal, CustomPortalDestroyCause.PLAYER_INSIDE, p);
 		}
 	}
 	
@@ -239,17 +252,48 @@ public class PortalListener implements Listener {
 		e.setCancelled(bucketEvent(e.getPlayer(), e.getBlockClicked().getRelative(e.getBlockFace())));
 	}
 	
-	
 	public boolean bucketEvent(Player p, Block eventBlock) {
+		return hasPortalInLineOfSight(p, (int) Math.ceil(eventBlock.getLocation().distance(p.getEyeLocation())));
+	}
+	
+	/**
+	 * Check if player has a portal in their line of sight
+	 * Falls back to distance check if line of sight is unavailable (e.g., invalid dimension)
+	 */
+	private boolean hasPortalInLineOfSight(Player player, int maxDistance) {
 		try {
-			int rad = (int) Math.ceil(eventBlock.getLocation().distance(p.getEyeLocation()));
-			List<Block> los = p.getLineOfSight(null, rad);
+			List<Block> los = player.getLineOfSight(null, maxDistance);
 			for (Block block : los) {
-				if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false)!=null) {
+				if (!PortalsUtils.isAir(block)) {
+					// Block of sight is blocked - no portal visible
+					break;
+				}
+				if (Portals.getCompletePortalManager().getCompletePortal(block.getLocation(), false, false) != null) {
 					return true;
 				}
 			}
-		} catch (IllegalStateException ex) {}
+		} catch (IllegalStateException e) {
+			// Player in invalid dimension - use fallback proximity check
+			return hasPortalNearby(player.getLocation());
+		}
+		return false;
+	}
+	
+	/**
+	 * Fallback check for portal nearby when line of sight is unavailable
+	 */
+	private boolean hasPortalNearby(Location location) {
+		int searchRadius = 3;
+		for (int x = -searchRadius; x <= searchRadius; x++) {
+			for (int y = -searchRadius; y <= searchRadius; y++) {
+				for (int z = -searchRadius; z <= searchRadius; z++) {
+					Location checkLoc = location.clone().add(x, y, z);
+					if (Portals.getCompletePortalManager().getCompletePortal(checkLoc, false, false) != null) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 	

@@ -10,8 +10,9 @@ import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
 import com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
 import com.comphenix.packetwrapper.WrapperPlayServerEntityTeleport;
 import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntity;
-import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+
+import me.japherwocky.portals.PortalsDebbuger;
 
 /**
  * The PortalEntity that sends players packets of spawning falling sand with textures of blocks
@@ -46,20 +47,6 @@ public class PortalEntitySand extends PortalEntity {
 
 		spawnPacket.setTypeFallingBlock(combinedID);
 		
-		/*try {
-			spawnPacket.setType(EntityType.FALLING_BLOCK);
-			spawnPacket.setObjectData(combinedID);
-		} catch (FieldAccessException e) {
-			try {
-				spawnPacket.getHandle().getIntegers().write(6, 70);
-				spawnPacket.getHandle().getIntegers().write(7, combinedID);
-			} catch (FieldAccessException e1) {
-				spawnPacket.getHandle().getIntegers().write(3, 70);
-				spawnPacket.getHandle().getIntegers().write(4, combinedID);
-			}
-			
-		}*/
-		
 		spawnPacket.setX(location.getX());
 		spawnPacket.setY(location.getY());
 		spawnPacket.setZ(location.getZ());
@@ -73,29 +60,82 @@ public class PortalEntitySand extends PortalEntity {
 		
 		metaPacket.setMetadata(dataWatcher.getWatchableObjects());
 		
+		initializeTeleportPacket(location);
+		initializeDestroyPacket();
+	}
+	
+	/**
+	 * Initialize teleport packet with fallback handling
+	 */
+	private void initializeTeleportPacket(Location location) {
 		teleportPacket = new WrapperPlayServerEntityTeleport();
 		teleportPacket.setEntityID(fallingBlockId);
-		try {
-			teleportPacket.setX(location.getX()+0.5f);
-			teleportPacket.setY(location.getY());
-			teleportPacket.setZ(location.getZ()+0.5f);
-		} catch (FieldAccessException e) {
-			teleportPacket.setLocation(location.getX()+0.5f, location.getY(), location.getZ()+0.5f);
-		}
 		
+		boolean success = setTeleportField("setX", location.getX() + 0.5f)
+			&& setTeleportField("setY", location.getY())
+			&& setTeleportField("setZ", location.getZ() + 0.5f);
+		
+		if (!success) {
+			// Fallback to setLocation if setters aren't available
+			teleportPacket.setLocation(location.getX() + 0.5f, location.getY(), location.getZ() + 0.5f);
+		}
+	}
+	
+	/**
+	 * Set a field on the teleport packet using reflection
+	 */
+	private boolean setTeleportField(String methodName, double value) {
+		try {
+			teleportPacket.getClass().getMethod(methodName, double.class).invoke(teleportPacket, value);
+			return true;
+		} catch (NoSuchMethodException e) {
+			return false;
+		} catch (Exception e) {
+			PortalsDebbuger.MEDIUM.print("Failed to set teleport field: " + e.getMessage());
+			return false;
+		}
+	}
+	
+	/**
+	 * Initialize destroy packet with fallback handling
+	 */
+	private void initializeDestroyPacket() {
 		destroyPacket = new WrapperPlayServerEntityDestroy();
+		
+		boolean success = setDestroyEntityIds();
+		
+		if (!success) {
+			// Entity will despawn naturally - that's fine
+			PortalsDebbuger.MEDIUM.print("Destroy packet not fully supported - entity will despawn naturally");
+		}
+	}
+	
+	/**
+	 * Set entity IDs on destroy packet
+	 */
+	private boolean setDestroyEntityIds() {
 		try {
 			destroyPacket.setEntityIds(fallingBlockId);
+			return true;
 		} catch (Exception e) {
-			// Try alternative methods
-			try {
-				if (destroyPacket.getHandle().getIntegers().size() > 0) {
-					destroyPacket.getHandle().getIntegers().write(0, fallingBlockId);
-				}
-			} catch (Exception e2) {
-				// Skip destroy packet - entity will still despawn naturally
-			}
+			// Try direct field access as fallback
+			return setDestroyFieldDirect();
 		}
+	}
+	
+	/**
+	 * Try to set destroy field directly via handle
+	 */
+	private boolean setDestroyFieldDirect() {
+		try {
+			if (destroyPacket.getHandle().getIntegers().size() > 0) {
+				destroyPacket.getHandle().getIntegers().write(0, fallingBlockId);
+				return true;
+			}
+		} catch (Exception e) {
+			// Ignore - entity will despawn naturally
+		}
+		return false;
 	}
 
 	/**
