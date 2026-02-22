@@ -1,5 +1,5 @@
 name: Portals
-version: '3.2.10'
+version: '1.0.0'
 main: me.japherwocky.portals.Portals
 api-version: '1.20'
 authors: [japherwocky]

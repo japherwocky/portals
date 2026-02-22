@@ -1,7 +1,7 @@
 name: Portals
 main: me.japherwocky.portals.Portals
 api-version: 1.20
-version: 3.2.10
+version: 1.0.0
 description: Create custom portals to any world or dimension
 author: japherwocky
 website: https://github.com/japherwocky/portals

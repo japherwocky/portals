@@ -6,11 +6,11 @@
 
     <groupId>me.japherwocky</groupId>
     <artifactId>portals</artifactId>
-    <version>3.2.10</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Portals</name> <!-- Renamed from Dimensions3 -->
-    <description>Allow players to easily build portals to another world</description>
+    <name>Portals</name>
+    <description>Create custom portals to any world or dimension</description>
     <url>https://github.com/japherwocky/portals</url>
 
     <properties>
