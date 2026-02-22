@@ -33,11 +33,7 @@ Portal:
   # Item used to ignite/activate the portal
   # Set to "null" to allow any item or any block interaction
   LighterMaterial: FLINT_AND_STEEL
-  
-  # Particle color when players enter the portal (BGR format: Blue;Green;Red)
-  # Use 0;0;0 for default, or RGB values like "255;0;0" for red
-  ParticlesColor: "0;0;0"
-  
+   
   # Sound played when the portal breaks
   BreakEffect: BLOCK_GLASS_BREAK
   
@@ -77,9 +73,6 @@ Options:
   
   # Delay in ticks before teleporting (20 ticks = 1 second)
   TeleportDelay: 4
-  
-  # Enable particle effects when entering the portal
-  EnableParticles: true
 
 # ============================================
 # ENTITY SETTINGS (Optional)

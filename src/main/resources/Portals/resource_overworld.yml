@@ -16,7 +16,6 @@ Portal:
     Face: all
   InsideMaterial: NETHER_PORTAL
   LighterMaterial: FLINT_AND_STEEL
-  ParticlesColor: "0;0;0"
   BreakEffect: BLOCK_GLASS_BREAK
   MinimumHeight: 4
   MaximumHeight: 15
@@ -34,7 +33,6 @@ Options:
     FixedWidth: -1
     FixedHeight: -1
   TeleportDelay: 4
-  EnableParticles: true
 
 Entities:
   Transformation: []
