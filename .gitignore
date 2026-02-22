@@ -51,8 +51,6 @@ server/
 Thumbs.db
 
 # Project specific
-dimensions/target/
-test/
 
 # IDE specific
 .factorypath

@@ -32,8 +32,6 @@ import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
-import me.japherwocky.portals.PortalsDebbuger;
-
 public class WrapperPlayServerEntityMetadata extends AbstractPacket {
 	public static final PacketType TYPE =
 			PacketType.Play.Server.ENTITY_METADATA;
@@ -129,7 +127,6 @@ public class WrapperPlayServerEntityMetadata extends AbstractPacket {
 //	       	 });
 //	       	 handle.getDataValueCollectionModifier().write(0, wrappedDataValueList);
 		} catch (FieldAccessException | ClassNotFoundException | NullPointerException e) {
-			PortalsDebbuger.DEBUG.print("tttt");
 			handle.getWatchableCollectionModifier().write(0, value);
 		}
 	}
