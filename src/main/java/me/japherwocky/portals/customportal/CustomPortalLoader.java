@@ -46,34 +46,30 @@ public class CustomPortalLoader {
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
 	 */
 	public CustomPortalLoader() {
-		// Get actual server version from Bukkit
-		NMS_VERSION = detectServerVersion();
-		Bukkit.getLogger().info("Detected server version: " + NMS_VERSION);
-		initializeNMSReflection();
-	}
-	
-	/**
-	 * Detect the server version string
-	 */
-	private String detectServerVersion() {
-		// Try to get version from a class we know exists
-		try {
-			// Try net.minecraft.server package
-			Class<?> serverClass = Class.forName("net.minecraft.server.MinecraftServer");
-			String name = serverClass.getName();
-			// net.minecraft.server.v1_21_11.MinecraftServer
-			return name.substring("net.minecraft.server.".length(), name.lastIndexOf('.'));
-		} catch (ClassNotFoundException e) {
-			// Fallback - try craftbukkit
+		// Debug: print all loaded classes that start with net.minecraft.server
+		Bukkit.getLogger().info("=== NMS Class Debug ===");
+		for (String pkg : new String[]{"net.minecraft.server", "org.bukkit.craftbukkit"}) {
 			try {
-				Class<?> serverClass = Class.forName("org.bukkit.craftbukkit.CraftServer");
-				// org.bukkit.craftbukkit.v1_21_11.CraftServer
-				String name = serverClass.getName();
-				return name.substring("org.bukkit.craftbukkit.".length(), name.lastIndexOf('.'));
-			} catch (ClassNotFoundException e2) {
-				throw new RuntimeException("Cannot detect server version");
+				ClassLoader cl = Thread.currentThread().getContextClassLoader();
+				if (cl == null) cl = getClass().getClassLoader();
+				java.net.URL url = cl.getResource("/" + pkg.replace('.', '/'));
+				Bukkit.getLogger().info(pkg + " resource: " + url);
+			} catch (Exception e) {
+				Bukkit.getLogger().info(pkg + " error: " + e.getMessage());
 			}
 		}
+		
+		// Try to find Block class
+		try {
+			Class<?> blockClass = Class.forName("net.minecraft.server.MinecraftServer");
+			Bukkit.getLogger().info("Found MinecraftServer: " + blockClass.getName());
+			String pkg = blockClass.getPackage().getName();
+			Bukkit.getLogger().info("MinecraftServer package: " + pkg);
+		} catch (Exception e) {
+			Bukkit.getLogger().info("MinecraftServer error: " + e.getMessage());
+		}
+		
+		initializeNMSReflection();
 	}
 	
 	/**
