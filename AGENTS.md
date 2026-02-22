@@ -11,10 +11,7 @@
 - **Maven Shade Plugin** - Creates uber-jar with all dependencies bundled
 
 ### Language & Runtime
-- **Java** 
-  - `pom.xml` specifies: Java 17
-  - GitHub Actions CI uses: Java 25 (Temurin)
-  - Note: Version mismatch between local config and CI
+- **Java** 25 (Temurin)
 
 ### Server Platform
 - **Paper** (1.21.11-R0.1-SNAPSHOT) - Pre-release/snapshot version
@@ -82,21 +79,15 @@ Portal types are defined as YAML files in `./plugins/Portals/Portals/` with opti
 
 ### Code Issues
 1. **Typo in class name**: `PortalsDebbuger` (double 'b') - used extensively throughout 53+ locations in the codebase
-2. **Debug print statement**: In `WrapperPlayServerEntityMetadata.java` line 132, there's a debug print `PortalsDebbuger.DEBUG.print("tttt");` that appears to be leftover debug code
 
 ### Version Mismatches
-1. **Java Version**: `pom.xml` specifies Java 17, but `.github/workflows/build.yml` uses Java 25
-2. **Paper Snapshot**: Uses `1.21.11-R0.1-SNAPSHOT` which is a pre-release version - may break without notice
+1. **Paper Snapshot**: Uses `1.21.11-R0.1-SNAPSHOT` which is a pre-release version - may break without notice
 
 ### Architectural Decisions
-1. **Bundled Packet Wrappers**: ProtocolLib packet wrapper classes are included directly in source (`com.comphenix.packetwrapper.*`) rather than depending on the full ProtocolLib library
-2. **Uber-Jar Build**: Uses Maven Shade to bundle all dependencies into a single JAR
-3. **Reflection-based Config**: `PortalsSettings.java` uses Java reflection to auto-generate config fields from class fields
-4. **Deferred Portal Loading**: Portals load 1 tick after plugin enable to ensure all worlds are loaded first
-5. **Static Instance Pattern**: Uses classic static singleton pattern (`Portals.getInstance()`)
-
-### Unused/Orphaned Files
-- `.gitignore` references `dimensions/target/` and `test/` directories that don't exist in the repository
+1. **Uber-Jar Build**: Uses Maven Shade to bundle all dependencies into a single JAR
+2. **Reflection-based Config**: `PortalsSettings.java` uses Java reflection to auto-generate config fields from class fields
+3. **Deferred Portal Loading**: Portals load 1 tick after plugin enable to ensure all worlds are loaded first
+4. **Static Instance Pattern**: Uses classic static singleton pattern (`Portals.getInstance()`)
 
 ## Building
 
