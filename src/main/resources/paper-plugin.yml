@@ -2,8 +2,8 @@ name: Portals
 version: '3.2.10'
 main: me.japherwocky.portals.Portals
 api-version: '1.20'
-authors: [astaspasta, japherwocky]
-description: Allow players to easily build portals to another world
+authors: [japherwocky]
+description: Create custom portals to any world or dimension
 website: https://github.com/japherwocky/portals
 dependencies:
   - name: ProtocolLib
@@ -32,8 +32,3 @@ dependencies:
     required: false
   - name: LightAPI
     required: false
-commands:
-  portals:
-    description: Main command
-    usage: /<command>
-    aliases: [portal, dim, dimensions]

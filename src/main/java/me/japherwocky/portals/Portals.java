@@ -115,8 +115,10 @@ public class Portals extends JavaPlugin {
 	}
 	
 	public void reload() {
-		addonsManager.unloadAll();
-		completePortalManager.save();
+		if (addonsManager != null)
+			addonsManager.unloadAll();
+		if (completePortalManager != null)
+			completePortalManager.save();
 		HandlerList.unregisterAll(this);
 		
 		new PortalsSettings(this);
@@ -137,8 +139,10 @@ public class Portals extends JavaPlugin {
 	
 	public void onDisable() {
 		
-		addonsManager.onDisable();
-		completePortalManager.save();
+		if (addonsManager != null)
+			addonsManager.onDisable();
+		if (completePortalManager != null)
+			completePortalManager.save();
 	}
 	
 	public static Portals getInstance() {

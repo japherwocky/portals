@@ -40,7 +40,19 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
     	commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
     	// Removed PortalsListCommand
 		
-		main.getCommand("dimensions").setExecutor(this);
+		// Register the main command manually (Paper doesn't support YAML command declarations)
+		org.bukkit.command.Command cmd = new org.bukkit.command.Command("dimensions", "Main portals command", "/portals", java.util.Arrays.asList("portal", "dim", "portals")) {
+			@Override
+			public boolean execute(CommandSender sender, String label, String[] args) {
+				return PortalsCommandManager.this.onCommand(sender, this, label, args);
+			}
+			
+			@Override
+			public java.util.List<String> tabComplete(CommandSender sender, String label, String[] args) {
+				return PortalsCommandManager.this.onTabComplete(sender, this, label, args);
+			}
+		};
+		main.getServer().getCommandMap().register("dimensions", cmd);
 		
 	}
     
