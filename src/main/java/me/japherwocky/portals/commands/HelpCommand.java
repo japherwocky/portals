@@ -25,7 +25,7 @@ public class HelpCommand extends PortalsCommand {
 		ArrayList<PortalsCommand> commandList = Portals.getCommandManager().getCommands();
 		for (int i =(int) Math.max(page*commandsPerPage, 0);i<Math.min(page*commandsPerPage+(commandList.size()-commandsPerPage*page), commandsPerPage*(1+page));i++) {
 			PortalsCommand cmd = (PortalsCommand) commandList.toArray()[i];
-        	head += "\n/dim "+cmd.getCommand()+" "+cmd.getArgs()+" §c-§7 "+cmd.getDescription();
+        	head += "\n/portals "+cmd.getCommand()+" "+cmd.getArgs()+" §c-§7 "+cmd.getDescription();
     	}
 		if (Math.min(commandList.size()-(1+page)*commandsPerPage, commandsPerPage*(2+page)) > 0 || page!=0)
 			head += "\n\n**Page "+(page+1)+"/"+((int) Math.ceil(commandList.size()/commandsPerPage))+"**";

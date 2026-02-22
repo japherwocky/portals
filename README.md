@@ -73,11 +73,13 @@ Copy `resource_overworld.yml` to `plugins/Portals/Portals/resource_overworld.yml
 
 ## Commands
 
-- `/portals` - Main portal commands
-- `/portals reload` - Reload all portal configurations
-- `/portals list` - List all configured portals
-- `/portals create` - Open the portal creation GUI
-- `/portals info <portal>` - Show portal information
+- `/portals` - Open portal browser GUI (players) or show version info
+- `/portals help` - List all commands
+- `/portals info` - Show plugin version
+- `/portals reload` - Reload all portal configurations (admin)
+- `/portals worlds` - List world names for config (admin)
+- `/portals portal [name]` - Show info about a portal (admin)
+- `/portals clear <all/world/portal>` - Delete saved portals (admin)
 
 ## Configuration
 
@@ -87,11 +89,3 @@ Key settings:
 - `searchRadius` - How far to search for portal frames
 - `fallbackWorld` - Default destination for unknown portals
 - `consumeItems` - Whether lighter items are consumed on use
-
-## Addons
-
-The plugin supports optional addons placed in `plugins/Portals/Addons/`. Addons are JAR files that extend the `PortalsAddon` class.
-
-Commands for managing addons:
-- `/portalsaddon list` - List loaded addons
-- `/portalsaddon info <addon>` - Show addon details

@@ -33,7 +33,7 @@ public abstract class CreatePortalGUI {
 	
 	public boolean handleClick(Inventory inv, int index, boolean rightClick, boolean shiftClick) {
 		
-		if (!inv.equals(inventory)) return false;
+		if (inv == null || !inv.equals(inventory)) return false;
 		handleClick(index, rightClick, shiftClick);
 		return true;
 	}

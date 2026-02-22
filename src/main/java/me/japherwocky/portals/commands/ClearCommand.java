@@ -31,7 +31,7 @@ public class ClearCommand extends PortalsCommand {
 			}
 			sender.sendMessage("§7[§cPortals§7] §aRemoved §c"+args[1]+"§a portals");
 		} else {
-			sender.sendMessage("§7[§cPortals§7] Missing argument. Please use /dim "+this.getCommand()+" "+this.getArgs());
+			sender.sendMessage("§7[§cPortals§7] Missing argument. Please use /portals "+this.getCommand()+" "+this.getArgs());
 		}
 		
 	}

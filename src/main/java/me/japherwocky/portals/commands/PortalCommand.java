@@ -46,7 +46,7 @@ public class PortalCommand extends PortalsCommand {
 				sender.sendMessage("§7[§cPortals§7] Could not find specified portal.");
 			}
 		} else {
-			sender.sendMessage("§7[§cPortals§7] Missing argument. Please use /portal "+this.getCommand()+" "+this.getArgs());
+			sender.sendMessage("§7[§cPortals§7] Missing argument. Please use /portals "+this.getCommand()+" "+this.getArgs());
 		}
 	}
 	

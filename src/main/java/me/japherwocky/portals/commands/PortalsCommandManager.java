@@ -1,6 +1,7 @@
 package me.japherwocky.portals.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -41,7 +42,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
     	// Removed PortalsListCommand
 		
 		// Register the main command manually (Paper doesn't support YAML command declarations)
-		org.bukkit.command.Command cmd = new org.bukkit.command.Command("dimensions", "Main portals command", "/portals", java.util.Arrays.asList("portal", "dim", "portals")) {
+		org.bukkit.command.Command cmd = new org.bukkit.command.Command("portals", "Portals plugin command", "/portals", java.util.Collections.emptyList()) {
 			@Override
 			public boolean execute(CommandSender sender, String label, String[] args) {
 				return PortalsCommandManager.this.onCommand(sender, this, label, args);
