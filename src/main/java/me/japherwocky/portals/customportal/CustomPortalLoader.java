@@ -35,11 +35,10 @@ public class CustomPortalLoader {
 	public static final File PORTALS_DIRECTORY = new File(DIRECTORY_PATH);
 	public static final String CONFIG_VERSION = "3.0.1";
 	
-	// For modern Minecraft (1.21+), we use NMS reflection directly
+	// For Minecraft 1.21+, we use NMS reflection to get block state IDs
 	private static Class<?> nmsBlockClass;
 	private static Class<?> craftBlockDataClass;
-	private static Method getStateIdMethod;
-	private static Method getStateMethod;
+	private static Method getBlockIdMethod;
 	private static boolean nmsAvailable = false;
 	
 	/**
@@ -50,7 +49,7 @@ public class CustomPortalLoader {
 	}
 	
 	/**
-	 * Initialize NMS reflection for block state ID lookup
+	 * Initialize NMS reflection for block state ID lookup (1.21.11+)
 	 */
 	private void initializeNMSReflection() {
 		try {
@@ -58,16 +57,12 @@ public class CustomPortalLoader {
 			nmsBlockClass = Class.forName("net.minecraft.server." + serverVersion + ".Block");
 			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit." + serverVersion + ".block.data.CraftBlockData");
 			
-			getStateIdMethod = findGetStateIdMethod();
-			getStateMethod = craftBlockDataClass.getMethod("getState");
+			// In 1.21+, use Block.getId(IBlockData) - static method that returns int
+			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockClass.getClassLoader().loadClass("net.minecraft.server." + serverVersion + ".IBlockData"));
 			nmsAvailable = true;
 			
-		} catch (ClassNotFoundException e) {
-			logNMSUnavailable("NMS class not found for version: " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			logNMSUnavailable("Required method not found: " + e.getMessage());
-		} catch (SecurityException e) {
-			logNMSUnavailable("Security restriction prevented NMS access: " + e.getMessage());
+		} catch (ClassNotFoundException | NoSuchMethodException e) {
+			PortalsDebbuger.MEDIUM.print("NMS unavailable: " + e.getMessage() + " - falling block effect disabled");
 		}
 	}
 	
@@ -76,49 +71,6 @@ public class CustomPortalLoader {
 	 */
 	private String getServerVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-	}
-	
-	/**
-	 * Find the appropriate method for getting block state ID
-	 */
-	private Method findGetStateIdMethod() throws NoSuchMethodException {
-		// Try parameterless getStateId() first
-		try {
-			return nmsBlockClass.getMethod("getStateId");
-		} catch (NoSuchMethodException e) {
-			// Continue to next attempt
-		}
-		
-		// Try the obfuscated method 'i' with CraftBlockData parameter
-		try {
-			return nmsBlockClass.getMethod("i", craftBlockDataClass);
-		} catch (NoSuchMethodException e) {
-			// Continue to next attempt
-		}
-		
-		// Try with two int parameters
-		try {
-			return nmsBlockClass.getMethod("getStateId", int.class, int.class);
-		} catch (NoSuchMethodException e) {
-			// Continue to last attempt
-		}
-		
-		// Last resort: try getting from Block.a(BlockState)
-		try {
-			Method getBlockMethod = nmsBlockClass.getMethod("getBlock");
-			return nmsBlockClass.getMethod("getStateId", getBlockMethod.getReturnType());
-		} catch (NoSuchMethodException e) {
-			throw new NoSuchMethodException("No suitable getStateId method found in Block class");
-		}
-	}
-	
-	/**
-	 * Log NMS unavailability with debug message
-	 */
-	private void logNMSUnavailable(String message) {
-		nmsAvailable = false;
-		PortalsDebbuger.MEDIUM.print("NMS reflection unavailable: " + message);
-		PortalsDebbuger.MEDIUM.print("Falling block visual effect will be disabled");
 	}
 	
 	/**
@@ -239,18 +191,17 @@ public class CustomPortalLoader {
 
 	/**
 	 * Creates combinedID for the block data inside the portal
-	 * @param insideBlockData
-	 * @param insideMaterial
-	 * @return
+	 * Uses NMS Block.getId(IBlockData) for 1.21+
 	 */
 	public static int[] createCombinedID(BlockData[] insideBlockData, Material insideMaterial) {
 		int[] combinedId = { 0, 0 };
 		
-		// Skip if NMS reflection isn't available
-		if (!nmsAvailable || nmsBlockClass == null || getStateIdMethod == null || getStateMethod == null) {
+		// Skip if NMS isn't available
+		if (!nmsAvailable || nmsBlockClass == null || getBlockIdMethod == null) {
 			return combinedId;
 		}
 		
+		// Only for solid blocks and portal-like materials
 		if (!insideMaterial.isSolid() && insideMaterial != Material.NETHER_PORTAL && insideMaterial != Material.END_GATEWAY) {
 			return combinedId;
 		}
@@ -265,39 +216,22 @@ public class CustomPortalLoader {
 	}
 	
 	/**
-	 * Get the block state ID using reflection
+	 * Get the block state ID using Block.getId(IBlockData)
 	 */
 	private static int getBlockStateId(BlockData blockData) {
 		try {
+			// Get the NMS IBlockData from CraftBlockData
+			Method getStateMethod = craftBlockDataClass.getMethod("getState");
 			Object nmsBlockData = getStateMethod.invoke(blockData);
-			return invokeGetStateIdMethod(nmsBlockData);
-		} catch (IllegalAccessException e) {
-			PortalsDebbuger.MEDIUM.print("Failed to access NMS method: " + e.getMessage());
-		} catch (java.lang.reflect.InvocationTargetException e) {
-			PortalsDebbuger.MEDIUM.print("Failed to invoke NMS method: " + e.getMessage());
-		} catch (NoSuchMethodException e) {
-			PortalsDebbuger.MEDIUM.print("NMS method not found: " + e.getMessage());
+			
+			// Call Block.getId(IBlockData) - static method
+			int blockId = (int) getBlockIdMethod.invoke(null, nmsBlockData);
+			return blockId;
+			
+		} catch (Exception e) {
+			PortalsDebbuger.MEDIUM.print("Failed to get block ID: " + e.getMessage());
 		}
 		return -1;
-	}
-	
-	/**
-	 * Invoke the appropriate getStateId method based on parameter count
-	 */
-	private static int invokeGetStateIdMethod(Object nmsBlockData) 
-			throws IllegalAccessException, java.lang.reflect.InvocationTargetException, NoSuchMethodException {
-		int paramCount = getStateIdMethod.getParameterCount();
-		
-		if (paramCount == 0) {
-			return (int) getStateIdMethod.invoke(nmsBlockData);
-		} else if (paramCount == 1) {
-			return (int) getStateIdMethod.invoke(nmsBlockData, 0);
-		} else {
-			// Multi-parameter method - use fallback approach
-			Method getBlockMethod = nmsBlockClass.getMethod("getBlock");
-			Object block = getBlockMethod.invoke(null);
-			return (int) getStateIdMethod.invoke(block, nmsBlockData);
-		}
 	}
 
 	/**

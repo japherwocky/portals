@@ -278,24 +278,11 @@ public class WrapperPlayServerSpawnEntity extends AbstractPacket {
 	 * @param value - new value.
 	 */
 	public void setTypeFallingBlock(int combinedID) {
-		try {
-			// Modern 1.21+ approach: Use entity type modifier
-			handle.getEntityTypeModifier().write(0, EntityType.FALLING_BLOCK);
-			
-			// Try index 1 first (object data field in 1.21+)
-			try {
-				handle.getIntegers().write(1, combinedID);
-			} catch (FieldAccessException e) {
-				// Try index 0 as fallback
-				try {
-					handle.getIntegers().write(0, combinedID);
-				} catch (FieldAccessException e2) {
-					// Unable to set - will use default
-				}
-			}
-		} catch (Exception e) {
-			// Failed to set falling block type
-		}
+		// Set entity type to FALLING_BLOCK
+		handle.getEntityTypeModifier().write(0, EntityType.FALLING_BLOCK);
+		
+		// In 1.21+, the object data is at index 1
+		handle.getIntegers().write(1, combinedID);
 	}
 
 	/**
