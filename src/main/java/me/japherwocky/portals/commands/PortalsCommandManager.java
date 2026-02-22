@@ -53,7 +53,7 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
 				return PortalsCommandManager.this.onTabComplete(sender, this, label, args);
 			}
 		};
-		main.getServer().getCommandMap().register("dimensions", cmd);
+		main.getServer().getCommandMap().register("", cmd);
 		
 	}
     
