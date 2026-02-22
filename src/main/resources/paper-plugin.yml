@@ -5,6 +5,42 @@ api-version: '1.20'
 authors: [japherwocky]
 description: Create custom portals to any world or dimension
 website: https://github.com/japherwocky/portals
+commands:
+  portals:
+    description: Main portals command
+    usage: /portals
+    aliases: [dim, dimensions]
+  portals-help:
+    description: List all commands
+    usage: /portals help
+  portals-info:
+    description: Show plugin version
+    usage: /portals info
+  portals-reload:
+    description: Reload all configurations
+    usage: /portals reload
+    permission: portals.command.reload
+  portals-worlds:
+    description: List world names for config
+    usage: /portals worlds
+    permission: portals.command.worlds
+  portals-clear:
+    description: Delete saved portals
+    usage: /portals clear <all/world/portal>
+    permission: portals.command.clear
+  portals-portal:
+    description: Show portal info
+    usage: /portals portal [name]
+    permission: portals.command.portal
+  portals-adminhelp:
+    description: List admin commands
+    usage: /portals adminHelp
+  portals-permissions:
+    description: List commands with permissions
+    usage: /portals permissions
+  portals-adminpermissions:
+    description: List admin commands with permissions
+    usage: /portals adminPermissions
 dependencies:
   - name: ProtocolLib
     required: true
