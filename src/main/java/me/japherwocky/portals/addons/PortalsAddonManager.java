@@ -153,8 +153,6 @@ public class PortalsAddonManager {
 		PortalsAddon.resetOptions();
 	}
 	
-	ArrayList<String> dontUnload = new ArrayList<String>(Arrays.asList(new String[] {"me.xxastaspastaxx.dimensions.listener.PortalListener", "me.xxastaspastaxx.dimensions.commands.AddonCommand"}));
-	
 	/**
 	 * Unload the given addon
 	 * @param plugin the addon to unload
@@ -163,15 +161,7 @@ public class PortalsAddonManager {
 	public boolean unload(PortalsAddon plugin) {
 		plugin.onDisable();
 		
-		HandlerList.getRegisteredListeners(pl).stream().filter(r -> !dontUnload.contains(r.getListener().getClass().getName())).forEach(r -> HandlerList.unregisterAll(r.getListener()));
-//		
-//		for (RegisteredListener r : HandlerList.getRegisteredListeners(pl)) {
-//			String s = r.getListener().getClass().getName();
-//			if (dontUnload.contains(s)) continue;
-//			
-//			HandlerList.unregisterAll(r.getListener());
-//		}
-//		
+		HandlerList.getRegisteredListeners(pl).forEach(r -> HandlerList.unregisterAll(r.getListener()));
 		return true;
     }
 
