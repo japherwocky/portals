@@ -36,7 +36,7 @@ public class CustomPortalLoader {
 	public static final String CONFIG_VERSION = "3.0.1";
 	
 	// Minecraft 1.21.11 NMS classes
-	private static final String NMS_VERSION = "v1_21_11";
+	private static String NMS_VERSION;
 	private static Class<?> nmsBlockClass;
 	private static Class<?> craftBlockDataClass;
 	private static Class<?> nmsBlockDataClass;
@@ -46,14 +46,38 @@ public class CustomPortalLoader {
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
 	 */
 	public CustomPortalLoader() {
-		// Log server version for debugging
-		String packageName = Bukkit.getServer().getClass().getPackage().getName();
-		Bukkit.getLogger().info("Server package: " + packageName);
+		// Get actual server version from Bukkit
+		NMS_VERSION = detectServerVersion();
+		Bukkit.getLogger().info("Detected server version: " + NMS_VERSION);
 		initializeNMSReflection();
 	}
 	
 	/**
-	 * Initialize NMS reflection for block state ID lookup (1.21.11)
+	 * Detect the server version string
+	 */
+	private String detectServerVersion() {
+		// Try to get version from a class we know exists
+		try {
+			// Try net.minecraft.server package
+			Class<?> serverClass = Class.forName("net.minecraft.server.MinecraftServer");
+			String name = serverClass.getName();
+			// net.minecraft.server.v1_21_11.MinecraftServer
+			return name.substring("net.minecraft.server.".length(), name.lastIndexOf('.'));
+		} catch (ClassNotFoundException e) {
+			// Fallback - try craftbukkit
+			try {
+				Class<?> serverClass = Class.forName("org.bukkit.craftbukkit.CraftServer");
+				// org.bukkit.craftbukkit.v1_21_11.CraftServer
+				String name = serverClass.getName();
+				return name.substring("org.bukkit.craftbukkit.".length(), name.lastIndexOf('.'));
+			} catch (ClassNotFoundException e2) {
+				throw new RuntimeException("Cannot detect server version");
+			}
+		}
+	}
+	
+	/**
+	 * Initialize NMS reflection for block state ID lookup
 	 */
 	private void initializeNMSReflection() {
 		try {
@@ -68,7 +92,7 @@ public class CustomPortalLoader {
 			
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
 			Bukkit.getLogger().severe("Failed to initialize NMS for " + NMS_VERSION + ": " + e.getMessage());
-			throw new RuntimeException("Failed to initialize NMS for 1.21.11: " + e.getMessage(), e);
+			throw new RuntimeException("Failed to initialize NMS: " + e.getMessage(), e);
 		}
 	}
 	
