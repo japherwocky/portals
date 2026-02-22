@@ -35,11 +35,12 @@ public class CustomPortalLoader {
 	public static final File PORTALS_DIRECTORY = new File(DIRECTORY_PATH);
 	public static final String CONFIG_VERSION = "3.0.1";
 	
-	// For Minecraft 1.21+, we use NMS reflection to get block state IDs
+	// Minecraft 1.21.11 NMS classes
+	private static final String NMS_VERSION = "v1_21_11";
 	private static Class<?> nmsBlockClass;
 	private static Class<?> craftBlockDataClass;
+	private static Class<?> nmsBlockDataClass;
 	private static Method getBlockIdMethod;
-	private static boolean nmsAvailable = false;
 	
 	/**
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
@@ -49,31 +50,20 @@ public class CustomPortalLoader {
 	}
 	
 	/**
-	 * Initialize NMS reflection for block state ID lookup (1.21.11+)
+	 * Initialize NMS reflection for block state ID lookup (1.21.11)
 	 */
 	private void initializeNMSReflection() {
 		try {
-			String serverVersion = getServerVersion();
-			nmsBlockClass = Class.forName("net.minecraft.server." + serverVersion + ".Block");
-			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit." + serverVersion + ".block.data.CraftBlockData");
+			nmsBlockClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".Block");
+			nmsBlockDataClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".IBlockData");
+			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + ".block.data.CraftBlockData");
 			
-			// In 1.21+, use Block.getId(IBlockData) - static method that returns int
-			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockClass.getClassLoader().loadClass("net.minecraft.server." + serverVersion + ".IBlockData"));
-			nmsAvailable = true;
+			// Block.getId(IBlockData) - returns the block state ID as int
+			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockDataClass);
 			
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
-			PortalsDebbuger.MEDIUM.print("NMS unavailable: " + e.getMessage() + " - falling block effect disabled");
+			throw new RuntimeException("Failed to initialize NMS for 1.21.11: " + e.getMessage(), e);
 		}
-	}
-	
-	/**
-	 * Get the current server version string
-	 */
-	private String getServerVersion() {
-		String packageName = Bukkit.getServer().getClass().getPackage().getName();
-		// Format is typically: org.bukkit.craftbukkit.v1_21_11 or net.minecraft.server.v1_21_11
-		// Get the last part after the last dot
-		return packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 	
 	/**
@@ -194,15 +184,10 @@ public class CustomPortalLoader {
 
 	/**
 	 * Creates combinedID for the block data inside the portal
-	 * Uses NMS Block.getId(IBlockData) for 1.21+
+	 * Uses NMS Block.getId(IBlockData) for 1.21.11
 	 */
 	public static int[] createCombinedID(BlockData[] insideBlockData, Material insideMaterial) {
 		int[] combinedId = { 0, 0 };
-		
-		// Skip if NMS isn't available
-		if (!nmsAvailable || nmsBlockClass == null || getBlockIdMethod == null) {
-			return combinedId;
-		}
 		
 		// Only for solid blocks and portal-like materials
 		if (!insideMaterial.isSolid() && insideMaterial != Material.NETHER_PORTAL && insideMaterial != Material.END_GATEWAY) {
@@ -210,10 +195,8 @@ public class CustomPortalLoader {
 		}
 		
 		int stateId = getBlockStateId(insideBlockData[0]);
-		if (stateId >= 0) {
-			combinedId[0] = stateId;
-			combinedId[1] = stateId;
-		}
+		combinedId[0] = stateId;
+		combinedId[1] = stateId;
 		
 		return combinedId;
 	}
@@ -228,13 +211,11 @@ public class CustomPortalLoader {
 			Object nmsBlockData = getStateMethod.invoke(blockData);
 			
 			// Call Block.getId(IBlockData) - static method
-			int blockId = (int) getBlockIdMethod.invoke(null, nmsBlockData);
-			return blockId;
+			return (int) getBlockIdMethod.invoke(null, nmsBlockData);
 			
 		} catch (Exception e) {
-			PortalsDebbuger.MEDIUM.print("Failed to get block ID: " + e.getMessage());
+			throw new RuntimeException("Failed to get block state ID: " + e.getMessage(), e);
 		}
-		return -1;
 	}
 
 	/**
