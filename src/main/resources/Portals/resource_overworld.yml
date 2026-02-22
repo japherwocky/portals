@@ -1,8 +1,13 @@
 # Resource World Portal Configuration
-# Creates a portal that links to a resource_overworld
+# Creates a portal to a resource world for gathering materials
 # 
 # Usage with Multiverse-Core:
-#   /mv create resource_world normal -g void
+#   # Normal world with default terrain:
+#   /mv create resource_world normal
+#   /mv setspawn resource_world
+#
+#   # Amplified terrain (tall mountains):
+#   /mv create resource_world normal -g minecraft:amplified
 #   /mv setspawn resource_world
 configVersion: "3.0.1"
 
