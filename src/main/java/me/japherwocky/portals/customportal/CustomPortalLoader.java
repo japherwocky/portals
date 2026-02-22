@@ -36,7 +36,6 @@ public class CustomPortalLoader {
 	public static final String CONFIG_VERSION = "3.0.1";
 	
 	// Minecraft 1.21.11 NMS classes
-	private static String NMS_VERSION;
 	private static Class<?> nmsBlockClass;
 	private static Class<?> craftBlockDataClass;
 	private static Class<?> nmsBlockDataClass;
@@ -46,29 +45,7 @@ public class CustomPortalLoader {
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
 	 */
 	public CustomPortalLoader() {
-		// Debug: print all loaded classes that start with net.minecraft.server
-		Bukkit.getLogger().info("=== NMS Class Debug ===");
-		for (String pkg : new String[]{"net.minecraft.server", "org.bukkit.craftbukkit"}) {
-			try {
-				ClassLoader cl = Thread.currentThread().getContextClassLoader();
-				if (cl == null) cl = getClass().getClassLoader();
-				java.net.URL url = cl.getResource("/" + pkg.replace('.', '/'));
-				Bukkit.getLogger().info(pkg + " resource: " + url);
-			} catch (Exception e) {
-				Bukkit.getLogger().info(pkg + " error: " + e.getMessage());
-			}
-		}
-		
-		// Try to find Block class
-		try {
-			Class<?> blockClass = Class.forName("net.minecraft.server.MinecraftServer");
-			Bukkit.getLogger().info("Found MinecraftServer: " + blockClass.getName());
-			String pkg = blockClass.getPackage().getName();
-			Bukkit.getLogger().info("MinecraftServer package: " + pkg);
-		} catch (Exception e) {
-			Bukkit.getLogger().info("MinecraftServer error: " + e.getMessage());
-		}
-		
+		Bukkit.getLogger().info("Minecraft version: " + Bukkit.getServer().getMinecraftVersion());
 		initializeNMSReflection();
 	}
 	
@@ -77,17 +54,48 @@ public class CustomPortalLoader {
 	 */
 	private void initializeNMSReflection() {
 		try {
-			Bukkit.getLogger().info("Trying NMS version: " + NMS_VERSION);
-			nmsBlockClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".Block");
-			nmsBlockDataClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".IBlockData");
-			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + ".block.data.CraftBlockData");
+			// In 1.20.5+ Paper uses Mojang-mapped names - try different possible paths
+			String[] nmsBlockPaths = {
+				"net.minecraft.server.MinecraftServer",  // Mojang-mapped (1.20.5+)
+				"net.minecraft.server.v1_21_11.MinecraftServer"  // Legacy
+			};
 			
-			// Block.getId(IBlockData) - returns the block state ID as int
+			for (String path : nmsBlockPaths) {
+				try {
+					nmsBlockClass = Class.forName(path);
+					Bukkit.getLogger().info("Found NMS class: " + path);
+					break;
+				} catch (ClassNotFoundException e) {
+					Bukkit.getLogger().info("Not found: " + path);
+				}
+			}
+			
+			if (nmsBlockClass == null) {
+				throw new ClassNotFoundException("Could not find any NMS class");
+			}
+			
+			// Try to find IBlockData
+			String[] ibdPaths = {"net.minecraft.server.IBlockData", "net.minecraft.server.BlockState"};
+			for (String path : ibdPaths) {
+				try {
+					nmsBlockDataClass = Class.forName(path);
+					Bukkit.getLogger().info("Found IBlockData: " + path);
+					break;
+				} catch (ClassNotFoundException e) {
+					// try next
+				}
+			}
+			
+			// Try CraftBlockData
+			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit.block.data.CraftBlockData");
+			
+			// Find getId method
 			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockDataClass);
-			Bukkit.getLogger().info("NMS initialized successfully for " + NMS_VERSION);
+			Bukkit.getLogger().info("Found getId method");
 			
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
-			Bukkit.getLogger().severe("Failed to initialize NMS for " + NMS_VERSION + ": " + e.getMessage());
+			Bukkit.getLogger().severe("Failed to initialize NMS: " + e.getMessage());
+			e.printStackTrace();
 			throw new RuntimeException("Failed to initialize NMS: " + e.getMessage(), e);
 		}
 	}
