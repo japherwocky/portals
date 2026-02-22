@@ -5,11 +5,6 @@ api-version: '1.20'
 authors: [japherwocky]
 description: Create custom portals to any world or dimension
 website: https://github.com/japherwocky/portals
-commands:
-  portals:
-    description: Main portals command
-    usage: /portals [subcommand]
-    aliases: [dim, dimensions]
 permissions:
   portals.command.*:
     description: All portals commands

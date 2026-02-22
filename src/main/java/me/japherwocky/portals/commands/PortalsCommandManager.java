@@ -1,6 +1,7 @@
 package me.japherwocky.portals.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -35,8 +36,23 @@ public class PortalsCommandManager implements CommandExecutor, TabCompleter {
         commands.add(new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
         commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
 
-        // Register the main /portals command
-        main.getCommand("portals").setExecutor(this);
+        // Register the main /portals command manually (Paper doesn't support YAML command declarations)
+        org.bukkit.command.Command cmd = new org.bukkit.command.Command(
+            "portals", 
+            "Main portals command", 
+            "/portals [subcommand]",
+            java.util.Arrays.asList("dim", "dimensions")
+        ) {
+            @Override
+            public boolean execute(org.bukkit.command.CommandSender sender, String label, String[] args) {
+                return PortalsCommandManager.this.onCommand(sender, this, label, args);
+            }
+            @Override
+            public java.util.List<String> tabComplete(org.bukkit.command.CommandSender sender, String label, String[] args) {
+                return PortalsCommandManager.this.onTabComplete(sender, this, label, args);
+            }
+        };
+        main.getServer().getCommandMap().register("portals", cmd);
     }
 
     /**
