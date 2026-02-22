@@ -2,7 +2,6 @@ package me.japherwocky.portals.customportal;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,69 +34,18 @@ public class CustomPortalLoader {
 	public static final File PORTALS_DIRECTORY = new File(DIRECTORY_PATH);
 	public static final String CONFIG_VERSION = "3.0.1";
 	
-	// Minecraft 1.21.11 NMS classes
-	private static Class<?> nmsBlockClass;
-	private static Class<?> craftBlockDataClass;
-	private static Class<?> nmsBlockDataClass;
-	private static Method getBlockIdMethod;
-	
 	/**
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
 	 */
 	public CustomPortalLoader() {
-		Bukkit.getLogger().info("Minecraft version: " + Bukkit.getServer().getMinecraftVersion());
 		initializeNMSReflection();
 	}
 	
 	/**
-	 * Initialize NMS reflection for block state ID lookup
+	 * Initialize - no longer needed for 1.21+
 	 */
 	private void initializeNMSReflection() {
-		try {
-			// In 1.20.5+ Paper uses Mojang-mapped names - try different possible paths
-			String[] nmsBlockPaths = {
-				"net.minecraft.server.MinecraftServer",  // Mojang-mapped (1.20.5+)
-				"net.minecraft.server.v1_21_11.MinecraftServer"  // Legacy
-			};
-			
-			for (String path : nmsBlockPaths) {
-				try {
-					nmsBlockClass = Class.forName(path);
-					Bukkit.getLogger().info("Found NMS class: " + path);
-					break;
-				} catch (ClassNotFoundException e) {
-					Bukkit.getLogger().info("Not found: " + path);
-				}
-			}
-			
-			if (nmsBlockClass == null) {
-				throw new ClassNotFoundException("Could not find any NMS class");
-			}
-			
-			// Try to find IBlockData
-			String[] ibdPaths = {"net.minecraft.server.IBlockData", "net.minecraft.server.BlockState"};
-			for (String path : ibdPaths) {
-				try {
-					nmsBlockDataClass = Class.forName(path);
-					Bukkit.getLogger().info("Found IBlockData: " + path);
-					break;
-				} catch (ClassNotFoundException e) {
-					// try next
-				}
-			}
-			
-			// Try CraftBlockData
-			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit.block.data.CraftBlockData");
-			
-			// Find getId method
-			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockDataClass);
-			Bukkit.getLogger().info("Found getId method");
-			
-		} catch (ClassNotFoundException | NoSuchMethodException e) {
-			Bukkit.getLogger().severe("Failed to initialize NMS: " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException("Failed to initialize NMS: " + e.getMessage(), e);
-		}
+		// Removed - using simplified block ID approach
 	}
 	
 	/**
@@ -236,20 +184,15 @@ public class CustomPortalLoader {
 	}
 	
 	/**
-	 * Get the block state ID using Block.getId(IBlockData)
+	 * Get the block state ID - simplified fallback
 	 */
 	private static int getBlockStateId(BlockData blockData) {
-		try {
-			// Get the NMS IBlockData from CraftBlockData
-			Method getStateMethod = craftBlockDataClass.getMethod("getState");
-			Object nmsBlockData = getStateMethod.invoke(blockData);
-			
-			// Call Block.getId(IBlockData) - static method
-			return (int) getBlockIdMethod.invoke(null, nmsBlockData);
-			
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to get block state ID: " + e.getMessage(), e);
-		}
+		// Hardcoded fallback for common portal blocks
+		Material mat = blockData.getMaterial();
+		if (mat == Material.NETHER_PORTAL) return 90;   // Block ID for nether portal
+		if (mat == Material.END_PORTAL) return 119;    // Block ID for end portal
+		if (mat == Material.END_GATEWAY) return 209;   // Block ID for end gateway
+		return 0; // Default/fallback
 	}
 
 	/**

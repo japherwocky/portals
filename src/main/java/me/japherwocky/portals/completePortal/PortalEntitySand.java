@@ -1,94 +1,70 @@
 package me.japherwocky.portals.completePortal;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-
-import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
-import com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
-import com.comphenix.packetwrapper.WrapperPlayServerEntityTeleport;
-import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntity;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import org.bukkit.block.data.BlockData;
 
 /**
- * The PortalEntity that sends players packets of spawning falling sand with textures of blocks
- *
+ * The PortalEntity that spawns actual falling block entities for portal visuals
+ * Uses modern Bukkit API instead of raw packets
  */
-
-@SuppressWarnings({"deprecation", "removal"})
 public class PortalEntitySand extends PortalEntity {
 
-	private int fallingBlockId;
-	
-	private WrapperPlayServerSpawnEntity spawnPacket;
-	private WrapperPlayServerEntityTeleport teleportPacket;
-	private WrapperPlayServerEntityMetadata metaPacket;
-	private WrappedDataWatcher dataWatcher;
-	private WrapperPlayServerEntityDestroy destroyPacket;
+	private FallingBlock fallingBlock;
 	
 	/**
-	 * Construct the PortalEntity and create all the packets to summon, retexture, teleport and destroy the falling block
+	 * Construct the PortalEntity to display a falling block with the given block data
 	 * @param location the location to summon the entity
-	 * @param combinedID the combinedID of the texture
+	 * @param blockData the block data to display
 	 */
-	public PortalEntitySand(Location location, int combinedID) {
+	public PortalEntitySand(Location location, BlockData blockData) {
 		super(location);
-		fallingBlockId = (int) (Math.random() * Integer.MAX_VALUE);
 		
-		// Spawn packet - set type as falling block with the block state ID
-		spawnPacket = new WrapperPlayServerSpawnEntity();
-		spawnPacket.setEntityID(fallingBlockId);
-		spawnPacket.setUniqueId(UUID.randomUUID());
-		spawnPacket.setTypeFallingBlock(combinedID);
-		spawnPacket.setX(location.getX());
-		spawnPacket.setY(location.getY());
-		spawnPacket.setZ(location.getZ());
+		// Center the falling block in the block position (add 0.5 to X and Z)
+		Location spawnLocation = location.clone().add(0.5, 0, 0.5);
 		
-		// Metadata packet - empty data watcher is fine
-		metaPacket = new WrapperPlayServerEntityMetadata();
-		metaPacket.setEntityID(fallingBlockId);
-		dataWatcher = new WrappedDataWatcher();
-		metaPacket.setMetadata(dataWatcher.getWatchableObjects());
+		// Spawn an actual falling block entity using Bukkit API
+		// This handles all modern block state IDs automatically
+		fallingBlock = spawnLocation.getWorld().spawnFallingBlock(spawnLocation, blockData);
 		
-		// Teleport packet - move entity to center of block
-		teleportPacket = new WrapperPlayServerEntityTeleport();
-		teleportPacket.setEntityID(fallingBlockId);
-		teleportPacket.setLocation(location.getX() + 0.5f, location.getY(), location.getZ() + 0.5f);
-		
-		// Destroy packet - to remove the entity when portal breaks
-		destroyPacket = new WrapperPlayServerEntityDestroy();
-		destroyPacket.setEntityIds(fallingBlockId);
+		if (fallingBlock != null) {
+			fallingBlock.setDropItem(false);
+			fallingBlock.setCancelDrop(true);
+			fallingBlock.setGravity(false);
+			fallingBlock.setInvulnerable(true);
+		}
 	}
-
+	
 	/**
-	 * Send the spawn packets to the player
+	 * Send nothing - the entity spawns automatically for all players
 	 */
 	public void summon(Player p) {
-		spawnPacket.sendPacket(p);
-		teleportPacket.sendPacket(p);
-		metaPacket.sendPacket(p);
+		// The falling block spawns naturally for all players when created
+		// No packet sending needed
 	}
 	
 	/**
-	 * Send the destroy packets to the player
+	 * Remove the entity for this player
 	 */
 	public void destroy(Player p) {
-		destroyPacket.sendPacket(p);
-		
-		p.sendBlockChange(getLocation(),getLocation().getBlock().getBlockData());
+		// Send block change to restore the actual block
+		p.sendBlockChange(getLocation(), getLocation().getBlock().getBlockData());
 	}
 
 	/**
-	 * Send the destroy packets to all players
+	 * Remove the entity for all players and broadcast block change
 	 */
-	
 	public void destroyBroadcast() {
-		destroyPacket.broadcastPacket();
+		if (fallingBlock != null && !fallingBlock.isDead()) {
+			fallingBlock.remove();
+		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			p.sendBlockChange(getLocation(),getLocation().getBlock().getBlockData());
+			p.sendBlockChange(getLocation(), getLocation().getBlock().getBlockData());
 		}
 	}
 	
