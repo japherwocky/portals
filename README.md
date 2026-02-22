@@ -32,10 +32,12 @@ Portal configurations are stored as YAML files in `./plugins/Portals/Portals/` o
 
 ### Example Configs
 
-This repository includes example portal configs in `src/main/resources/Portals/`:
+This repository includes example portal configs:
 
-- **`example.yml`** - A comprehensive reference showing all available options with comments
-- **`end_portal.yml`** - A simple End Portal config linking to `world_the_end`
+- **[example.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/example.yml)** - A comprehensive reference showing all available options with comments
+- **[end_portal.yml](https://github.com/japherwocky/portals/blob/main/src/main/resources/Portals/end_portal.yml)** - A simple End Portal config linking to `world_the_end`
+
+You can find these files in `src/main/resources/Portals/` in the source code.
 
 To use these:
 1. Copy the desired YAML file(s) to `./plugins/Portals/Portals/` on your server
