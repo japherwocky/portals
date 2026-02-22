@@ -578,24 +578,6 @@ public class CompletePortal {
 		if (getTag("hidePortalInside") != null) return;
 		if (p==null) {
 			Bukkit.getScheduler().cancelTask(particlesTask);
-			if (customPortal.isEnableParticles()) {
-				particlesTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(Portals.getInstance(), new Runnable() {
-					
-					@Override
-					public void run() {
-						
-						
-						if (!isActive() || getTag("hidePortalParticles")!=null) return;
-						for (PortalEntity en : spawnedEntities) {
-							// Ensure falling blocks stay alive
-							if (en instanceof PortalEntitySand) {
-								((PortalEntitySand) en).ensureValid();
-							}
-							en.emitParticles(customPortal.getParticlesColor());
-						}
-					}
-				}, 20, 40);
-			}
 			
 			for (Entity player : world.getNearbyEntities(getCenter(), 16*Bukkit.getViewDistance(), 255, 16*Bukkit.getViewDistance(), (player) -> player instanceof Player)) {
 				fill((Player) player);
