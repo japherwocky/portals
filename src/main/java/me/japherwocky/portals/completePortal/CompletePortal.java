@@ -624,9 +624,9 @@ public class CompletePortal {
 		
 		world.playSound(getCenter(), customPortal.getBreakSound(), 1, 8);
 		
-		Particle blockCrackParticle = Particle.valueOf("BLOCK_CRACK") == null ? Particle.valueOf("BLOCK_CRUMBLE") : Particle.valueOf("BLOCK_CRACK");
+		// BLOCK_CRACK was renamed to BLOCK_CRUMBLE in 1.21+
 		for (PortalEntity en : spawnedEntities) {
-			world.spawnParticle(blockCrackParticle, en.getLocation(), 10, customPortal.getInsideBlockData(false));
+			world.spawnParticle(Particle.BLOCK_CRUMBLE, en.getLocation(), 10, customPortal.getInsideBlockData(false));
 			if (p==null)
 				en.destroyBroadcast();
 			else
