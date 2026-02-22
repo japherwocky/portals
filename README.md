@@ -1,18 +1,30 @@
 # Portals
 
-This is a fork of the [Dimensions3](https://www.spigotmc.org/resources/dimensions-custom-portals.83982/) plugin (which appears to be abandoned), restructured and maintained by japherwocky.
+A Minecraft Paper/Spigot plugin for creating custom portals that link to any dimension/world.
 
-## Original Resources
-- [Spigot page](https://www.spigotmc.org/resources/dimensions-custom-portals.83982/)
-- [Wiki](https://astaspastagam.gitbook.io/first-steps/)
-- [Javadocs](https://astaspasta.alwaysdata.net/javadocs/)
-- [Free Addons](https://github.com/xXastaspastaXx/Dimensions-3-Free-Addons)
+## Features
 
-## Changes in this Fork
-- Restructured to standard Maven project layout
-- Updated to use Paper plugin format
-- Renamed from "Dimensions3" to "Portals"
-- Maintained compatibility with original plugin configuration
+- Create portals with custom frame materials (obsidian, diamond blocks, etc.)
+- Link portals to any world or dimension
+- Configurable portal sizes
+- Custom ignition items
+- Particle effects
+- Entity transformation support
+- Extensible addon system
+
+## Building
+
+```bash
+./apache-maven-3.9.12/bin/mvn package
+```
+
+The built JAR will be in `target/portals-*.jar`
+
+## Installation
+
+1. Drop `portals-*.jar` into your server's `plugins/` folder
+2. Restart the server
+3. Configure your custom portals in `plugins/Portals/Portals/`
 
 ## Creating Custom Portals
 
@@ -42,3 +54,29 @@ Key configuration options:
 | `Portal.LighterMaterial` | Item to ignite the portal (e.g., FLINT_AND_STEEL) |
 | `World.Name` | Destination world name |
 | `Options.AllowedWorlds` | Worlds where this portal can be built |
+
+## Commands
+
+- `/portals` - Main portal commands
+- `/portals reload` - Reload all portal configurations
+- `/portals list` - List all configured portals
+- `/portals create` - Open the portal creation GUI
+- `/portals info <portal>` - Show portal information
+
+## Configuration
+
+Main config file: `plugins/Portals/config.yml`
+
+Key settings:
+- `searchRadius` - How far to search for portal frames
+- `fallbackWorld` - Default destination for unknown portals
+- `consumeItems` - Whether lighter items are consumed on use
+- `enableNetherPortalEffect` - Show nether portal visual effect
+
+## Addons
+
+The plugin supports optional addons placed in `plugins/Portals/Addons/`. Addons are JAR files that extend the `PortalsAddon` class.
+
+Commands for managing addons:
+- `/portalsaddon list` - List loaded addons
+- `/portalsaddon info <addon>` - Show addon details
