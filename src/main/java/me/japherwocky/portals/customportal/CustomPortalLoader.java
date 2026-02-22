@@ -70,7 +70,10 @@ public class CustomPortalLoader {
 	 * Get the current server version string
 	 */
 	private String getServerVersion() {
-		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		String packageName = Bukkit.getServer().getClass().getPackage().getName();
+		// Format is typically: org.bukkit.craftbukkit.v1_21_11 or net.minecraft.server.v1_21_11
+		// Get the last part after the last dot
+		return packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 	
 	/**
