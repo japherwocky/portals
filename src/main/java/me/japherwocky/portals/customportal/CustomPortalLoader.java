@@ -46,6 +46,9 @@ public class CustomPortalLoader {
 	 * Constructor of the loader - sets up NMS reflection for block ID lookup
 	 */
 	public CustomPortalLoader() {
+		// Log server version for debugging
+		String packageName = Bukkit.getServer().getClass().getPackage().getName();
+		Bukkit.getLogger().info("Server package: " + packageName);
 		initializeNMSReflection();
 	}
 	
@@ -54,14 +57,17 @@ public class CustomPortalLoader {
 	 */
 	private void initializeNMSReflection() {
 		try {
+			Bukkit.getLogger().info("Trying NMS version: " + NMS_VERSION);
 			nmsBlockClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".Block");
 			nmsBlockDataClass = Class.forName("net.minecraft.server." + NMS_VERSION + ".IBlockData");
 			craftBlockDataClass = Class.forName("org.bukkit.craftbukkit." + NMS_VERSION + ".block.data.CraftBlockData");
 			
 			// Block.getId(IBlockData) - returns the block state ID as int
 			getBlockIdMethod = nmsBlockClass.getMethod("getId", nmsBlockDataClass);
+			Bukkit.getLogger().info("NMS initialized successfully for " + NMS_VERSION);
 			
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
+			Bukkit.getLogger().severe("Failed to initialize NMS for " + NMS_VERSION + ": " + e.getMessage());
 			throw new RuntimeException("Failed to initialize NMS for 1.21.11: " + e.getMessage(), e);
 		}
 	}
