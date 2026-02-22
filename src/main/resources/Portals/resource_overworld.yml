@@ -1,0 +1,43 @@
+# Resource World Portal Configuration
+# Creates a portal that links to a resource_overworld (e.g., via Multiverse-Core)
+# 
+# Usage with Multiverse-Core:
+#   /mv create resource_overworld normal
+#   /mv modify set generator void
+#   /mvsetspawn resource_overworld
+configVersion: "3.0.1"
+
+Enable: true
+DisplayName: "Resource World Portal"
+
+Portal:
+  Frame:
+    Material: COBBLESTONE
+    Face: all
+  InsideMaterial: NETHER_PORTAL
+  LighterMaterial: FLINT_AND_STEEL
+  ParticlesColor: "0;0;0"
+  BreakEffect: BLOCK_GLASS_BREAK
+  MinimumHeight: 4
+  MaximumHeight: 15
+  MinimumWidth: 3
+  MaximumWidth: 14
+
+World:
+  Name: resource_overworld
+
+Options:
+  AllowedWorlds:
+    - all
+  ExitPortal:
+    Enable: true
+    FixedWidth: -1
+    FixedHeight: -1
+  TeleportDelay: 4
+  EnableParticles: true
+
+Entities:
+  Transformation: []
+  Spawning:
+    Delay: "5000-10000"
+    List: []
