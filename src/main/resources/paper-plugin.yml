@@ -8,39 +8,21 @@ website: https://github.com/japherwocky/portals
 commands:
   portals:
     description: Main portals command
-    usage: /portals
+    usage: /portals [subcommand]
     aliases: [dim, dimensions]
-  portals-help:
-    description: List all commands
-    usage: /portals help
-  portals-info:
-    description: Show plugin version
-    usage: /portals info
-  portals-reload:
-    description: Reload all configurations
-    usage: /portals reload
-    permission: portals.command.reload
-  portals-worlds:
-    description: List world names for config
-    usage: /portals worlds
-    permission: portals.command.worlds
-  portals-clear:
-    description: Delete saved portals
-    usage: /portals clear <all/world/portal>
-    permission: portals.command.clear
-  portals-portal:
-    description: Show portal info
-    usage: /portals portal [name]
-    permission: portals.command.portal
-  portals-adminhelp:
-    description: List admin commands
-    usage: /portals adminHelp
-  portals-permissions:
-    description: List commands with permissions
-    usage: /portals permissions
-  portals-adminpermissions:
-    description: List admin commands with permissions
-    usage: /portals adminPermissions
+permissions:
+  portals.command.*:
+    description: All portals commands
+    children:
+      portals.command.help: true
+      portals.command.info: true
+      portals.command.reload: true
+      portals.command.worlds: true
+      portals.command.clear: true
+      portals.command.portal: true
+      portals.command.adminhelp: true
+      portals.command.permissions: true
+      portals.command.adminpermissions: true
 dependencies:
   - name: ProtocolLib
     required: true

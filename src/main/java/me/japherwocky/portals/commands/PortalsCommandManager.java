@@ -3,68 +3,48 @@ package me.japherwocky.portals.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 import me.japherwocky.portals.Portals;
 
 /**
  * Class to register and manage the Portals commands
- *
  */
 
-public class PortalsCommandManager {
+public class PortalsCommandManager implements CommandExecutor, TabCompleter {
 
     private ArrayList<PortalsCommand> commands = new ArrayList<PortalsCommand>();
     
     /**
-     * Construct the manager and register all subcommands
+     * Construct the manager and register the /portals command
      * @param main the instance of the Portals plugin
      */
     public PortalsCommandManager(Portals main) {
 
-        // Register subcommands
-        registerCommand(main, new HelpCommand("help", "", new String[] {"h"}, "List all commands", "none", false));
-        registerCommand(main, new InfoCommand("info", "", new String[0], "Info about the plugin", "none", false));
-        registerCommand(main, new AdminHelpCommand("adminHelp", "", new String[] {"ah"}, "List all admin commands", "", false));
-        registerCommand(main, new PermissionsCommand("permissions", "", new String[] {"perms"}, "List all commands with their permissions", "", true));
-        registerCommand(main, new ReloadCommand("reload", "", new String[0], "Reload all configurations and addons", "", true));
-        registerCommand(main, new WorldsCommand("worlds", "", new String[0], "List world names to be used in config", "", true));
-        registerCommand(main, new AdminPermissionsCommand("adminPermissions", "", new String[] {"aperms"}, "List all admin commands with their permissions", "", true));
-        registerCommand(main, new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
-        registerCommand(main, new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
+        // Register all subcommands
+        commands.add(new HelpCommand("help", "", new String[] {"h"}, "List all commands", "none", false));
+        commands.add(new InfoCommand("info", "", new String[0], "Info about the plugin", "none", false));
+        commands.add(new AdminHelpCommand("adminHelp", "", new String[] {"ah"}, "List all admin commands", "", false));
+        commands.add(new PermissionsCommand("permissions", "", new String[] {"perms"}, "List all commands with their permissions", "", true));
+        commands.add(new ReloadCommand("reload", "", new String[0], "Reload all configurations and addons", "", true));
+        commands.add(new WorldsCommand("worlds", "", new String[0], "List world names to be used in config", "", true));
+        commands.add(new AdminPermissionsCommand("adminPermissions", "", new String[] {"aperms"}, "List all admin commands with their permissions", "", true));
+        commands.add(new ClearCommand("clear", "<all/world/portal>", new String[] {"clr"}, "Delete all saved portals.", "", true));
+        commands.add(new PortalCommand("portal", "[portal]", new String[0], "Show info of specified portal or look at a portal", "", true));
 
-    }
-
-    /**
-     * Register a subcommand with the server
-     */
-    private void registerCommand(Portals main, PortalsCommand cmd) {
-        commands.add(cmd);
-        String name = "portals-" + cmd.getCommand();
-        
-        org.bukkit.command.Command command = new org.bukkit.command.Command(
-            name,
-            cmd.getDescription(),
-            "/" + name,
-            java.util.Arrays.asList(cmd.getAliases())
-        ) {
-            @Override
-            public boolean execute(CommandSender sender, String label, String[] args) {
-                return handleCommand(sender, args);
-            }
-            @Override
-            public List<String> tabComplete(CommandSender sender, String label, String[] args) {
-                return handleTabComplete(sender, args);
-            }
-        };
-        main.getServer().getCommandMap().register("portals", command);
+        // Register the main /portals command
+        main.getCommand("portals").setExecutor(this);
     }
 
     /**
      * Handle command execution - delegates to the appropriate PortalsCommand
      */
-    private boolean handleCommand(CommandSender sender, String[] args) {
-        String subcommand = args.length > 0 ? args[0] : "help";
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        String subcommand = args.length > 0 ? args[0] : "info";
         
         for (PortalsCommand command : commands) {
             if (!command.isThisCommand(subcommand)) continue;
@@ -79,15 +59,33 @@ public class PortalsCommandManager {
                 e.printStackTrace();
             }
         }
+        
+        // Default to help if command not found
+        for (PortalsCommand command : commands) {
+            if (!command.isThisCommand("help")) continue;
+            command.execute(sender, args);
+            return true;
+        }
+        
         return true;
     }
 
     /**
      * Handle tab completion - delegates to the appropriate PortalsCommand
      */
-    private List<String> handleTabComplete(CommandSender sender, String[] args) {
-        String subcommand = args.length > 0 ? args[0] : "";
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        // Return list of available subcommands for first argument
+        if (args.length == 1) {
+            ArrayList<String> res = new ArrayList<String>();
+            commands.stream()
+                .filter(c -> c.getPermission().contentEquals("none") || sender.hasPermission(c.getPermission()))
+                .forEach(c -> res.add(c.getCommand()));
+            return res;
+        }
         
+        // Delegate to the matching subcommand
+        String subcommand = args[0];
         for (PortalsCommand command : commands) {
             if (!command.isThisCommand(subcommand)) continue;
             if (!command.getPermission().contentEquals("none") && !sender.hasPermission(command.getPermission())) {
@@ -98,15 +96,6 @@ public class PortalsCommandManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        
-        // Return list of available subcommands for first argument
-        if (args.length == 1) {
-            ArrayList<String> res = new ArrayList<String>();
-            commands.stream()
-                .filter(c -> c.getPermission().contentEquals("none") || sender.hasPermission(c.getPermission()))
-                .forEach(c -> res.add(c.getCommand()));
-            return res;
         }
         
         return new ArrayList<String>();
@@ -153,7 +142,5 @@ public class PortalsCommandManager {
 	public void unregisterCommand(PortalsCommand cmd) {
 		commands.remove(cmd);
 	}
-	
-	
 	
 }
