@@ -54,6 +54,7 @@ Thumbs.db
 
 # IDE specific
 .factorypath
+.flattened-pom.xml
 
 # Local Maven
 apache-maven-*/

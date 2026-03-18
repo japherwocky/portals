@@ -18,14 +18,10 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    
-    - name: Download Maven 3.9.12
-      run: |
-        curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.12/binaries/apache-maven-3.9.12-bin.tar.gz | tar -xz
-        echo "${PWD}/apache-maven-3.9.12/bin" >> $GITHUB_PATH
+        cache: maven
     
     - name: Build with Maven
-      run: mvn -B clean package
+      run: mvn -B package --file pom.xml
     
     - name: Upload build artifact
       if: success() && github.event_name == 'pull_request'
