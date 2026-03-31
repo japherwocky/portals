@@ -1,68 +1,38 @@
-# Portals - Custom Portal Plugin
+# Portals
 
-Portals allows you to create custom portal frames that link to any world or dimension in your Minecraft server.
+A straightforward portal engine for Paper/Spigot that allows you to link any world or dimension on your server. Unlike vanilla portals, these are fully customizable via config files, allowing you to define the frame material, size, and ignition item.
 
-## ✨ Features
+## Core Functionality
 
-### 🔗 Link to Any World
-Create portals that teleport players to the End, custom resource worlds, Nether dimensions, or any world on your server.
+* **World Linking:** Connect any worlds managed by your server, including **Multiverse-Core** worlds, resource worlds, or custom dimensions.
+* **Player-Built Frames:** Players can build their own portal frames out of any block you specify in the config (Stone Bricks, Quartz, Cobblestone, etc.).
+* **Config-Driven:** Everything is handled in `plugins/Portals/portals.yml`. You define the "rules" for a portal type, and players simply build the shape to activate it.
+* **Flexible Sizing:** Supports custom dimensions from 1x2 "doors" up to massive 5x5 gates.
+* **Custom Ignition:** Set specific items (like a Fire Charge or a custom key) to open the portal.
 
-### 🧱 Custom Frame Materials
-Don't like obsidian? Use cobblestone, stone bricks, quartz blocks, or any block you want for your portal frame.
+## Admin Features
 
-### 📏 Configurable Sizes
-Set minimum and maximum dimensions for each portal type - create tiny 2x3 portals or massive 5x5 gates.
+* **In-Game Browser:** A simple GUI for players to see which portals are available to them.
+* **Entity Support:** Handles mobs and entities passing through, with optional transformation settings.
+* **No Restarts:** Use `/portals reload` to update your portal configurations on the fly.
+* **Auto-Generation:** Option to automatically create a "return" portal at the destination coordinate.
 
-### 🔥 Custom Ignition
-Choose which item ignites each portal - flint and steel, fire charges, or allow any ignition source.
+## Compatibility
 
-### 🔄 Entity Transformation
-Automatically transform entities when they pass through (mobs entering a nether portal, etc.)
+Works alongside the standard server stack:
+* **Management:** Multiverse-Core, BentoBox, Iridium/SuperiorSkyblock.
+* **Tools:** WorldGuard, WorldEdit, Vault.
+* **Custom Items:** Oraxen, ItemsAdder, ModelEngine.
 
-### 🚪 Exit Portals
-Automatically generate return portals at the destination world.
+## Technical Requirements
 
-### 🎛️ GUI Portal Browser
-Players can browse available portals through an intuitive in-game GUI.
+* **Minecraft:** 1.21+
+* **Java:** 21+
+* **Dependency:** [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/)
 
-### ⚡ Full Reload Support
-Reload portal configurations without restarting the server using `/portals reload`.
+## Setup
 
-## 🎮 For Players
-
-- Build custom portals using any frame material
-- Access resource worlds, end dimensions, or custom adventure maps
-- Intuitive portal browser GUI
-- Works seamlessly with existing server worlds
-
-## 🔧 For Server Admins
-
-- Simple YAML-based configuration
-- Full control over portal properties
-- Multiple portal types supported simultaneously
-- Compatible with popular plugins:
-  - Multiverse-Core
-  - WorldEdit & WorldGuard
-  - Vault
-  - BentoBox
-  - IridiumSkyblock & SuperiorSkyblock2
-  - Oraxen & ItemsAdder
-  - ModelEngine
-  - And more!
-
-## 📋 Requirements
-
-- **Minecraft**: 1.21+
-- **Server**: Paper or Spigot
-- **Java**: 21+
-- **Dependency**: ProtocolLib
-
-## 🚀 Quick Start
-
-1. Install Portals.jar in your plugins folder
-2. Restart your server
-3. Edit `plugins/Portals/Portals/example.yml` to configure your first portal
-4. Build your portal frame and ignite it!
-5. Run `/portals reload` to load your changes
-
-Transform your server's world connectivity with Portals!
+1. Drop `Portals.jar` into your `/plugins` folder.
+2. Restart the server to generate the default configuration.
+3. Modify `plugins/Portals/portals.yml` to set your frame materials and destination worlds.
+4. Build the frame in-game and ignite it.
