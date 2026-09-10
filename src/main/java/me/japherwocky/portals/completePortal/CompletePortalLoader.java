@@ -58,11 +58,16 @@ public class CompletePortalLoader {
 	 * @throws FileNotFoundException
 	 */
 	public void loadAll() throws FileNotFoundException {
-		Reader reader = new BufferedReader((new FileReader(FILE_PATH)));
-		ArrayList<HashMap<String, Object>> portals = gson.fromJson(reader, new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+		ArrayList<HashMap<String, Object>> portals = null;
+		try (Reader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+			portals = gson.fromJson(reader, new TypeToken<ArrayList<HashMap<String, Object>>>() {}.getType());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ArrayList<HashMap<String, Object>> portallist = portals == null || portals.isEmpty() ? new ArrayList<HashMap<String, Object>>() : portals;
 		try {
 
-			for (HashMap<String, Object> portal : portals) {
+			for (HashMap<String, Object> portal : portallist) {
 				CustomPortal customPortal = Portals.getCustomPortalManager().getCustomPortal((String) portal.get("customPortal"));
 				World world = Bukkit.getWorld((String) portal.get("world"));
 				Location loc = new Location(world, (double) portal.get("centerX"), (double) portal.get("centerY"), (double) portal.get("centerZ"));
