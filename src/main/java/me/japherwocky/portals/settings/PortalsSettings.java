@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.japherwocky.portals.Portals;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.customportal.CustomPortalDestroyCause;
 
 /**
@@ -132,11 +133,16 @@ public class PortalsSettings {
 		if (config.getConfigurationSection("Worlds")!=null) {
 			for (String string : config.getConfigurationSection("Worlds").getKeys(false)) {
 				World world = Bukkit.getWorld(string);
+				if (world == null) continue;
 				worldConfigurations.put(string, new WorldConfiguration(
 						config.getInt("Worlds."+string+".MinHeight", world.getMinHeight()),
 						config.getInt("Worlds."+string+".MaxHeight", world.getMaxHeight()),
 						config.getDouble("Worlds."+string+".Size", world.getWorldBorder().getSize())
 						));
+
+				// Gamerules declared for a world are (re-)applied on every
+				// boot, so the world always matches its config.
+				PortalsUtils.applyGamerules(config.getConfigurationSection("Worlds."+string+".Gamerules"), world);
 			}
 		}
 	}

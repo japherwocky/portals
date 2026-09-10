@@ -9,19 +9,24 @@ import java.util.List;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Orientable;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
 import me.japherwocky.portals.AxisOrFace;
 import me.japherwocky.portals.Portals;
 import me.japherwocky.portals.PortalsDebbuger;
+import me.japherwocky.portals.PortalsUtils;
 import me.japherwocky.portals.completePortal.PortalGeometry;
 
 /**
@@ -114,9 +119,7 @@ public class CustomPortalLoader {
 			int minimumWidth = portalConfig.getInt("Portal.MinimumWidth", 3);
 			
 			String worldName = portalConfig.getString("World.Name", "world");
-			/*if (PortalsSettings.generateNewWorlds && !Bukkit.getServer().getWorlds().contains(Bukkit.getWorld(worldName))) {
-				Bukkit.getServer().createWorld(new WorldCreator(worldName));
-			}*/
+			createWorldIfNeeded(portalConfig, worldName);
 			
 //			String[] ratioString = portalConfig.getString("World.Ratio", "1:1").split(":");
 //			int ratio0 = Integer.parseInt(ratioString[0]);
@@ -240,5 +243,50 @@ public class CustomPortalLoader {
 			return Sound.BLOCK_GLASS_BREAK;
 		}
 	}
-	
+
+	/**
+	 * Create the portal's target world if the portal config asks for it
+	 * (World.Create: true) and the world does not exist yet. Gamerules
+	 * declared under World.Gamerules are (re-)applied on every load, so the
+	 * portal's dimension always matches its config.
+	 */
+	private void createWorldIfNeeded(YamlConfiguration portalConfig, String worldName) {
+		if (!portalConfig.getBoolean("World.Create", false)) return;
+
+		World world = Bukkit.getWorld(worldName);
+		if (world == null) {
+			WorldCreator creator = new WorldCreator(worldName);
+
+			String environment = portalConfig.getString("World.Environment", "NORMAL");
+			try {
+				creator.environment(World.Environment.valueOf(environment.toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				PortalsDebbuger.MEDIUM.print("Unknown environment: " + environment + ", using NORMAL");
+			}
+
+			creator.generateStructures(portalConfig.getBoolean("World.GenerateStructures", true));
+
+			String seed = portalConfig.getString("World.Seed", "");
+			if (!seed.isEmpty()) {
+				try {
+					creator.seed(Long.parseLong(seed));
+				} catch (NumberFormatException e) {
+					creator.seed((long) seed.hashCode()); // seed by string, like the vanilla client
+				}
+			}
+
+			String generator = portalConfig.getString("World.Generator", "");
+			if (!generator.isEmpty()) creator.generator(generator);
+
+			world = Bukkit.getServer().createWorld(creator);
+			if (world == null) {
+				PortalsDebbuger.MEDIUM.print("Could not create world: " + worldName);
+				return;
+			}
+			PortalsDebbuger.MEDIUM.print("Created world: " + worldName);
+		}
+
+		PortalsUtils.applyGamerules(portalConfig.getConfigurationSection("World.Gamerules"), world);
+	}
+
 }

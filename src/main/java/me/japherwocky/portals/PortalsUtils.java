@@ -2,14 +2,17 @@ package me.japherwocky.portals;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Orientable;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 /**
@@ -17,7 +20,49 @@ import org.bukkit.entity.LivingEntity;
  *
  */
 public class PortalsUtils {
-	
+
+	/**
+	 * Apply every gamerule declared in the given section to the world.
+	 * Keys may use the vanilla namespaced form (minecraft:keep_inventory)
+	 * or the bare name. Unknown rules and invalid values are logged and
+	 * skipped.
+	 *
+	 * @param section the configuration section holding the gamerules
+	 * @param world the world to apply them to
+	 */
+	public static void applyGamerules(ConfigurationSection section, World world) {
+		if (section == null) return;
+
+		for (String key : section.getKeys(false)) {
+			String ruleName = key.startsWith("minecraft:") ? key.substring("minecraft:".length()) : key;
+			GameRule<?> rule = GameRule.getByName(ruleName);
+			if (rule == null) {
+				PortalsDebbuger.MEDIUM.print("Unknown gamerule: " + key);
+				continue;
+			}
+
+			String value = String.valueOf(section.get(key));
+			try {
+				if (Boolean.class.equals(rule.getType())) {
+					setGameRuleValue(world, rule, Boolean.parseBoolean(value));
+				} else if (Integer.class.equals(rule.getType())) {
+					setGameRuleValue(world, rule, Integer.parseInt(value));
+				} else if (Double.class.equals(rule.getType())) {
+					setGameRuleValue(world, rule, Double.parseDouble(value));
+				} else {
+					PortalsDebbuger.MEDIUM.print("Unsupported gamerule type for " + key + ": " + rule.getType());
+				}
+			} catch (NumberFormatException e) {
+				PortalsDebbuger.MEDIUM.print("Invalid value for gamerule " + key + ": " + value);
+			}
+		}
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static void setGameRuleValue(World world, GameRule rule, Object value) {
+		world.setGameRule(rule, value);
+	}
+
 	/** 
 	 * Check if the block is air
 	 * 

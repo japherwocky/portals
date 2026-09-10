@@ -21,8 +21,6 @@ permissions:
 dependencies:
   - name: ProtocolLib
     required: true
-  - name: Multiverse-Core
-    required: false
   - name: BetterPortals
     required: false
   - name: Vault
