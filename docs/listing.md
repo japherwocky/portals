@@ -1,38 +1,49 @@
 # Portals
 
-A straightforward portal engine for Paper/Spigot that allows you to link any world or dimension on your server. Unlike vanilla portals, these are fully customizable via config files, allowing you to define the frame material, size, and ignition item.
+Custom portals for Paper servers. Build a frame out of whatever block you
+want, light it, and step through to any world on your server: the nether, the
+end, a resource world, or a dimension the plugin creates for you.
 
-## Core Functionality
+Vanilla portals take obsidian and go where vanilla sends them. Portals lets
+you pick the frame material, the size limits, the ignition item, and the
+destination. Each portal type is one small YAML file.
 
-* **World Linking:** Connect any worlds managed by your server, including **Multiverse-Core** worlds, resource worlds, or custom dimensions.
-* **Player-Built Frames:** Players can build their own portal frames out of any block you specify in the config (Stone Bricks, Quartz, Cobblestone, etc.).
-* **Config-Driven:** Everything is handled in `plugins/Portals/portals.yml`. You define the "rules" for a portal type, and players simply build the shape to activate it.
-* **Flexible Sizing:** Supports custom dimensions from 1x2 "doors" up to massive 5x5 gates.
-* **Custom Ignition:** Set specific items (like a Fire Charge or a custom key) to open the portal.
+## How it works
 
-## Admin Features
+You describe a portal type in a config file: the frame block, the inside
+material, the ignition item, the destination world. Players build the frame in
+game and light it with the item you chose. The config file's name is the
+portal's id.
 
-* **In-Game Browser:** A simple GUI for players to see which portals are available to them.
-* **Entity Support:** Handles mobs and entities passing through, with optional transformation settings.
-* **No Restarts:** Use `/portals reload` to update your portal configurations on the fly.
-* **Auto-Generation:** Option to automatically create a "return" portal at the destination coordinate.
+## What it does
 
-## Compatibility
+- Any frame material: cobblestone, stone bricks, quartz, whatever fits the build
+- Any size, with minimum and maximum limits you set
+- Any ignition item: flint and steel, a fire charge, or a custom key
+- Any destination: nether, end, resource worlds, or a world the plugin creates on the spot (`World.Create: true`)
+- Return portals built automatically at the destination
+- Mobs and dropped items travel through too, with optional transformation (cows stepping into a nether portal becoming zombified piglins, that kind of thing)
+- `/portals reload` applies config changes without a restart
+- A GUI browser so players can see which portals exist
 
-Works alongside the standard server stack:
-* **Management:** Multiverse-Core, BentoBox, Iridium/SuperiorSkyblock.
-* **Tools:** WorldGuard, WorldEdit, Vault.
-* **Custom Items:** Oraxen, ItemsAdder, ModelEngine.
+## Getting along with other plugins
 
-## Technical Requirements
+Portals reads the world list from the server, so it works alongside whatever
+manages your worlds, or nothing at all. Since 1.1.0 a portal can create the
+world it points at, with its own seed and gamerules, so you don't need a
+world manager just to have somewhere for the portal to go.
 
-* **Minecraft:** 1.21+
-* **Java:** 21+
-* **Dependency:** [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/)
+It also plays fine with WorldGuard, WorldEdit, Vault, BentoBox, skyblock
+plugins, and custom item plugins.
+
+## Requirements
+
+- Paper (or Spigot) 26.2 or newer
+- Java 25 or newer
+- [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/)
 
 ## Setup
 
-1. Drop `Portals.jar` into your `/plugins` folder.
-2. Restart the server to generate the default configuration.
-3. Modify `plugins/Portals/portals.yml` to set your frame materials and destination worlds.
-4. Build the frame in-game and ignite it.
+1. Drop the jar in your `plugins` folder and restart the server.
+2. Edit the portal configs under `plugins/Portals/Portals/`.
+3. Build a frame and light it.

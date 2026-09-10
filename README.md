@@ -47,19 +47,24 @@ To use these:
 
 ### Quick Start
 
-**1. Create a new world (using Multiverse-Core as an example):**
-```bash
-/mv create resource_world normal -g void
-/mv setspawn resource_world
+**1. Point a portal at a new world:**
+Copy `resource_overworld.yml` to `plugins/Portals/Portals/resource_overworld.yml`
+and set `World.Create: true` — Portals creates the world on the next boot or
+`/portals reload`:
+
+```yaml
+World:
+  Name: resource_world
+  Create: true
 ```
 
-**2. Copy the example config:**
-Copy `resource_overworld.yml` to `plugins/Portals/Portals/resource_overworld.yml`
-
-**3. Build your portal:**
+**2. Build your portal:**
 - Use cobblestone for the frame
 - Ignite with flint and steel
 - Step through to reach your resource world!
+
+If you already manage worlds with another plugin, skip `World.Create` and
+just set `World.Name` to the existing world.
 
 ### Portal Options
 

@@ -1,14 +1,20 @@
 # Resource World Portal Configuration
 # Creates a portal to a resource world for gathering materials
-# 
-# Usage with Multiverse-Core:
+#
+# The world is created by Portals itself (World.Create: true). Options:
+#
 #   # Normal world with default terrain:
-#   /mv create resource_world normal
-#   /mv setspawn resource_world
+#   Environment: NORMAL
 #
 #   # Amplified terrain (tall mountains):
-#   /mv create resource_world normal -g minecraft:amplified
-#   /mv setspawn resource_world
+#   Environment: NORMAL
+#   Generator: minecraft:amplified
+#
+#   # A fixed seed, so every install gets the same world:
+#   Seed: "12345"
+#
+# If you manage worlds with another plugin instead, leave Create out and
+# just set World.Name to the existing world.
 configVersion: "3.0.1"
 
 Enable: true
@@ -28,6 +34,7 @@ Portal:
 
 World:
   Name: resource_world
+  Create: true
 
 Options:
   AllowedWorlds:
